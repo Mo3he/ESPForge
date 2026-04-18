@@ -156,7 +156,7 @@ export function importYaml(text: string): ImportResult {
 
       const def = componentDefinitions.find((d) => d.domain === domain && d.platform === platform);
       if (!def) {
-        warnings.push(`${domain}.${platform} is not supported in ESPForge and was skipped.`);
+        // Unknown platform — preserved verbatim in passthroughYaml, skip visual import
         continue;
       }
 
@@ -188,16 +188,14 @@ export function importYaml(text: string): ImportResult {
     }
   }
 
-  if (components.length === 0 && Object.values(COMPONENT_DOMAINS).some((d) => doc[d])) {
-    warnings.push('No components could be matched. They may use platforms not yet supported by ESPForge.');
-  }
-
   return {
     project: {
       board: board ?? undefined,
       settings,
       components,
       automations: [],
+      // Store the full original YAML — the generator will strip sections it regenerates
+      passthroughYaml: text,
     },
     warnings,
   };

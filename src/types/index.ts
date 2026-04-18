@@ -199,4 +199,6 @@ export interface Project {
   settings: ProjectSettings;
   components: ComponentInstance[];
   automations: Automation[];
+  /** Raw YAML for sections ESPForge can't represent, re-emitted verbatim on export */
+  passthroughYaml?: string;
 }
