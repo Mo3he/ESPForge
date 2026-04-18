@@ -81,6 +81,20 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
   };
 
   const handleShareUrl = () => {
+    const s = project.settings;
+    const hasCredentials =
+      s.wifiSsid || s.wifiPassword || s.apiKey || s.otaPassword || s.mqttPassword;
+
+    if (hasCredentials) {
+      const ok = confirm(
+        'Your project contains credentials (WiFi password, API key, etc.).\n\n' +
+        'Share links encode everything as Base64 — anyone with the link can read them.\n\n' +
+        'Consider using the "Use !secret" options in Settings before sharing publicly.\n\n' +
+        'Share anyway?'
+      );
+      if (!ok) return;
+    }
+
     try {
       const json = JSON.stringify(project);
       const encoded = btoa(encodeURIComponent(json));
