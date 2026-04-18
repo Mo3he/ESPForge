@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml, generateSecretsYaml } from '../utils/yamlGenerator';
+import { importYaml } from '../utils/yamlImporter';
 import { validateProject } from '../utils/validation';
 
 interface HeaderProps {
@@ -71,10 +72,15 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
           const data = JSON.parse(text);
           dispatch({ type: 'LOAD_PROJECT', project: data });
         } else {
-          alert('YAML import: Paste YAML into the import dialog (File → Import). JSON project files can be loaded directly.');
+          const result = importYaml(text);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dispatch({ type: 'LOAD_PROJECT', project: result.project as any });
+          if (result.warnings.length > 0) {
+            alert('YAML imported with warnings:\n\n' + result.warnings.join('\n'));
+          }
         }
-      } catch {
-        alert('Invalid project file.');
+      } catch (err) {
+        alert(`Import failed: ${(err as Error).message}`);
       }
     };
     input.click();
