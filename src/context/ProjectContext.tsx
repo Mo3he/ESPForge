@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useCallback, type ReactNode, type Dispatch } from 'react';
+import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode, type Dispatch } from 'react';
 import type { Project, ProjectSettings, Board, ComponentInstance, Automation } from '../types';
 
 // ── Default state ──
@@ -39,6 +39,18 @@ const defaultSettings: ProjectSettings = {
   timeTimezone: '',
   timeServers: '',
 };
+
+const STORAGE_KEY = 'espforge_autosave';
+
+function loadFromStorage(): Project | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as Project;
+  } catch {
+    return null;
+  }
+}
 
 const initialProject: Project = {
   board: null,
@@ -201,11 +213,24 @@ interface ProjectContextValue {
 const ProjectContext = createContext<ProjectContextValue | null>(null);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
+  // Load from localStorage on first render, but only if no share link in URL
+  const hasShareLink = window.location.hash.startsWith('#project=');
+  const savedProject = !hasShareLink ? loadFromStorage() : null;
+
   const [historyState, historyDispatch] = useReducer(historyReducer, {
     past: [],
-    present: initialProject,
+    present: savedProject ?? initialProject,
     future: [],
   });
+
+  // Auto-save to localStorage whenever the project changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(historyState.present));
+    } catch {
+      // storage quota exceeded — ignore
+    }
+  }, [historyState.present]);
 
   const dispatch = useCallback((action: Action) => {
     historyDispatch({ type: 'PROJECT_ACTION', action });
