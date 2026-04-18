@@ -33,7 +33,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
     URL.revokeObjectURL(url);
 
     // Also export secrets if using !secret
-    if (project.settings.useSecrets) {
+    if (project.settings.useSecretsWifi || project.settings.useSecretsApi || project.settings.useSecretsOta || project.settings.useSecretsMqtt) {
       const secretsStr = generateSecretsYaml(project);
       if (secretsStr) {
         const sBlob = new Blob([secretsStr], { type: 'text/yaml' });

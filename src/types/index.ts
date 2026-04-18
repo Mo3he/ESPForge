@@ -89,6 +89,7 @@ export interface ComponentDefinition {
   pins: PinRequirement[];
   configFields: ConfigField[];
   needsI2C?: boolean;
+  needsSPI?: boolean;
   /** Extra top-level YAML sections this component contributes */
   extraDomains?: string[];
   /** Only show for these platforms. Omit = all platforms. */
@@ -161,7 +162,10 @@ export interface ProjectSettings {
   friendlyName: string;
   wifiSsid: string;
   wifiPassword: string;
-  useSecrets: boolean;
+  useSecretsWifi: boolean;
+  useSecretsApi: boolean;
+  useSecretsOta: boolean;
+  useSecretsMqtt: boolean;
   staticIpEnabled: boolean;
   staticIp: string;
   gateway: string;

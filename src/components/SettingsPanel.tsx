@@ -54,13 +54,13 @@ export default function SettingsPanel() {
           <label className="toggle-label">
             <input
               type="checkbox"
-              checked={s.useSecrets}
-              onChange={(e) => update({ useSecrets: e.target.checked })}
+              checked={s.useSecretsWifi}
+              onChange={(e) => update({ useSecretsWifi: e.target.checked })}
             />
-            <span className="toggle-text">Use !secret references</span>
+            <span className="toggle-text">Use !secret for WiFi credentials</span>
           </label>
         </div>
-        {!s.useSecrets && (
+        {!s.useSecretsWifi && (
           <>
             <div className="form-group">
               <label>SSID</label>
@@ -163,14 +163,28 @@ export default function SettingsPanel() {
           </label>
         </div>
         {s.apiEnabled && (
-          <div className="form-group">
-            <label>Encryption Key</label>
-            <div className="input-with-btn">
-              <input type="text" value={s.apiKey} placeholder="Base64 key" onChange={(e) => update({ apiKey: e.target.value })} />
-              <button className="btn btn-sm" onClick={() => update({ apiKey: generateBase64Key() })} title="Generate random key">🔑 Generate</button>
+          <>
+            <div className="form-group">
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={s.useSecretsApi}
+                  onChange={(e) => update({ useSecretsApi: e.target.checked })}
+                />
+                <span className="toggle-text">Use !secret for API key</span>
+              </label>
             </div>
-            <span className="form-hint">32-byte Base64-encoded key for API encryption.</span>
-          </div>
+            {!s.useSecretsApi && (
+              <div className="form-group">
+                <label>Encryption Key</label>
+                <div className="input-with-btn">
+                  <input type="text" value={s.apiKey} placeholder="Base64 key" onChange={(e) => update({ apiKey: e.target.value })} />
+                  <button className="btn btn-sm" onClick={() => update({ apiKey: generateBase64Key() })} title="Generate random key">🔑 Generate</button>
+                </div>
+                <span className="form-hint">32-byte Base64-encoded key for API encryption.</span>
+              </div>
+            )}
+          </>
         )}
         <div className="form-group">
           <label className="toggle-label">
@@ -179,13 +193,27 @@ export default function SettingsPanel() {
           </label>
         </div>
         {s.otaEnabled && (
-          <div className="form-group">
-            <label>OTA Password</label>
-            <div className="input-with-btn">
-              <input type="text" value={s.otaPassword} placeholder="Password" onChange={(e) => update({ otaPassword: e.target.value })} />
-              <button className="btn btn-sm" onClick={() => update({ otaPassword: generatePassword() })} title="Generate random password">🔑 Generate</button>
+          <>
+            <div className="form-group">
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={s.useSecretsOta}
+                  onChange={(e) => update({ useSecretsOta: e.target.checked })}
+                />
+                <span className="toggle-text">Use !secret for OTA password</span>
+              </label>
             </div>
-          </div>
+            {!s.useSecretsOta && (
+              <div className="form-group">
+                <label>OTA Password</label>
+                <div className="input-with-btn">
+                  <input type="text" value={s.otaPassword} placeholder="Password" onChange={(e) => update({ otaPassword: e.target.value })} />
+                  <button className="btn btn-sm" onClick={() => update({ otaPassword: generatePassword() })} title="Generate random password">🔑 Generate</button>
+                </div>
+              </div>
+            )}
+          </>
         )}
         <div className="form-group">
           <label className="toggle-label">
@@ -220,13 +248,27 @@ export default function SettingsPanel() {
               <input type="number" value={s.mqttPort} onChange={(e) => update({ mqttPort: Number(e.target.value) })} />
             </div>
             <div className="form-group">
-              <label>Username</label>
-              <input type="text" value={s.mqttUsername} onChange={(e) => update({ mqttUsername: e.target.value })} />
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={s.useSecretsMqtt}
+                  onChange={(e) => update({ useSecretsMqtt: e.target.checked })}
+                />
+                <span className="toggle-text">Use !secret for credentials</span>
+              </label>
             </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input type="password" value={s.mqttPassword} onChange={(e) => update({ mqttPassword: e.target.value })} />
-            </div>
+            {!s.useSecretsMqtt && (
+              <>
+                <div className="form-group">
+                  <label>Username</label>
+                  <input type="text" value={s.mqttUsername} onChange={(e) => update({ mqttUsername: e.target.value })} />
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <input type="password" value={s.mqttPassword} onChange={(e) => update({ mqttPassword: e.target.value })} />
+                </div>
+              </>
+            )}
           </>
         )}
       </fieldset>

@@ -9,7 +9,7 @@ export default function StepGuide({ activeTab, onNavigate }: Props) {
   const { project } = useProject();
   const s = project.settings;
 
-  const hasWifi = s.useSecrets || (s.wifiSsid.length > 0);
+  const hasWifi = s.useSecretsWifi || (s.wifiSsid.length > 0);
   const hasComponents = project.components.length > 0;
   const hasAutomations = project.automations.length > 0;
   const hasPinnable = project.components.some((c) => Object.keys(c.pins).length > 0);

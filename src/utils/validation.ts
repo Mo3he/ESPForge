@@ -19,11 +19,11 @@ export function validateProject(project: Project): ValidationIssue[] {
     issues.push({ level: 'warning', message: 'Device name is still the default — consider renaming.', tab: 'settings' });
   }
 
-  if (!s.useSecrets && !s.wifiSsid) {
+  if (!s.useSecretsWifi && !s.wifiSsid) {
     issues.push({ level: 'error', message: 'WiFi SSID is not configured.', tab: 'settings' });
   }
 
-  if (!s.useSecrets && !s.wifiPassword) {
+  if (!s.useSecretsWifi && !s.wifiPassword) {
     issues.push({ level: 'warning', message: 'WiFi password is empty.', tab: 'settings' });
   }
 

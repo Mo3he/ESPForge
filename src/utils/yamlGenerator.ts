@@ -39,8 +39,10 @@ export function generateYaml(project: Project): string {
   // ── api ──
   if (settings.apiEnabled) {
     const api: Record<string, unknown> = {};
-    if (settings.apiKey) {
-      api.encryption = { key: settings.useSecrets ? '!secret api_key' : settings.apiKey };
+    if (settings.useSecretsApi) {
+      api.encryption = { key: '__SECRET__api_key' };
+    } else if (settings.apiKey) {
+      api.encryption = { key: settings.apiKey };
     }
     doc.api = Object.keys(api).length > 0 ? api : null;
   }
@@ -48,8 +50,10 @@ export function generateYaml(project: Project): string {
   // ── ota ──
   if (settings.otaEnabled) {
     const ota: Record<string, unknown> = { platform: 'esphome' };
-    if (settings.otaPassword) {
-      ota.password = settings.useSecrets ? '!secret ota_password' : settings.otaPassword;
+    if (settings.useSecretsOta) {
+      ota.password = '__SECRET__ota_password';
+    } else if (settings.otaPassword) {
+      ota.password = settings.otaPassword;
     }
     doc.ota = [ota];
   }
@@ -57,9 +61,9 @@ export function generateYaml(project: Project): string {
   // ── wifi ──
   {
     const wifi: Record<string, unknown> = {};
-    if (settings.useSecrets) {
-      wifi.ssid = '!secret wifi_ssid';
-      wifi.password = '!secret wifi_password';
+    if (settings.useSecretsWifi) {
+      wifi.ssid = '__SECRET__wifi_ssid';
+      wifi.password = '__SECRET__wifi_password';
     } else {
       if (settings.wifiSsid) wifi.ssid = settings.wifiSsid;
       if (settings.wifiPassword) wifi.password = settings.wifiPassword;
@@ -98,9 +102,26 @@ export function generateYaml(project: Project): string {
     const mqtt: Record<string, unknown> = {};
     if (settings.mqttBroker) mqtt.broker = settings.mqttBroker;
     if (settings.mqttPort !== 1883) mqtt.port = settings.mqttPort;
-    if (settings.mqttUsername) mqtt.username = settings.useSecrets ? '!secret mqtt_username' : settings.mqttUsername;
-    if (settings.mqttPassword) mqtt.password = settings.useSecrets ? '!secret mqtt_password' : settings.mqttPassword;
+    if (settings.useSecretsMqtt) {
+      mqtt.username = '__SECRET__mqtt_username';
+      mqtt.password = '__SECRET__mqtt_password';
+    } else {
+      if (settings.mqttUsername) mqtt.username = settings.mqttUsername;
+      if (settings.mqttPassword) mqtt.password = settings.mqttPassword;
+    }
     doc.mqtt = mqtt;
+  }
+
+  // ── spi ──
+  const needsSPI = components.some((c) => {
+    const def = getDefinition(c.type);
+    return def?.needsSPI;
+  });
+  if (needsSPI) {
+    const spiDefaults = board.platform === 'esp8266'
+      ? { clk_pin: 'GPIO14', mosi_pin: 'GPIO13', miso_pin: 'GPIO12' }
+      : { clk_pin: 'GPIO18', mosi_pin: 'GPIO23', miso_pin: 'GPIO19' };
+    doc.spi = spiDefaults;
   }
 
   // ── i2c ──
@@ -469,7 +490,9 @@ export function generateYaml(project: Project): string {
       forceQuotes: false,
       skipInvalid: true,
       sortKeys: false,
-    }).replace(/: null$/gm, ':');
+    })
+      .replace(/: null$/gm, ':')
+      .replace(/: ['"]?__SECRET__(\S+?)['"]?$/gm, ': !secret $1');
   };
 
   const parts: string[] = [];
@@ -656,7 +679,6 @@ function generateComponentEntry(
       base.platform = 'ssd1306_i2c';
       base.model = inst.config.model || 'SSD1306_128X64';
       if (inst.config.address) base.address = inst.config.address;
-      base.lambda = '|-\n  it.printf(0, 0, id(font1), "Hello ESPForge!");';
       break;
     }
     case 'display.ssd1306_spi': {
@@ -1484,37 +1506,33 @@ function str(val: unknown, fallback: string): string {
   return typeof val === 'string' && val.length > 0 ? val : fallback;
 }
 
-/** Generate a secrets.yaml file when useSecrets is enabled */
+/** Generate a secrets.yaml file based on which secret flags are enabled */
 export function generateSecretsYaml(project: Project): string | null {
   const s = project.settings;
-  if (!s.useSecrets) return null;
+  const anySecrets = s.useSecretsWifi || s.useSecretsApi || s.useSecretsOta || s.useSecretsMqtt;
+  if (!anySecrets) return null;
 
   const lines: string[] = [
     '# Secrets file — keep this private, do not commit to version control',
     '',
   ];
 
-  if (s.wifiSsid) lines.push(`wifi_ssid: "${s.wifiSsid}"`);
-  else lines.push('wifi_ssid: "YOUR_WIFI_SSID"');
-
-  if (s.wifiPassword) lines.push(`wifi_password: "${s.wifiPassword}"`);
-  else lines.push('wifi_password: "YOUR_WIFI_PASSWORD"');
-
-  if (s.apiEnabled && s.apiKey) {
-    lines.push(`api_key: "${s.apiKey}"`);
+  if (s.useSecretsWifi) {
+    lines.push(`wifi_ssid: "${s.wifiSsid || 'YOUR_WIFI_SSID'}"`);
+    lines.push(`wifi_password: "${s.wifiPassword || 'YOUR_WIFI_PASSWORD'}"`);
   }
 
-  if (s.otaEnabled && s.otaPassword) {
-    lines.push(`ota_password: "${s.otaPassword}"`);
+  if (s.useSecretsApi && s.apiEnabled) {
+    lines.push(`api_key: "${s.apiKey || 'YOUR_API_KEY'}"`);
   }
 
-  if (s.mqttEnabled) {
-    if (s.mqttUsername) lines.push(`mqtt_username: "${s.mqttUsername}"`);
-    if (s.mqttPassword) lines.push(`mqtt_password: "${s.mqttPassword}"`);
+  if (s.useSecretsOta && s.otaEnabled) {
+    lines.push(`ota_password: "${s.otaPassword || 'YOUR_OTA_PASSWORD'}"`);
   }
 
-  if (s.fallbackApEnabled && s.fallbackApPassword) {
-    lines.push(`fallback_ap_password: "${s.fallbackApPassword}"`);
+  if (s.useSecretsMqtt && s.mqttEnabled) {
+    lines.push(`mqtt_username: "${s.mqttUsername || 'YOUR_MQTT_USERNAME'}"`);
+    lines.push(`mqtt_password: "${s.mqttPassword || 'YOUR_MQTT_PASSWORD'}"`);
   }
 
   lines.push('');

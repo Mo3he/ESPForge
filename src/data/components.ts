@@ -644,6 +644,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     name: 'SSD1306 OLED Display (SPI)',
     description: 'SPI-connected OLED display for faster refresh.',
     icon: '🖥️',
+    needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
       { role: 'dc_pin', label: 'DC Pin', capabilities: ['gpio'] },
@@ -665,6 +666,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     name: 'ST7789 TFT LCD',
     description: 'SPI color TFT display (240×240 or 240×320).',
     icon: '🖥️',
+    needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
       { role: 'dc_pin', label: 'DC Pin', capabilities: ['gpio'] },
@@ -1425,6 +1427,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     name: 'MAX6675 Thermocouple (K-type)',
     description: 'SPI thermocouple interface for high-temperature measurement (up to 1024°C).',
     icon: '🌡️',
+    needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
     ],
@@ -1441,6 +1444,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     name: 'MAX31855 Thermocouple',
     description: 'SPI thermocouple interface supporting K, J, N, R, S, T types.',
     icon: '🌡️',
+    needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
     ],
