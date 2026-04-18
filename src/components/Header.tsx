@@ -199,6 +199,18 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               <button className="btn btn-ghost" onClick={handleLoadProject} title="Load project">
                 📂
               </button>
+              <button
+                className="btn btn-ghost"
+                onClick={() => {
+                  if (confirm('Start a new project? All unsaved changes will be lost.')) {
+                    dispatch({ type: 'RESET_PROJECT' });
+                    onTabChange('board');
+                  }
+                }}
+                title="New project"
+              >
+                🆕
+              </button>
               <button className="btn btn-ghost" onClick={handleSaveProject} title="Save project (Ctrl+S)">
                 💾
               </button>
