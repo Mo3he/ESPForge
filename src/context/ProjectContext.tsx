@@ -37,6 +37,7 @@ const defaultSettings: ProjectSettings = {
   statusLedPin: '',
   timeEnabled: false,
   timeTimezone: '',
+  timeServers: '',
 };
 
 const initialProject: Project = {

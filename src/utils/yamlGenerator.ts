@@ -279,6 +279,9 @@ export function generateYaml(project: Project): string {
   if (settings.timeEnabled) {
     const time: Record<string, unknown> = { platform: 'sntp' };
     if (settings.timeTimezone) time.timezone = settings.timeTimezone;
+    if (settings.timeServers) {
+      time.servers = settings.timeServers.split(',').map((s) => s.trim()).filter(Boolean);
+    }
     doc.time = [time];
   }
 

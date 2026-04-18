@@ -191,6 +191,7 @@ export interface ProjectSettings {
   statusLedPin: string;
   timeEnabled: boolean;
   timeTimezone: string;
+  timeServers: string;
 }
 
 export interface Project {

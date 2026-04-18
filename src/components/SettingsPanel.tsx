@@ -287,11 +287,93 @@ export default function SettingsPanel() {
           </label>
         </div>
         {s.timeEnabled && (
-          <div className="form-group">
-            <label>Timezone</label>
-            <input type="text" value={s.timeTimezone} placeholder="e.g. Europe/London or EST5EDT" onChange={(e) => update({ timeTimezone: e.target.value })} />
-            <span className="form-hint">POSIX or Olson timezone string.</span>
-          </div>
+          <>
+            <div className="form-group">
+              <label>Timezone</label>
+              <select value={s.timeTimezone} onChange={(e) => update({ timeTimezone: e.target.value })}>
+                <option value="">None</option>
+                <optgroup label="Europe">
+                  <option value="Europe/London">Europe/London</option>
+                  <option value="Europe/Paris">Europe/Paris</option>
+                  <option value="Europe/Berlin">Europe/Berlin</option>
+                  <option value="Europe/Madrid">Europe/Madrid</option>
+                  <option value="Europe/Rome">Europe/Rome</option>
+                  <option value="Europe/Amsterdam">Europe/Amsterdam</option>
+                  <option value="Europe/Brussels">Europe/Brussels</option>
+                  <option value="Europe/Vienna">Europe/Vienna</option>
+                  <option value="Europe/Warsaw">Europe/Warsaw</option>
+                  <option value="Europe/Stockholm">Europe/Stockholm</option>
+                  <option value="Europe/Oslo">Europe/Oslo</option>
+                  <option value="Europe/Copenhagen">Europe/Copenhagen</option>
+                  <option value="Europe/Helsinki">Europe/Helsinki</option>
+                  <option value="Europe/Athens">Europe/Athens</option>
+                  <option value="Europe/Bucharest">Europe/Bucharest</option>
+                  <option value="Europe/Istanbul">Europe/Istanbul</option>
+                  <option value="Europe/Moscow">Europe/Moscow</option>
+                  <option value="Europe/Lisbon">Europe/Lisbon</option>
+                  <option value="Europe/Dublin">Europe/Dublin</option>
+                  <option value="Europe/Zurich">Europe/Zurich</option>
+                  <option value="Europe/Prague">Europe/Prague</option>
+                  <option value="Europe/Budapest">Europe/Budapest</option>
+                </optgroup>
+                <optgroup label="Americas">
+                  <option value="America/New_York">America/New_York (ET)</option>
+                  <option value="America/Chicago">America/Chicago (CT)</option>
+                  <option value="America/Denver">America/Denver (MT)</option>
+                  <option value="America/Los_Angeles">America/Los_Angeles (PT)</option>
+                  <option value="America/Anchorage">America/Anchorage (AKT)</option>
+                  <option value="Pacific/Honolulu">Pacific/Honolulu (HT)</option>
+                  <option value="America/Toronto">America/Toronto</option>
+                  <option value="America/Vancouver">America/Vancouver</option>
+                  <option value="America/Mexico_City">America/Mexico_City</option>
+                  <option value="America/Sao_Paulo">America/Sao_Paulo</option>
+                  <option value="America/Argentina/Buenos_Aires">America/Buenos_Aires</option>
+                  <option value="America/Bogota">America/Bogota</option>
+                  <option value="America/Lima">America/Lima</option>
+                  <option value="America/Santiago">America/Santiago</option>
+                  <option value="America/Caracas">America/Caracas</option>
+                </optgroup>
+                <optgroup label="Asia / Pacific">
+                  <option value="Asia/Dubai">Asia/Dubai</option>
+                  <option value="Asia/Kolkata">Asia/Kolkata</option>
+                  <option value="Asia/Dhaka">Asia/Dhaka</option>
+                  <option value="Asia/Bangkok">Asia/Bangkok</option>
+                  <option value="Asia/Singapore">Asia/Singapore</option>
+                  <option value="Asia/Shanghai">Asia/Shanghai</option>
+                  <option value="Asia/Tokyo">Asia/Tokyo</option>
+                  <option value="Asia/Seoul">Asia/Seoul</option>
+                  <option value="Asia/Jakarta">Asia/Jakarta</option>
+                  <option value="Asia/Karachi">Asia/Karachi</option>
+                  <option value="Asia/Riyadh">Asia/Riyadh</option>
+                  <option value="Asia/Jerusalem">Asia/Jerusalem</option>
+                  <option value="Asia/Taipei">Asia/Taipei</option>
+                  <option value="Asia/Hong_Kong">Asia/Hong_Kong</option>
+                  <option value="Australia/Sydney">Australia/Sydney</option>
+                  <option value="Australia/Melbourne">Australia/Melbourne</option>
+                  <option value="Australia/Brisbane">Australia/Brisbane</option>
+                  <option value="Australia/Perth">Australia/Perth</option>
+                  <option value="Pacific/Auckland">Pacific/Auckland</option>
+                </optgroup>
+                <optgroup label="Africa">
+                  <option value="Africa/Cairo">Africa/Cairo</option>
+                  <option value="Africa/Johannesburg">Africa/Johannesburg</option>
+                  <option value="Africa/Lagos">Africa/Lagos</option>
+                  <option value="Africa/Nairobi">Africa/Nairobi</option>
+                  <option value="Africa/Casablanca">Africa/Casablanca</option>
+                </optgroup>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>NTP Servers</label>
+              <input
+                type="text"
+                value={s.timeServers}
+                placeholder="pool.ntp.org, time.google.com (comma-separated)"
+                onChange={(e) => update({ timeServers: e.target.value })}
+              />
+              <span className="form-hint">Leave empty to use ESPHome defaults.</span>
+            </div>
+          </>
         )}
       </fieldset>
 
