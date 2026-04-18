@@ -1,0 +1,272 @@
+import { useProject } from '../context/ProjectContext';
+
+function generateBase64Key(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function generatePassword(length = 16): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
+}
+
+export default function SettingsPanel() {
+  const { project, dispatch } = useProject();
+  const s = project.settings;
+
+  const update = (patch: Partial<typeof s>) => {
+    dispatch({ type: 'UPDATE_SETTINGS', settings: patch });
+  };
+
+  return (
+    <div className="settings-panel">
+      <h2>Project Settings</h2>
+
+      <fieldset className="config-fieldset">
+        <legend>Device</legend>
+        <div className="form-group">
+          <label>Device Name <span className="required">*</span></label>
+          <input
+            type="text"
+            value={s.name}
+            placeholder="my-esp-device"
+            onChange={(e) => update({ name: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
+          />
+          <span className="form-hint">Lowercase, hyphens only. Used as hostname.</span>
+        </div>
+        <div className="form-group">
+          <label>Friendly Name</label>
+          <input
+            type="text"
+            value={s.friendlyName}
+            placeholder="My ESP Device"
+            onChange={(e) => update({ friendlyName: e.target.value })}
+          />
+        </div>
+      </fieldset>
+
+      <fieldset className="config-fieldset">
+        <legend>WiFi</legend>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={s.useSecrets}
+              onChange={(e) => update({ useSecrets: e.target.checked })}
+            />
+            <span className="toggle-text">Use !secret references</span>
+          </label>
+        </div>
+        {!s.useSecrets && (
+          <>
+            <div className="form-group">
+              <label>SSID</label>
+              <input
+                type="text"
+                value={s.wifiSsid}
+                placeholder="MyWiFi"
+                onChange={(e) => update({ wifiSsid: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                value={s.wifiPassword}
+                placeholder="••••••••"
+                onChange={(e) => update({ wifiPassword: e.target.value })}
+              />
+            </div>
+          </>
+        )}
+        <div className="form-group">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={s.fallbackApEnabled}
+              onChange={(e) => update({ fallbackApEnabled: e.target.checked })}
+            />
+            <span className="toggle-text">Fallback Access Point</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={s.captivePortalEnabled}
+              onChange={(e) => update({ captivePortalEnabled: e.target.checked })}
+            />
+            <span className="toggle-text">Captive Portal</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={s.staticIpEnabled}
+              onChange={(e) => update({ staticIpEnabled: e.target.checked })}
+            />
+            <span className="toggle-text">Static IP</span>
+          </label>
+        </div>
+        {s.staticIpEnabled && (
+          <>
+            <div className="form-group">
+              <label>IP Address</label>
+              <input type="text" value={s.staticIp} placeholder="192.168.1.50" onChange={(e) => update({ staticIp: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Gateway</label>
+              <input type="text" value={s.gateway} placeholder="192.168.1.1" onChange={(e) => update({ gateway: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Subnet</label>
+              <input type="text" value={s.subnet} placeholder="255.255.255.0" onChange={(e) => update({ subnet: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>DNS (optional)</label>
+              <input type="text" value={s.dns} placeholder="8.8.8.8" onChange={(e) => update({ dns: e.target.value })} />
+            </div>
+          </>
+        )}
+      </fieldset>
+
+      <fieldset className="config-fieldset">
+        <legend>Services</legend>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.loggerEnabled} onChange={(e) => update({ loggerEnabled: e.target.checked })} />
+            <span className="toggle-text">Logger</span>
+          </label>
+        </div>
+        {s.loggerEnabled && (
+          <div className="form-group">
+            <label>Log Level</label>
+            <select value={s.loggerLevel} onChange={(e) => update({ loggerLevel: e.target.value })}>
+              <option value="NONE">NONE</option>
+              <option value="ERROR">ERROR</option>
+              <option value="WARN">WARN</option>
+              <option value="INFO">INFO</option>
+              <option value="DEBUG">DEBUG</option>
+              <option value="VERBOSE">VERBOSE</option>
+              <option value="VERY_VERBOSE">VERY_VERBOSE</option>
+            </select>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.apiEnabled} onChange={(e) => update({ apiEnabled: e.target.checked })} />
+            <span className="toggle-text">Home Assistant API</span>
+          </label>
+        </div>
+        {s.apiEnabled && (
+          <div className="form-group">
+            <label>Encryption Key</label>
+            <div className="input-with-btn">
+              <input type="text" value={s.apiKey} placeholder="Base64 key" onChange={(e) => update({ apiKey: e.target.value })} />
+              <button className="btn btn-sm" onClick={() => update({ apiKey: generateBase64Key() })} title="Generate random key">🔑 Generate</button>
+            </div>
+            <span className="form-hint">32-byte Base64-encoded key for API encryption.</span>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.otaEnabled} onChange={(e) => update({ otaEnabled: e.target.checked })} />
+            <span className="toggle-text">OTA Updates</span>
+          </label>
+        </div>
+        {s.otaEnabled && (
+          <div className="form-group">
+            <label>OTA Password</label>
+            <div className="input-with-btn">
+              <input type="text" value={s.otaPassword} placeholder="Password" onChange={(e) => update({ otaPassword: e.target.value })} />
+              <button className="btn btn-sm" onClick={() => update({ otaPassword: generatePassword() })} title="Generate random password">🔑 Generate</button>
+            </div>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.webServerEnabled} onChange={(e) => update({ webServerEnabled: e.target.checked })} />
+            <span className="toggle-text">Web Server</span>
+          </label>
+        </div>
+        {s.webServerEnabled && (
+          <div className="form-group">
+            <label>Port</label>
+            <input type="number" value={s.webServerPort} onChange={(e) => update({ webServerPort: Number(e.target.value) })} />
+          </div>
+        )}
+      </fieldset>
+
+      <fieldset className="config-fieldset">
+        <legend>MQTT</legend>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.mqttEnabled} onChange={(e) => update({ mqttEnabled: e.target.checked })} />
+            <span className="toggle-text">Enable MQTT</span>
+          </label>
+        </div>
+        {s.mqttEnabled && (
+          <>
+            <div className="form-group">
+              <label>Broker</label>
+              <input type="text" value={s.mqttBroker} placeholder="192.168.1.100" onChange={(e) => update({ mqttBroker: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Port</label>
+              <input type="number" value={s.mqttPort} onChange={(e) => update({ mqttPort: Number(e.target.value) })} />
+            </div>
+            <div className="form-group">
+              <label>Username</label>
+              <input type="text" value={s.mqttUsername} onChange={(e) => update({ mqttUsername: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input type="password" value={s.mqttPassword} onChange={(e) => update({ mqttPassword: e.target.value })} />
+            </div>
+          </>
+        )}
+      </fieldset>
+
+      <fieldset className="config-fieldset">
+        <legend>Advanced</legend>
+        <div className="form-group">
+          <label>Status LED Pin</label>
+          <input type="text" value={s.statusLedPin} placeholder="GPIO2 (leave empty to disable)" onChange={(e) => update({ statusLedPin: e.target.value })} />
+          <span className="form-hint">Built-in LED that blinks to show device status.</span>
+        </div>
+        <div className="form-group">
+          <label className="toggle-label">
+            <input type="checkbox" checked={s.timeEnabled} onChange={(e) => update({ timeEnabled: e.target.checked })} />
+            <span className="toggle-text">SNTP Time Sync</span>
+          </label>
+        </div>
+        {s.timeEnabled && (
+          <div className="form-group">
+            <label>Timezone</label>
+            <input type="text" value={s.timeTimezone} placeholder="e.g. Europe/London or EST5EDT" onChange={(e) => update({ timeTimezone: e.target.value })} />
+            <span className="form-hint">POSIX or Olson timezone string.</span>
+          </div>
+        )}
+      </fieldset>
+
+      {/* Change board */}
+      <fieldset className="config-fieldset">
+        <legend>Project</legend>
+        <button
+          className="btn btn-danger"
+          onClick={() => {
+            if (confirm('This will reset all components and automations. Continue?')) {
+              dispatch({ type: 'RESET_PROJECT' });
+            }
+          }}
+        >
+          Reset Project
+        </button>
+      </fieldset>
+    </div>
+  );
+}

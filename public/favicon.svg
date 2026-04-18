@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#1a1b2e"/>
+  <g transform="rotate(-45 16 16)">
+    <!-- hammer head -->
+    <rect x="6" y="5" width="18" height="8" rx="2" fill="#58a6ff"/>
+    <!-- handle -->
+    <rect x="14" y="13" width="4" height="14" rx="1" fill="#8b949e"/>
+  </g>
+</svg>
