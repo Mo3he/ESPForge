@@ -5,9 +5,10 @@ import { generateYaml } from '../utils/yamlGenerator';
 interface Props {
   open: boolean;
   onClose: () => void;
+  width?: number;
 }
 
-export default function YamlPreview({ open, onClose }: Props) {
+export default function YamlPreview({ open, onClose, width = 420 }: Props) {
   const { project } = useProject();
 
   const yamlStr = useMemo(() => generateYaml(project), [project]);
@@ -19,7 +20,7 @@ export default function YamlPreview({ open, onClose }: Props) {
   if (!open) return null;
 
   return (
-    <div className="yaml-panel">
+    <div className="yaml-panel" style={{ width }}>
       <div className="yaml-panel-header">
         <h3>YAML Preview</h3>
         <div className="yaml-panel-actions">

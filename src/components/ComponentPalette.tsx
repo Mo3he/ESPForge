@@ -6,9 +6,10 @@ import type { ComponentDefinition, ComponentInstance } from '../types';
 interface Props {
   onSelectComponent: (id: string) => void;
   selectedComponentId: string | null;
+  width?: number;
 }
 
-export default function ComponentPalette({ onSelectComponent, selectedComponentId }: Props) {
+export default function ComponentPalette({ onSelectComponent, selectedComponentId, width = 320 }: Props) {
   const { project, dispatch } = useProject();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(getCategories().map((c) => c.key)),
@@ -76,7 +77,7 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
   });
 
   return (
-    <div className="component-palette">
+    <div className="component-palette" style={{ width }}>
       {/* Added components */}
       <div className="palette-section">
         <h3 className="palette-section-title">Added Components ({project.components.length})</h3>

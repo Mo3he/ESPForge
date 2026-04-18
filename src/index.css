@@ -712,11 +712,28 @@ body {
 /* ── Component Palette ── */
 
 .component-palette {
-  width: 320px;
   flex-shrink: 0;
-  border-right: 1px solid var(--border);
+  border-right: none;
   overflow-y: auto;
   background: var(--bg-secondary);
+  min-width: 200px;
+  max-width: 600px;
+}
+
+.palette-resize-handle {
+  width: 5px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: transparent;
+  border-right: 1px solid var(--border);
+  transition: background 0.15s;
+  z-index: 10;
+}
+
+.palette-resize-handle:hover,
+.palette-resize-handle:active {
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .palette-section {
@@ -1271,12 +1288,29 @@ select {
 /* ── YAML Preview Panel ── */
 
 .yaml-panel {
-  width: 420px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--border);
   background: var(--bg-secondary);
+  min-width: 280px;
+  max-width: 800px;
+}
+
+.yaml-resize-handle {
+  width: 5px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: transparent;
+  border-left: 1px solid var(--border);
+  transition: background 0.15s;
+  z-index: 10;
+}
+
+.yaml-resize-handle:hover,
+.yaml-resize-handle:active {
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .yaml-panel-header {
