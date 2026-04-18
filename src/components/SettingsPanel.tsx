@@ -92,6 +92,28 @@ export default function SettingsPanel() {
             <span className="toggle-text">Fallback Access Point</span>
           </label>
         </div>
+        {s.fallbackApEnabled && (
+          <>
+            <div className="form-group">
+              <label>AP Name</label>
+              <input
+                type="text"
+                value={s.fallbackApSsid}
+                placeholder={`${s.friendlyName} Fallback`}
+                onChange={(e) => update({ fallbackApSsid: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>AP Password</label>
+              <input
+                type="text"
+                value={s.fallbackApPassword}
+                placeholder="fallback123"
+                onChange={(e) => update({ fallbackApPassword: e.target.value })}
+              />
+            </div>
+          </>
+        )}
         <div className="form-group">
           <label className="toggle-label">
             <input
