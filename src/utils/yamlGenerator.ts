@@ -537,77 +537,99 @@ export function generateYaml(project: Project): string {
 
   const parts: string[] = [];
 
-  // Known top-level sections first
-  for (const key of sectionOrder) {
-    if (doc[key] === undefined) continue;
-    const comment = sectionComments[key];
-    if (comment) parts.push(comment);
-    parts.push(dumpSection(key, doc[key]));
-    delete doc[key];
-  }
-
-  // Domain-grouped component sections
-  for (const [domain, entries] of domainMap) {
-    if (doc[domain] === undefined) continue;
-    const comment = domainComments[domain] || `# ${domain.charAt(0).toUpperCase() + domain.slice(1)}`;
-    parts.push(comment);
-    parts.push(dumpSection(domain, entries));
-    delete doc[domain];
-  }
-
-  // Any remaining sections (interval, etc.)
-  for (const [key, value] of Object.entries(doc)) {
-    const comment = sectionComments[key] || domainComments[key];
-    if (comment) parts.push(comment);
-    parts.push(dumpSection(key, value));
-  }
-
-  // ── Passthrough: sections from imported YAML that ESPForge doesn't manage ──
   if (project.passthroughYaml) {
-    try {
-      const emittedKeys = new Set([
-        'esphome',
-        board.platform === 'esp32' ? 'esp32' : 'esp8266',
-        'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
-        'spi', 'i2c', 'one_wire', 'uart',
-        'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
-        'remote_transmitter', 'remote_receiver', 'i2s_audio',
-        'deep_sleep', 'dfplayer', 'rtttl', 'status_led', 'time',
-        'ld2410', 'ads1115', 'pcf8574', 'interval',
-        ...Array.from(domainMap.keys()),
-      ]);
+    // ── IMPORTED PROJECT: rebuild in original section order ──
+    // Split original into ordered top-level blocks, emit managed sections freshly
+    // generated in-place and everything else verbatim.
+    const platformKey = board.platform === 'esp32' ? 'esp32' : 'esp8266';
+    const managedKeys = new Set([
+      'esphome', platformKey,
+      'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+      'spi', 'i2c', 'one_wire', 'uart',
+      'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
+      'remote_transmitter', 'remote_receiver', 'i2s_audio',
+      'deep_sleep', 'dfplayer', 'rtttl', 'status_led', 'time',
+      'ld2410', 'ads1115', 'pcf8574', 'interval',
+      ...Array.from(domainMap.keys()),
+    ]);
 
-      // Split the original YAML into top-level key blocks and re-emit verbatim.
-      // This preserves unicode escapes, lambdas, custom tags, etc. exactly as-is.
-      const lines = project.passthroughYaml.split('\n');
-      const blocks: { key: string; lines: string[] }[] = [];
-      let current: { key: string; lines: string[] } | null = null;
+    // Parse original into ordered blocks
+    const lines = project.passthroughYaml.split('\n');
+    const blocks: { key: string; text: string }[] = [];
+    let curKey = '';
+    let curLines: string[] = [];
 
-      for (const line of lines) {
-        const topLevelMatch = line.match(/^([a-zA-Z0-9_]+)\s*:/);
-        if (topLevelMatch && !line.startsWith(' ') && !line.startsWith('\t') && !line.startsWith('#')) {
-          if (current) blocks.push(current);
-          current = { key: topLevelMatch[1], lines: [line] };
-        } else if (current) {
-          current.lines.push(line);
+    for (const line of lines) {
+      const m = line.match(/^([a-zA-Z0-9_]+)\s*:/);
+      if (m && !line.startsWith(' ') && !line.startsWith('\t') && !line.startsWith('#')) {
+        if (curKey) blocks.push({ key: curKey, text: curLines.join('\n').trimEnd() });
+        curKey = m[1];
+        curLines = [line];
+      } else {
+        curLines.push(line);
+      }
+    }
+    if (curKey) blocks.push({ key: curKey, text: curLines.join('\n').trimEnd() });
+
+    const emittedKeys = new Set<string>();
+
+    for (const block of blocks) {
+      if (managedKeys.has(block.key)) {
+        // Emit the freshly generated version for this key
+        if (doc[block.key] !== undefined) {
+          const comment = sectionComments[block.key] || domainComments[block.key];
+          if (comment) parts.push(comment);
+          parts.push(dumpSection(block.key, doc[block.key]));
+        } else if (domainMap.has(block.key)) {
+          const comment = domainComments[block.key] || `# ${block.key}`;
+          parts.push(comment);
+          parts.push(dumpSection(block.key, domainMap.get(block.key)));
         }
+        // else: ESPForge no longer has anything for this key (component removed) — skip it
+        emittedKeys.add(block.key);
+      } else {
+        // Not managed — emit verbatim
+        parts.push(block.text);
+        emittedKeys.add(block.key);
       }
-      if (current) blocks.push(current);
+    }
 
-      const passthroughParts: string[] = [];
-      for (const block of blocks) {
-        if (emittedKeys.has(block.key)) continue;
-        // Trim trailing blank lines from each block
-        const trimmed = block.lines.join('\n').trimEnd();
-        passthroughParts.push(trimmed);
-      }
+    // Append any newly added managed sections not present in the original
+    for (const key of sectionOrder) {
+      if (emittedKeys.has(key) || doc[key] === undefined) continue;
+      const comment = sectionComments[key];
+      if (comment) parts.push(comment);
+      parts.push(dumpSection(key, doc[key]));
+    }
+    for (const [domain, entries] of domainMap) {
+      if (emittedKeys.has(domain)) continue;
+      const comment = domainComments[domain] || `# ${domain}`;
+      parts.push(comment);
+      parts.push(dumpSection(domain, entries));
+    }
 
-      if (passthroughParts.length > 0) {
-        parts.push('# (Passthrough \u2014 sections preserved from original YAML)');
-        parts.push(...passthroughParts);
-      }
-    } catch {
-      // Skip silently if something goes wrong
+  } else {
+    // ── NEW PROJECT: emit in fixed section order ──
+    for (const key of sectionOrder) {
+      if (doc[key] === undefined) continue;
+      const comment = sectionComments[key];
+      if (comment) parts.push(comment);
+      parts.push(dumpSection(key, doc[key]));
+      delete doc[key];
+    }
+
+    for (const [domain, entries] of domainMap) {
+      if (doc[domain] === undefined) continue;
+      const comment = domainComments[domain] || `# ${domain.charAt(0).toUpperCase() + domain.slice(1)}`;
+      parts.push(comment);
+      parts.push(dumpSection(domain, entries));
+      delete doc[domain];
+    }
+
+    for (const [key, value] of Object.entries(doc)) {
+      const comment = sectionComments[key] || domainComments[key];
+      if (comment) parts.push(comment);
+      parts.push(dumpSection(key, value));
     }
   }
 
