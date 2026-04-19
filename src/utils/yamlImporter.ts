@@ -225,6 +225,14 @@ export function importYaml(text: string): ImportResult {
         }
       }
 
+      // Capture inline action blocks (on_press, on_state, on_value, etc.) so the
+      // generator can re-attach them and the original behaviour is preserved.
+      const inlineActions: Record<string, unknown> = {};
+      for (const key of Object.keys(entry)) {
+        if (key.startsWith('on_')) inlineActions[key] = entry[key];
+      }
+      if (Object.keys(inlineActions).length > 0) config._inlineActions = inlineActions;
+
       components.push({
         id,
         type: def.type,

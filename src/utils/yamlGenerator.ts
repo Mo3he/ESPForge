@@ -1460,6 +1460,13 @@ function generateComponentEntry(
       return null;
   }
 
+  // Re-attach inline actions (on_press, on_state, etc.) preserved from import
+  if (inst.config._inlineActions && typeof inst.config._inlineActions === 'object') {
+    for (const [key, value] of Object.entries(inst.config._inlineActions as Record<string, unknown>)) {
+      base[key] = value;
+    }
+  }
+
   return base;
 }
 
