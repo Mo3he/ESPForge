@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { ChevronDown, ChevronRight, ChevronUp, Trash2 } from 'lucide-react';
 import { componentDefinitions, getCategories } from '../data/components';
 import { useProject, generateId } from '../context/ProjectContext';
+import { Icon } from './Icon';
 import type { ComponentDefinition, ComponentInstance } from '../types';
 
 interface Props {
@@ -97,7 +99,7 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
                 className={`added-component-item ${selectedComponentId === inst.id ? 'selected' : ''}`}
                 onClick={() => onSelectComponent(inst.id)}
               >
-                <span className="added-component-icon">{def?.icon || '📦'}</span>
+                <span className="added-component-icon"><Icon name={def?.icon || 'Settings'} size={15} /></span>
                 <div className="added-component-info">
                   <span className="added-component-name">
                     {(inst.config.name as string) || inst.name}
@@ -110,13 +112,13 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
                     onClick={(e) => { e.stopPropagation(); handleMove(inst.id, 'up'); }}
                     disabled={idx === 0}
                     title="Move up"
-                  >▲</button>
+                  ><ChevronUp size={12} /></button>
                   <button
                     className="btn-icon btn-move"
                     onClick={(e) => { e.stopPropagation(); handleMove(inst.id, 'down'); }}
                     disabled={idx === project.components.length - 1}
                     title="Move down"
-                  >▼</button>
+                  ><ChevronDown size={12} /></button>
                   <button
                     className="btn-icon btn-remove"
                     onClick={(e) => {
@@ -125,7 +127,7 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
                     }}
                     title="Remove"
                   >
-                    ×
+                    <Trash2 size={12} />
                   </button>
                 </div>
               </div>
@@ -161,10 +163,11 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
           return (
             <div key={cat.key} className="palette-category">
               <button className="palette-category-header" onClick={() => toggleCategory(cat.key)}>
-                <span>
-                  {cat.icon} {cat.label}
+                <span className="palette-category-label">
+                  <Icon name={cat.icon} size={14} />
+                  {cat.label}
                 </span>
-                <span className="palette-chevron">{isExpanded ? '▾' : '▸'}</span>
+                <span className="palette-chevron">{isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</span>
               </button>
               {isExpanded && (
                 <div className="palette-category-items">

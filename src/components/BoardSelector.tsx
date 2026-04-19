@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Check } from 'lucide-react';
 import { boards } from '../data/boards';
 import { projectTemplates, type ProjectTemplate } from '../data/templates';
 import { useProject } from '../context/ProjectContext';
+import { Icon } from './Icon';
 import type { Board } from '../types';
 
 interface Props {
@@ -97,7 +99,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
               className={`template-card ${t.id === 'blank' ? 'template-blank' : ''}`}
               onClick={() => handleSelectTemplate(t)}
             >
-              <div className="template-icon">{t.icon}</div>
+              <div className="template-icon"><Icon name={t.icon} size={28} strokeWidth={1.25} /></div>
               <div className="template-info">
                 <h3>{t.name}</h3>
                 <p>{t.description}</p>
@@ -127,7 +129,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
         <h1>Select Your Board</h1>
         {selectedTemplate && selectedTemplate.id !== 'blank' ? (
           <p>
-            Template: <strong>{selectedTemplate.icon} {selectedTemplate.name}</strong>
+            Template: <strong><Icon name={selectedTemplate.icon} size={14} className="inline-icon" /> {selectedTemplate.name}</strong>
             {selectedTemplate.recommendedBoards.length > 0 && ' — recommended boards shown first'}
           </p>
         ) : (
@@ -145,7 +147,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
 
       <div className="onboarding-steps">
         <div className="step completed" onClick={handleBackToTemplates} style={{ cursor: 'pointer' }}>
-          <div className="step-num">✓</div>
+          <div className="step-num"><Check size={14} /></div>
           <span>Choose Template</span>
         </div>
         <div className="step-line active" />

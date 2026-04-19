@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Copy, X } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml } from '../utils/yamlGenerator';
 
@@ -25,10 +26,10 @@ export default function YamlPreview({ open, onClose, width = 420 }: Props) {
         <h3>YAML Preview</h3>
         <div className="yaml-panel-actions">
           <button className="btn btn-sm btn-ghost" onClick={handleCopy} title="Copy to clipboard">
-            📋 Copy
+            <Copy size={14} /> Copy
           </button>
           <button className="btn-icon" onClick={onClose}>
-            ×
+            <X size={16} />
           </button>
         </div>
       </div>

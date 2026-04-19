@@ -18,7 +18,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'blank',
     name: 'Blank Project',
     description: 'Start from scratch — pick your own components.',
-    icon: '📄',
+    icon: 'FileText',
     recommendedBoards: [],
     components: [],
     automations: [],
@@ -28,7 +28,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'basic_sensor_node',
     name: 'Basic Sensor Node',
     description: 'Temperature + humidity (DHT22) with status LED and WiFi info.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     recommendedBoards: ['esp32dev', 'nodemcuv2', 'd1_mini'],
     components: [
       { id: 'sensor_1', type: 'sensor.dht', name: 'DHT22 Sensor', config: { name: 'Temperature & Humidity', model: 'DHT22', update_interval: '60s' }, pins: { pin: null } },
@@ -44,7 +44,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'smart_relay',
     name: 'Smart Relay / Plug',
     description: 'GPIO relay with physical button toggle and status LED. Perfect for Sonoff Basic.',
-    icon: '🔌',
+    icon: 'Plug',
     recommendedBoards: ['sonoff_basic', 'sonoff_basic_r4', 'esp32dev', 'd1_mini'],
     components: [
       { id: 'switch_1', type: 'switch.gpio', name: 'Relay', config: { name: 'Relay', restore_mode: 'RESTORE_DEFAULT_OFF' }, pins: { pin: null } },
@@ -68,7 +68,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'led_strip',
     name: 'Addressable LED Strip',
     description: 'WS2812B / NeoPixel strip with status LED and effects ready.',
-    icon: '🌈',
+    icon: 'Palette',
     recommendedBoards: ['esp32dev', 'esp32s3_devkitc', 'd1_mini'],
     components: [
       { id: 'light_1', type: 'light.neopixelbus', name: 'LED Strip', config: { name: 'LED Strip', num_leds: 60, chipset: 'WS2812B', rgb_order: 'GRB' }, pins: { pin: null } },
@@ -82,7 +82,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'environment_monitor',
     name: 'Environment Monitor',
     description: 'BME280 (temp/humidity/pressure) + SCD41 CO2 + WiFi diagnostics.',
-    icon: '🌿',
+    icon: 'Leaf',
     recommendedBoards: ['esp32dev', 'esp32s3_devkitc', 'seeed_xiao_esp32c3'],
     components: [
       { id: 'sensor_1', type: 'sensor.bme280', name: 'BME280', config: { name: 'BME280', address: '0x76', temperature_name: 'Temperature', humidity_name: 'Humidity', pressure_name: 'Pressure', update_interval: '60s' }, pins: {} },
@@ -98,7 +98,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'motion_light',
     name: 'Motion-Activated Light',
     description: 'PIR motion sensor that auto-toggles a relay/light with configurable timeout.',
-    icon: '💡',
+    icon: 'Lightbulb',
     recommendedBoards: ['esp32dev', 'd1_mini', 'esp32c3_devkitm'],
     components: [
       { id: 'binary_sensor_1', type: 'binary_sensor.gpio', name: 'PIR Motion', config: { name: 'Motion', device_class: 'motion' }, pins: { pin: null } },
@@ -131,7 +131,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'ble_gateway',
     name: 'BLE Gateway / Proxy',
     description: 'Bluetooth proxy for Home Assistant with WiFi diagnostics. Requires ESP32 with BLE.',
-    icon: '📡',
+    icon: 'Radio',
     recommendedBoards: ['esp32dev', 'esp32s3_devkitc', 'esp32s3_n16r8', 'm5stack_atom_lite'],
     components: [
       { id: 'bluetooth_1', type: 'bluetooth.proxy', name: 'BLE Proxy', config: { active: true }, pins: {} },
@@ -147,7 +147,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'garage_door',
     name: 'Garage Door Controller',
     description: 'Relay + reed switch with time-based cover entity for Home Assistant.',
-    icon: '🏠',
+    icon: 'Home',
     recommendedBoards: ['esp32dev', 'd1_mini', 'esp32c3_devkitm'],
     components: [
       { id: 'cover_1', type: 'cover.time_based', name: 'Garage Door', config: { name: 'Garage Door', device_class: 'garage', open_duration: '15s', close_duration: '15s' }, pins: { open_pin: null, close_pin: null } },
@@ -162,7 +162,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'power_monitor',
     name: 'Power Monitor',
     description: 'HLW8012 energy monitoring (voltage, current, power). Great for Sonoff POW.',
-    icon: '⚡',
+    icon: 'Zap',
     recommendedBoards: ['esp32dev', 'sonoff_basic_r4', 'd1_mini'],
     components: [
       { id: 'sensor_1', type: 'sensor.hlw8012', name: 'Power Monitor', config: { name: 'Power Monitor', voltage_name: 'Voltage', current_name: 'Current', power_name: 'Power', sel_pin_inverted: true, current_resistor: '0.001', voltage_divider: '2351', update_interval: '10s' }, pins: { sel_pin: null, cf_pin: null, cf1_pin: null } },
@@ -176,7 +176,7 @@ export const projectTemplates: ProjectTemplate[] = [
     id: 'fan_controller',
     name: 'PWM Fan Controller',
     description: 'Variable-speed fan with physical button to cycle speeds.',
-    icon: '🌀',
+    icon: 'Fan',
     recommendedBoards: ['esp32dev', 'esp32c3_devkitm', 'd1_mini'],
     components: [
       { id: 'fan_1', type: 'fan.speed', name: 'Fan', config: { name: 'Fan', speed_count: 4 }, pins: { pin: null } },

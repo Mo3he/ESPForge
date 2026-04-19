@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
+    "lucide-react": "^1.8.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

@@ -1,3 +1,4 @@
+import { AlertTriangle } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { getDefinition } from '../data/components';
 
@@ -74,7 +75,7 @@ export default function PinMapper() {
 
       {conflictPins.size > 0 && (
         <div className="pin-conflict-banner">
-          ⚠️ Pin conflict{conflictPins.size > 1 ? 's' : ''} detected on GPIO{[...conflictPins].join(', GPIO')} — multiple components share the same pin.
+          <AlertTriangle size={15} /> Pin conflict{conflictPins.size > 1 ? 's' : ''} detected on GPIO{[...conflictPins].join(', GPIO')} — multiple components share the same pin.
         </div>
       )}
 

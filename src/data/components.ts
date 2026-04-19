@@ -11,7 +11,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'DHT Temperature & Humidity',
     description: 'DHT11/DHT22 temperature and humidity sensor.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     pins: [{ role: 'pin', label: 'Data Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Living Room Climate' },
@@ -32,7 +32,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Dallas Temperature (DS18B20)',
     description: 'OneWire temperature sensor. Supports multiple sensors on one pin.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     pins: [{ role: 'pin', label: 'Data Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Water Temperature' },
@@ -48,7 +48,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'ADC (Analog) Sensor',
     description: 'Read analog voltage from an ADC-capable pin.',
-    icon: '📊',
+    icon: 'BarChart2',
     pins: [{ role: 'pin', label: 'Analog Pin', capabilities: ['adc'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Battery Voltage' },
@@ -69,7 +69,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'BME280 (Temp/Humidity/Pressure)',
     description: 'I²C environmental sensor for temperature, humidity, and pressure.',
-    icon: '🌤️',
+    icon: 'Cloud',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -91,7 +91,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'BMP280 (Temp/Pressure)',
     description: 'I²C sensor for temperature and barometric pressure.',
-    icon: '🌤️',
+    icon: 'Cloud',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -112,7 +112,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'BME680 (Temp/Hum/Press/Gas)',
     description: 'I²C environmental sensor with VOC gas resistance measurement.',
-    icon: '🌫️',
+    icon: 'Wind',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -135,7 +135,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'SHT3x Temperature & Humidity',
     description: 'High-accuracy I²C temperature and humidity sensor (SHT30/SHT31/SHT35).',
-    icon: '🌡️',
+    icon: 'Thermometer',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -156,7 +156,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'AHT10/AHT20 Temperature & Humidity',
     description: 'Low-cost I²C temperature and humidity sensor.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -177,7 +177,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Ultrasonic Distance (HC-SR04)',
     description: 'Measure distance using an ultrasonic sensor.',
-    icon: '📏',
+    icon: 'Ruler',
     pins: [
       { role: 'trigger_pin', label: 'Trigger Pin', capabilities: ['gpio'] },
       { role: 'echo_pin', label: 'Echo Pin', capabilities: ['gpio'] },
@@ -194,7 +194,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'BH1750 Light Sensor',
     description: 'I²C ambient light sensor (lux).',
-    icon: '☀️',
+    icon: 'Sun',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -213,7 +213,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'TSL2561 Light Sensor',
     description: 'I²C digital light sensor with IR and full-spectrum channels.',
-    icon: '☀️',
+    icon: 'Sun',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -233,7 +233,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'HX711 Load Cell / Weight',
     description: 'Load cell amplifier for weight measurement.',
-    icon: '⚖️',
+    icon: 'Scale',
     pins: [
       { role: 'dout_pin', label: 'DOUT Pin', capabilities: ['gpio'] },
       { role: 'clk_pin', label: 'CLK Pin', capabilities: ['gpio'] },
@@ -255,7 +255,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'MPU6050 Accelerometer & Gyro',
     description: 'I²C 6-axis IMU (3-axis accel + 3-axis gyro).',
-    icon: '🧭',
+    icon: 'Compass',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -274,7 +274,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'INA219 Current/Power Monitor',
     description: 'I²C current, voltage, and power sensor.',
-    icon: '🔋',
+    icon: 'Battery',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -297,7 +297,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'CCS811 Air Quality (eCO2/TVOC)',
     description: 'I²C air quality sensor measuring eCO2 and TVOC.',
-    icon: '🌫️',
+    icon: 'Wind',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -318,7 +318,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'SCD30 CO2 Sensor',
     description: 'I²C high-accuracy NDIR CO2 sensor with temp & humidity.',
-    icon: '🌿',
+    icon: 'Leaf',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -336,7 +336,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'PZEM-004T AC Energy Monitor',
     description: 'UART-based AC power monitor — voltage, current, power, energy.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [
       { role: 'tx_pin', label: 'TX Pin', capabilities: ['gpio'] },
       { role: 'rx_pin', label: 'RX Pin', capabilities: ['gpio'] },
@@ -354,7 +354,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Pulse Counter',
     description: 'Count pulses on a GPIO pin. Ideal for water/gas meters and flow sensors.',
-    icon: '🔢',
+    icon: 'Hash',
     pins: [{ role: 'pin', label: 'Input Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Water Meter' },
@@ -370,7 +370,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'WiFi Signal Strength',
     description: 'Reports current WiFi RSSI in dB.',
-    icon: '📶',
+    icon: 'Wifi',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'WiFi Signal' },
@@ -384,7 +384,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Uptime Sensor',
     description: 'Reports how long the device has been running.',
-    icon: '⏱️',
+    icon: 'Timer',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Uptime' },
@@ -401,7 +401,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'GPIO Binary Sensor (Button/Switch)',
     description: 'Detect HIGH/LOW state on a GPIO pin. Ideal for buttons and reed switches.',
-    icon: '🔘',
+    icon: 'CircleDot',
     pins: [{ role: 'pin', label: 'Input Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Door Sensor' },
@@ -427,7 +427,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'Status Sensor',
     description: 'Reports whether the ESP is connected to the network.',
-    icon: '📶',
+    icon: 'Wifi',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Status' },
@@ -440,7 +440,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'PIR Motion Sensor',
     description: 'Passive infrared motion detector (HC-SR501 / AM312).',
-    icon: '🚶',
+    icon: 'User',
     pins: [{ role: 'pin', label: 'Signal Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Hallway Motion' },
@@ -461,7 +461,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'switch',
     name: 'GPIO Switch (Relay/LED)',
     description: 'Control a relay, LED, or any output via a GPIO pin.',
-    icon: '🔌',
+    icon: 'Plug',
     pins: [{ role: 'pin', label: 'Output Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Kitchen Relay' },
@@ -481,7 +481,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'switch',
     name: 'Restart Switch',
     description: 'A virtual switch that restarts the ESP when toggled.',
-    icon: '🔄',
+    icon: 'RefreshCw',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Restart' },
@@ -494,7 +494,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'switch',
     name: 'Safe Mode Switch',
     description: 'Reboot into safe mode for OTA recovery.',
-    icon: '🛡️',
+    icon: 'Shield',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Safe Mode' },
@@ -511,7 +511,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'Binary Light (On/Off)',
     description: 'Simple on/off light controlled by a GPIO switch output.',
-    icon: '💡',
+    icon: 'Lightbulb',
     pins: [{ role: 'pin', label: 'Output Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Porch Light' },
@@ -525,7 +525,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'Dimmable Light (PWM)',
     description: 'Single-channel dimmable light using PWM output.',
-    icon: '🔆',
+    icon: 'SunDim',
     pins: [{ role: 'pin', label: 'PWM Pin', capabilities: ['pwm'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Desk Lamp' },
@@ -540,7 +540,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'NeoPixel / WS2812B LED Strip',
     description: 'Addressable RGB LED strip (WS2812B, WS2811, SK6812, etc.).',
-    icon: '🌈',
+    icon: 'Palette',
     pins: [{ role: 'pin', label: 'Data Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'LED Strip' },
@@ -573,7 +573,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'output',
     name: 'GPIO Output',
     description: 'Raw GPIO digital output (HIGH/LOW).',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [{ role: 'pin', label: 'Output Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'ID', type: 'text', required: true, placeholder: 'relay_output' },
@@ -587,7 +587,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'output',
     name: 'LEDC PWM Output (ESP32)',
     description: 'Hardware PWM output using ESP32 LEDC peripheral.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [{ role: 'pin', label: 'PWM Pin', capabilities: ['pwm'] }],
     platformFilter: ['esp32'],
     configFields: [
@@ -602,7 +602,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'output',
     name: 'ESP8266 PWM Output',
     description: 'Software PWM output for ESP8266.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [{ role: 'pin', label: 'PWM Pin', capabilities: ['pwm'] }],
     platformFilter: ['esp8266'],
     configFields: [
@@ -621,7 +621,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'display',
     name: 'SSD1306 OLED Display (I²C)',
     description: '0.96" or 1.3" I²C OLED display.',
-    icon: '🖥️',
+    icon: 'Monitor',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -643,7 +643,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'display',
     name: 'SSD1306 OLED Display (SPI)',
     description: 'SPI-connected OLED display for faster refresh.',
-    icon: '🖥️',
+    icon: 'Monitor',
     needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
@@ -665,7 +665,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'display',
     name: 'ST7789 TFT LCD',
     description: 'SPI color TFT display (240×240 or 240×320).',
-    icon: '🖥️',
+    icon: 'Monitor',
     needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
@@ -694,7 +694,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'bluetooth',
     name: 'Bluetooth Proxy',
     description: 'Turn this ESP32 into a BLE proxy for Home Assistant. Extends BLE range to remote rooms.',
-    icon: '📡',
+    icon: 'Radio',
     requiresBLE: true,
     platformFilter: ['esp32'],
     pins: [],
@@ -710,7 +710,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'bluetooth',
     name: 'BLE Device Tracker',
     description: 'Scan for BLE devices and track presence. Use with BLE Proxy or standalone.',
-    icon: '📲',
+    icon: 'Smartphone',
     requiresBLE: true,
     platformFilter: ['esp32'],
     pins: [],
@@ -727,7 +727,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'bluetooth',
     name: 'BLE RSSI Sensor',
     description: 'Track signal strength of a specific BLE device by MAC address.',
-    icon: '📶',
+    icon: 'Wifi',
     requiresBLE: true,
     platformFilter: ['esp32'],
     pins: [],
@@ -743,7 +743,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'bluetooth',
     name: 'BLE Presence Sensor',
     description: 'Detect if a BLE device is nearby by MAC address or iBeacon UUID.',
-    icon: '🏠',
+    icon: 'Home',
     requiresBLE: true,
     platformFilter: ['esp32'],
     pins: [],
@@ -760,7 +760,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'bluetooth',
     name: 'Xiaomi BLE Sensor',
     description: 'Read Xiaomi Mijia/Aqara BLE sensors (LYWSD03MMC, CGG1, etc.).',
-    icon: '🌡️',
+    icon: 'Thermometer',
     requiresBLE: true,
     platformFilter: ['esp32'],
     pins: [],
@@ -787,7 +787,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'ir',
     name: 'IR Receiver',
     description: 'Receive infrared signals from remotes. Use with VS1838B or TSOP38238.',
-    icon: '📡',
+    icon: 'Radio',
     pins: [{ role: 'pin', label: 'Receiver Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'dump', label: 'Dump Protocol', type: 'select', default: 'all', options: [
@@ -810,7 +810,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'ir',
     name: 'IR Transmitter',
     description: 'Send infrared signals to control TVs, ACs, and other IR devices.',
-    icon: '📺',
+    icon: 'Tv',
     pins: [{ role: 'pin', label: 'IR LED Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'carrier_duty_percent', label: 'Carrier Duty %', type: 'number', default: 50 },
@@ -827,7 +827,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'climate',
     name: 'IR Climate Controller',
     description: 'Control air conditioners via IR. Supports many brands (Daikin, Mitsubishi, LG, etc.).',
-    icon: '❄️',
+    icon: 'Snowflake',
     pins: [{ role: 'pin', label: 'IR LED Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Bedroom AC' },
@@ -858,7 +858,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'climate',
     name: 'Thermostat Controller',
     description: 'Bang-bang thermostat using a temp sensor + heating/cooling relay.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Floor Heating' },
@@ -880,7 +880,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'media',
     name: 'I²S Audio Output',
     description: 'Audio output via I²S DAC (MAX98357A, PCM5102, etc.). Used for speakers/media players.',
-    icon: '🔊',
+    icon: 'Volume2',
     platformFilter: ['esp32'],
     pins: [
       { role: 'bclk_pin', label: 'BCLK Pin', capabilities: ['gpio'] },
@@ -898,7 +898,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'media',
     name: 'Speaker (I²S)',
     description: 'Speaker output for media player and voice assistant.',
-    icon: '🔊',
+    icon: 'Volume2',
     platformFilter: ['esp32'],
     pins: [],
     configFields: [
@@ -916,7 +916,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'media',
     name: 'Microphone (I²S)',
     description: 'I²S microphone input (INMP441, ICS43432, SPH0645). Used for voice assistant.',
-    icon: '🎤',
+    icon: 'Mic',
     platformFilter: ['esp32'],
     pins: [
       { role: 'din_pin', label: 'Data In Pin', capabilities: ['gpio'] },
@@ -935,7 +935,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'media',
     name: 'DFPlayer Mini (MP3)',
     description: 'UART-based MP3/WAV player with SD card. Play sound effects and announcements.',
-    icon: '🎵',
+    icon: 'Music',
     pins: [
       { role: 'tx_pin', label: 'TX Pin', capabilities: ['gpio'] },
       { role: 'rx_pin', label: 'RX Pin', capabilities: ['gpio'] },
@@ -950,7 +950,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'media',
     name: 'Buzzer / RTTTL Player',
     description: 'Play RTTTL ring tones and beeps through a passive buzzer via PWM.',
-    icon: '🔔',
+    icon: 'Bell',
     pins: [{ role: 'pin', label: 'Buzzer Pin', capabilities: ['pwm'] }],
     configFields: [],
     extraDomains: ['output'],
@@ -966,7 +966,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'Servo Motor',
     description: 'Control a hobby servo motor using PWM output.',
-    icon: '⚙️',
+    icon: 'Settings',
     pins: [{ role: 'pin', label: 'Signal Pin', capabilities: ['pwm'] }],
     configFields: [
       { key: 'id', label: 'Servo ID', type: 'text', required: true, placeholder: 'my_servo' },
@@ -983,7 +983,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'Stepper Motor (A4988/DRV8825)',
     description: 'Drive a stepper motor using A4988 or DRV8825 driver.',
-    icon: '⚙️',
+    icon: 'Settings',
     pins: [
       { role: 'step_pin', label: 'Step Pin', capabilities: ['gpio'] },
       { role: 'dir_pin', label: 'Direction Pin', capabilities: ['gpio'] },
@@ -1002,7 +1002,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'Rotary Encoder',
     description: 'Read a KY-040 rotary encoder for scrolling, volume control, etc.',
-    icon: '🎛️',
+    icon: 'SlidersHorizontal',
     pins: [
       { role: 'pin_a', label: 'Pin A (CLK)', capabilities: ['gpio'] },
       { role: 'pin_b', label: 'Pin B (DT)', capabilities: ['gpio'] },
@@ -1020,7 +1020,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'ESPHome Version Sensor',
     description: 'Reports the running ESPHome version as a text sensor.',
-    icon: 'ℹ️',
+    icon: 'Info',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'ESPHome Version' },
@@ -1033,7 +1033,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'WiFi Info Sensor',
     description: 'Reports SSID, BSSID, and IP address as text sensors.',
-    icon: '📶',
+    icon: 'Wifi',
     pins: [],
     configFields: [
       { key: 'ip_address_name', label: 'IP Address Name', type: 'text', default: 'IP Address' },
@@ -1047,7 +1047,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'Deep Sleep',
     description: 'Put the ESP into deep sleep to save battery. Wakes on timer or pin.',
-    icon: '🔋',
+    icon: 'Battery',
     pins: [],
     configFields: [
       { key: 'run_duration', label: 'Run Duration', type: 'text', default: '30s', placeholder: 'How long to stay awake' },
@@ -1065,7 +1065,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'fan',
     name: 'Speed Fan (PWM)',
     description: 'Variable-speed fan controlled via PWM output. Supports speed steps.',
-    icon: '🌀',
+    icon: 'Fan',
     pins: [{ role: 'pin', label: 'PWM Pin', capabilities: ['pwm'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Exhaust Fan' },
@@ -1080,7 +1080,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'fan',
     name: 'Binary Fan (On/Off)',
     description: 'Simple on/off fan controlled by a GPIO switch.',
-    icon: '🌀',
+    icon: 'Fan',
     pins: [{ role: 'pin', label: 'Output Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Bathroom Fan' },
@@ -1094,7 +1094,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'fan',
     name: 'H-Bridge Fan (Reversible)',
     description: 'Reversible fan using an H-Bridge driver (L298N, etc.).',
-    icon: '🌀',
+    icon: 'Fan',
     pins: [
       { role: 'pin_a', label: 'Pin A (PWM)', capabilities: ['pwm'] },
       { role: 'pin_b', label: 'Pin B (PWM)', capabilities: ['pwm'] },
@@ -1120,7 +1120,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'cover',
     name: 'Time-Based Cover',
     description: 'Blinds/shutter controlled by open/close relays with timed travel.',
-    icon: '🪟',
+    icon: 'ArrowUpDown',
     pins: [
       { role: 'open_pin', label: 'Open Relay Pin', capabilities: ['gpio'] },
       { role: 'close_pin', label: 'Close Relay Pin', capabilities: ['gpio'] },
@@ -1146,7 +1146,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'cover',
     name: 'Endstop Cover',
     description: 'Cover with open/close endstop switches for position feedback.',
-    icon: '🪟',
+    icon: 'ArrowUpDown',
     pins: [
       { role: 'open_pin', label: 'Open Motor Pin', capabilities: ['gpio'] },
       { role: 'close_pin', label: 'Close Motor Pin', capabilities: ['gpio'] },
@@ -1172,7 +1172,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'cover',
     name: 'Template Cover',
     description: 'Virtual cover controlled by lambda or automations.',
-    icon: '🪟',
+    icon: 'ArrowUpDown',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Custom Cover' },
@@ -1197,7 +1197,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'button',
     name: 'Restart Button',
     description: 'A button entity that restarts the ESP when pressed from Home Assistant.',
-    icon: '🔄',
+    icon: 'RefreshCw',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Restart' },
@@ -1210,7 +1210,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'button',
     name: 'Safe Mode Button',
     description: 'Reboots into safe mode for OTA recovery.',
-    icon: '🛡️',
+    icon: 'Shield',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Safe Mode Boot' },
@@ -1223,7 +1223,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'button',
     name: 'Shutdown Button',
     description: 'Gracefully shuts down the ESP (enters deep sleep indefinitely).',
-    icon: '⏻',
+    icon: 'Power',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Shutdown' },
@@ -1236,7 +1236,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'button',
     name: 'Factory Reset Button',
     description: 'Resets all saved preferences and reboots.',
-    icon: '🗑️',
+    icon: 'Trash2',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Factory Reset' },
@@ -1249,7 +1249,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'button',
     name: 'Template Button',
     description: 'Custom button that runs actions when pressed.',
-    icon: '🔘',
+    icon: 'CircleDot',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Play Doorbell' },
@@ -1266,7 +1266,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'number',
     name: 'Template Number',
     description: 'A numeric input entity. Use for thresholds, setpoints, brightness levels, etc.',
-    icon: '🔢',
+    icon: 'Hash',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Target Temperature' },
@@ -1290,7 +1290,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'select',
     name: 'Template Select',
     description: 'A dropdown entity. Use for modes, presets, or any enumerated choice.',
-    icon: '📋',
+    icon: 'List',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Fan Mode' },
@@ -1311,7 +1311,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'text',
     name: 'Template Text',
     description: 'A text input entity. Use for display messages, MQTT payloads, etc.',
-    icon: '📝',
+    icon: 'FileText',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Display Message' },
@@ -1333,7 +1333,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'lock',
     name: 'GPIO Lock',
     description: 'Electric lock/strike controlled by a GPIO relay.',
-    icon: '🔒',
+    icon: 'Lock',
     pins: [{ role: 'pin', label: 'Lock Relay Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Front Door Lock' },
@@ -1347,7 +1347,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'lock',
     name: 'Template Lock',
     description: 'Virtual lock entity controlled by automations.',
-    icon: '🔒',
+    icon: 'Lock',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Office Lock' },
@@ -1365,7 +1365,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'SGP30 Air Quality (eCO2/TVOC)',
     description: 'I²C multi-pixel gas sensor for eCO2 and TVOC.',
-    icon: '🌫️',
+    icon: 'Wind',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -1382,7 +1382,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'SCD40/SCD41 CO2 Sensor',
     description: 'I²C photoacoustic true CO2 sensor with temperature and humidity.',
-    icon: '🌿',
+    icon: 'Leaf',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -1400,7 +1400,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'PMS5003/7003 Particulate Sensor',
     description: 'UART particulate matter sensor (PM1.0, PM2.5, PM10).',
-    icon: '🌫️',
+    icon: 'Wind',
     pins: [
       { role: 'tx_pin', label: 'TX Pin', capabilities: ['gpio'] },
       { role: 'rx_pin', label: 'RX Pin', capabilities: ['gpio'] },
@@ -1426,7 +1426,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'MAX6675 Thermocouple (K-type)',
     description: 'SPI thermocouple interface for high-temperature measurement (up to 1024°C).',
-    icon: '🌡️',
+    icon: 'Thermometer',
     needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
@@ -1443,7 +1443,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'MAX31855 Thermocouple',
     description: 'SPI thermocouple interface supporting K, J, N, R, S, T types.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     needsSPI: true,
     pins: [
       { role: 'cs_pin', label: 'CS Pin', capabilities: ['gpio'] },
@@ -1460,7 +1460,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'VL53L0X Laser Distance',
     description: 'I²C Time-of-Flight laser distance sensor (up to 2m).',
-    icon: '📏',
+    icon: 'Ruler',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -1476,7 +1476,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'HLW8012 Power Monitor',
     description: 'Power monitoring IC used in Sonoff POW, Shelly 1PM, etc.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [
       { role: 'sel_pin', label: 'SEL Pin', capabilities: ['gpio'] },
       { role: 'cf_pin', label: 'CF Pin', capabilities: ['gpio'] },
@@ -1500,7 +1500,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'CSE7766 Power Monitor',
     description: 'UART power monitoring IC used in Sonoff POW R2, S31.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [
       { role: 'rx_pin', label: 'RX Pin', capabilities: ['gpio'] },
     ],
@@ -1520,7 +1520,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'NTC Thermistor',
     description: 'Analog NTC temperature sensor. Requires ADC sensor as input.',
-    icon: '🌡️',
+    icon: 'Thermometer',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'NTC Temperature' },
@@ -1537,7 +1537,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Template Sensor',
     description: 'Virtual sensor with value set by lambda or automation.',
-    icon: '📊',
+    icon: 'BarChart2',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Calculated Value' },
@@ -1557,7 +1557,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'Template Binary Sensor',
     description: 'Virtual on/off sensor controlled by lambda or automation.',
-    icon: '🔘',
+    icon: 'CircleDot',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Custom Sensor' },
@@ -1578,7 +1578,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'Analog Threshold',
     description: 'Turns an analog value into on/off based on upper/lower thresholds.',
-    icon: '📊',
+    icon: 'BarChart2',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Soil Dry' },
@@ -1598,7 +1598,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'switch',
     name: 'Template Switch',
     description: 'Virtual switch controlled by lambda or automation.',
-    icon: '🔌',
+    icon: 'Plug',
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Custom Switch' },
@@ -1618,7 +1618,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'switch',
     name: 'UART Switch',
     description: 'Send UART bytes when toggled. Useful for controlling serial devices.',
-    icon: '🔌',
+    icon: 'Plug',
     pins: [
       { role: 'tx_pin', label: 'TX Pin', capabilities: ['gpio'] },
       { role: 'rx_pin', label: 'RX Pin', capabilities: ['gpio'] },
@@ -1641,7 +1641,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'Cold White + Warm White Light',
     description: 'Two-channel white light (cold + warm white LEDs).',
-    icon: '💡',
+    icon: 'Lightbulb',
     pins: [
       { role: 'cw_pin', label: 'Cold White Pin', capabilities: ['pwm'] },
       { role: 'ww_pin', label: 'Warm White Pin', capabilities: ['pwm'] },
@@ -1660,7 +1660,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'RGB Light (3-channel)',
     description: 'RGB light with separate PWM channels for red, green, and blue.',
-    icon: '🌈',
+    icon: 'Palette',
     pins: [
       { role: 'red_pin', label: 'Red Pin', capabilities: ['pwm'] },
       { role: 'green_pin', label: 'Green Pin', capabilities: ['pwm'] },
@@ -1678,7 +1678,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'RGBW Light (4-channel)',
     description: 'RGBW light with separate PWM channels for R, G, B, and white.',
-    icon: '🌈',
+    icon: 'Palette',
     pins: [
       { role: 'red_pin', label: 'Red Pin', capabilities: ['pwm'] },
       { role: 'green_pin', label: 'Green Pin', capabilities: ['pwm'] },
@@ -1703,7 +1703,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'LD2410 mmWave Presence',
     description: 'HiLink LD2410 24GHz mmWave radar for human presence & motion detection.',
-    icon: '📡',
+    icon: 'Radio',
     pins: [
       { role: 'tx_pin', label: 'UART TX Pin', capabilities: ['gpio'] },
       { role: 'rx_pin', label: 'UART RX Pin', capabilities: ['gpio'] },
@@ -1726,7 +1726,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'ADS1115 4-Channel ADC',
     description: 'I²C 16-bit 4-channel ADC for precise analog readings.',
-    icon: '📊',
+    icon: 'BarChart2',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -1765,7 +1765,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'light',
     name: 'ESP32 RMT LED Strip (WS2812B)',
     description: 'Addressable LEDs via ESP32 RMT peripheral. Recommended over NeoPixelBus for ESP32.',
-    icon: '🌈',
+    icon: 'Palette',
     platformFilter: ['esp32'],
     pins: [{ role: 'pin', label: 'Data Pin', capabilities: ['gpio'] }],
     configFields: [
@@ -1795,7 +1795,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'binary_sensor',
     name: 'ESP32 Touch Pad',
     description: 'Built-in capacitive touch sensor on ESP32 GPIO pins.',
-    icon: '👆',
+    icon: 'Fingerprint',
     platformFilter: ['esp32'],
     pins: [{ role: 'pin', label: 'Touch Pin', capabilities: ['touch'] }],
     configFields: [
@@ -1812,7 +1812,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'misc',
     name: 'PCF8574 I/O Expander',
     description: 'I²C 8-bit I/O expander — adds 8 GPIO pins.',
-    icon: '🔌',
+    icon: 'Plug',
     needsI2C: true,
     pins: [],
     configFields: [
@@ -1839,7 +1839,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'sensor',
     name: 'Pulse Meter',
     description: 'High-accuracy pulse counting for energy/water/gas meters.',
-    icon: '⚡',
+    icon: 'Zap',
     pins: [{ role: 'pin', label: 'Pulse Pin', capabilities: ['gpio'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Power Meter' },
@@ -1857,23 +1857,23 @@ export function getDefinition(type: string): ComponentDefinition | undefined {
 
 export function getCategories(): { key: string; label: string; icon: string }[] {
   return [
-    { key: 'sensor', label: 'Sensors', icon: '📡' },
-    { key: 'binary_sensor', label: 'Binary Sensors', icon: '🔘' },
-    { key: 'switch', label: 'Switches', icon: '🔌' },
-    { key: 'button', label: 'Buttons', icon: '🔲' },
-    { key: 'light', label: 'Lights', icon: '💡' },
-    { key: 'fan', label: 'Fans', icon: '🌀' },
-    { key: 'cover', label: 'Covers / Blinds', icon: '🪟' },
-    { key: 'climate', label: 'Climate / HVAC', icon: '❄️' },
-    { key: 'lock', label: 'Locks', icon: '🔒' },
-    { key: 'number', label: 'Numbers', icon: '🔢' },
-    { key: 'select', label: 'Selects', icon: '📋' },
-    { key: 'text', label: 'Text Inputs', icon: '📝' },
-    { key: 'output', label: 'Outputs', icon: '⚡' },
-    { key: 'display', label: 'Displays', icon: '🖥️' },
-    { key: 'bluetooth', label: 'Bluetooth / BLE', icon: '📡' },
-    { key: 'ir', label: 'Infrared (IR)', icon: '📺' },
-    { key: 'media', label: 'Media / Audio', icon: '🔊' },
-    { key: 'misc', label: 'Utilities', icon: '🔧' },
+    { key: 'sensor', label: 'Sensors', icon: 'Radio' },
+    { key: 'binary_sensor', label: 'Binary Sensors', icon: 'CircleDot' },
+    { key: 'switch', label: 'Switches', icon: 'Plug' },
+    { key: 'button', label: 'Buttons', icon: 'MousePointerClick' },
+    { key: 'light', label: 'Lights', icon: 'Lightbulb' },
+    { key: 'fan', label: 'Fans', icon: 'Fan' },
+    { key: 'cover', label: 'Covers / Blinds', icon: 'ArrowUpDown' },
+    { key: 'climate', label: 'Climate / HVAC', icon: 'Snowflake' },
+    { key: 'lock', label: 'Locks', icon: 'Lock' },
+    { key: 'number', label: 'Numbers', icon: 'Hash' },
+    { key: 'select', label: 'Selects', icon: 'List' },
+    { key: 'text', label: 'Text Inputs', icon: 'FileText' },
+    { key: 'output', label: 'Outputs', icon: 'Zap' },
+    { key: 'display', label: 'Displays', icon: 'Monitor' },
+    { key: 'bluetooth', label: 'Bluetooth / BLE', icon: 'Radio' },
+    { key: 'ir', label: 'Infrared (IR)', icon: 'Tv' },
+    { key: 'media', label: 'Media / Audio', icon: 'Volume2' },
+    { key: 'misc', label: 'Utilities', icon: 'Wrench' },
   ];
 }

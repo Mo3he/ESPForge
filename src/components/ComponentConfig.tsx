@@ -1,5 +1,6 @@
 import { useProject } from '../context/ProjectContext';
 import { getDefinition } from '../data/components';
+import { Icon } from './Icon';
 import type { ComponentInstance, Pin } from '../types';
 
 interface Props {
@@ -14,7 +15,7 @@ export default function ComponentConfig({ componentId }: Props) {
     return (
       <div className="component-config empty">
         <div className="config-placeholder">
-          <span className="config-placeholder-icon">⚙️</span>
+          <span className="config-placeholder-icon"><Icon name="Settings" size={32} strokeWidth={1.25} /></span>
           <p>Select a component from the list to configure it.</p>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default function ComponentConfig({ componentId }: Props) {
   return (
     <div className="component-config">
       <div className="config-header">
-        <span className="config-icon">{def.icon}</span>
+        <span className="config-icon"><Icon name={def.icon} size={20} /></span>
         <div>
           <h3>{def.name}</h3>
           <p className="config-type">{def.type}</p>

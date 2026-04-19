@@ -1,4 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import {
+  AlertTriangle, Coffee, Cpu, FilePlus, FolderOpen, Link, Moon,
+  Redo2, Save, Sun, Undo2, X, XCircle, Download,
+} from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml, generateSecretsYaml } from '../utils/yamlGenerator';
 import { importYaml } from '../utils/yamlImporter';
@@ -186,18 +190,18 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                 }}
                 title="Change board"
               >
-                🔧 {project.board.name}
+                <Cpu size={14} /> {project.board.name}
               </button>
               <div className="btn-group">
                 <button className="btn btn-ghost" onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)">
-                  ↩
+                  <Undo2 size={16} />
                 </button>
                 <button className="btn btn-ghost" onClick={redo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)">
-                  ↪
+                  <Redo2 size={16} />
                 </button>
               </div>
               <button className="btn btn-ghost" onClick={handleLoadProject} title="Load project">
-                📂
+                <FolderOpen size={16} />
               </button>
               <button
                 className="btn btn-ghost"
@@ -209,13 +213,13 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                 }}
                 title="New project"
               >
-                🆕
+                <FilePlus size={16} />
               </button>
               <button className="btn btn-ghost" onClick={handleSaveProject} title="Save project (Ctrl+S)">
-                💾
+                <Save size={16} />
               </button>
               <button className="btn btn-ghost" onClick={handleShareUrl} title="Copy share link">
-                🔗
+                <Link size={16} />
               </button>
               {issues.length > 0 && (
                 <button
@@ -223,7 +227,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                   onClick={() => setShowValidation(!showValidation)}
                   title={`${errors.length} errors, ${warnings.length} warnings`}
                 >
-                  {errors.length > 0 ? '🔴' : '🟡'} {issues.length}
+                  {errors.length > 0 ? <XCircle size={16} /> : <AlertTriangle size={16} />} {issues.length}
                 </button>
               )}
               <button
@@ -234,12 +238,12 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                 {'{ }'}
               </button>
               <button className="btn btn-primary" onClick={handleExport}>
-                Export YAML
+                <Download size={14} /> Export YAML
               </button>
             </>
           )}
           <button className="btn btn-ghost" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
           <a
             href="https://github.com/mo3he/ESPForge"
@@ -266,7 +270,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
             className="btn btn-ghost bmc-link"
             title="Buy me a coffee"
           >
-            ☕
+            <Coffee size={16} />
           </a>
         </div>
       </header>
@@ -279,7 +283,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               {errors.length > 0 && <span className="validation-count error">{errors.length} error{errors.length !== 1 ? 's' : ''}</span>}
               {warnings.length > 0 && <span className="validation-count warning">{warnings.length} warning{warnings.length !== 1 ? 's' : ''}</span>}
             </span>
-            <button className="btn-icon" onClick={() => setShowValidation(false)}>×</button>
+            <button className="btn-icon" onClick={() => setShowValidation(false)}><X size={14} /></button>
           </div>
           <div className="validation-list">
             {issues.map((issue, i) => (
@@ -288,7 +292,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                 className={`validation-item ${issue.level}`}
                 onClick={() => { if (issue.tab) onTabChange(issue.tab); setShowValidation(false); }}
               >
-                <span className="validation-icon">{issue.level === 'error' ? '🔴' : '🟡'}</span>
+                <span className="validation-icon">{issue.level === 'error' ? <XCircle size={14} /> : <AlertTriangle size={14} />}</span>
                 <span>{issue.message}</span>
               </div>
             ))}
