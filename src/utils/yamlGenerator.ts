@@ -721,7 +721,8 @@ function generateComponentEntry(
     case 'light.monochromatic': {
       base.platform = 'monochromatic';
       base.name = str(inst.config.name, inst.name);
-      base.output = `${inst.id}_output`;
+      // Use original output id from import if present, otherwise auto-generate
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       break;
     }
     case 'light.neopixelbus': {
@@ -1461,6 +1462,8 @@ function generateOutputForLight(
       };
     }
     case 'light.monochromatic': {
+      // If imported with an existing output id, that output component handles its own entry
+      if (inst.config._outputId) return null;
       return {
         platform: 'ledc',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',
