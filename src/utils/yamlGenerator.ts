@@ -454,6 +454,9 @@ export function generateYaml(project: Project): string {
     (doc.esphome as Record<string, unknown>).on_boot = {
       then: bootAutos.flatMap((a) => a.actions.map((act) => formatAction(act, project))),
     };
+  } else if (settings._rawOnBoot !== undefined) {
+    // Preserve complex on_boot (e.g. array with priority) verbatim from import
+    (doc.esphome as Record<string, unknown>).on_boot = settings._rawOnBoot;
   }
 
   // Serialize each section separately with comments for readability
@@ -1635,7 +1638,10 @@ function formatAction(
       return { 'light.toggle': targetRef };
     case 'light.turn_on': {
       const opts: Record<string, unknown> = { id: targetRef };
-      if (action.config.brightness) opts.brightness = `${action.config.brightness}%`;
+      if (action.config.brightness) {
+        const b = String(action.config.brightness);
+        opts.brightness = b.endsWith('%') ? b : `${b}%`;
+      }
       return { 'light.turn_on': opts };
     }
     case 'light.turn_off':

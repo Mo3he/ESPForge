@@ -337,15 +337,24 @@ export function importYaml(text: string): ImportResult {
   // esphome.on_boot
   const onBootRaw = (esphome as Record<string, unknown>).on_boot;
   if (onBootRaw) {
-    autoCounter++;
-    const bootEntry = onBootRaw as Record<string, unknown>;
-    automations.push({
-      id: `imported_auto_${autoCounter}`,
-      name: 'On Boot',
-      trigger: { type: 'on_boot', config: {} },
-      conditions: [],
-      actions: parseActionsList(bootEntry.then),
-    });
+    // Array form: [{priority: -100, then: [...]}, ...] — complex, can't safely round-trip
+    // Simple form: {then: [...]} — parse into automation
+    const isArray = Array.isArray(onBootRaw);
+    const bootObj = !isArray ? onBootRaw as Record<string, unknown> : null;
+    const hasThen = bootObj && Array.isArray(bootObj.then);
+    if (!isArray && hasThen) {
+      autoCounter++;
+      automations.push({
+        id: `imported_auto_${autoCounter}`,
+        name: 'On Boot',
+        trigger: { type: 'on_boot', config: {} },
+        conditions: [],
+        actions: parseActionsList(bootObj!.then),
+      });
+    } else {
+      // Complex form — store verbatim so the generator can re-attach it unchanged
+      settings._rawOnBoot = onBootRaw;
+    }
   }
 
   return {

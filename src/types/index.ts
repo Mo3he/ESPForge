@@ -191,6 +191,7 @@ export interface ProjectSettings {
   fallbackApSsid: string;
   fallbackApPassword: string;
   useSecretsFallbackAp: boolean;
+  _rawOnBoot?: unknown;
   statusLedPin: string;
   timeEnabled: boolean;
   timeTimezone: string;
