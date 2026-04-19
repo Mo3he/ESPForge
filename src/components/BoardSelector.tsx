@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Upload } from 'lucide-react';
 import { boards } from '../data/boards';
 import { projectTemplates, type ProjectTemplate } from '../data/templates';
 import { useProject } from '../context/ProjectContext';
+import { importYaml } from '../utils/yamlImporter';
 import { Icon } from './Icon';
 import type { Board } from '../types';
 
@@ -15,6 +16,35 @@ export default function BoardSelector({ onBoardSelected }: Props) {
   const [search, setSearch] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
   const [step, setStep] = useState<'template' | 'board'>('template');
+
+  const handleImport = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,.yaml,.yml';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        if (file.name.endsWith('.json')) {
+          const data = JSON.parse(text);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dispatch({ type: 'LOAD_PROJECT', project: data as any });
+        } else {
+          const result = importYaml(text);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dispatch({ type: 'LOAD_PROJECT', project: result.project as any });
+          if (result.warnings.length > 0) {
+            alert('YAML imported with warnings:\n\n' + result.warnings.join('\n'));
+          }
+        }
+        onBoardSelected?.('settings');
+      } catch (err) {
+        alert(`Import failed: ${(err as Error).message}`);
+      }
+    };
+    input.click();
+  };
 
   const handleSelectBoard = (board: Board) => {
     dispatch({ type: 'SET_BOARD', board });
@@ -114,6 +144,17 @@ export default function BoardSelector({ onBoardSelected }: Props) {
               </div>
             </button>
           ))}
+        </div>
+
+        <div className="import-divider">
+          <span>or</span>
+        </div>
+        <div className="import-existing">
+          <button className="btn btn-ghost import-project-btn" onClick={handleImport}>
+            <Upload size={16} />
+            Import existing project or YAML
+          </button>
+          <p className="import-hint">Load a saved <code>.json</code> project or an existing ESPHome <code>.yaml</code> file</p>
         </div>
       </div>
     );
