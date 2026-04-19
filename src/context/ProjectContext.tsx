@@ -30,6 +30,7 @@ const defaultSettings: ProjectSettings = {
   webServerPort: 80,
   loggerEnabled: true,
   loggerLevel: 'DEBUG',
+  espFramework: 'arduino',
   captivePortalEnabled: true,
   fallbackApEnabled: true,
   fallbackApSsid: '',

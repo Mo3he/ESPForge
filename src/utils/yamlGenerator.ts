@@ -16,24 +16,29 @@ export function generateYaml(project: Project): string {
 
   // ── platform ──
   if (board.platform === 'esp32') {
-    doc.esp32 = {
-      board: board.board,
-      framework: { type: 'arduino' },
-    };
+    const platformDoc: Record<string, unknown> = { board: board.board };
+    if (settings._rawPlatformExtras) {
+      Object.assign(platformDoc, settings._rawPlatformExtras);
+    } else {
+      platformDoc.framework = { type: settings.espFramework || 'arduino' };
+    }
+    doc.esp32 = platformDoc;
   } else {
-    doc.esp8266 = {
-      board: board.board,
-      framework: { type: 'arduino' },
-    };
+    const platformDoc: Record<string, unknown> = { board: board.board };
+    if (settings._rawPlatformExtras) {
+      Object.assign(platformDoc, settings._rawPlatformExtras);
+    } else {
+      platformDoc.framework = { type: 'arduino' };
+    }
+    doc.esp8266 = platformDoc;
   }
 
   // ── logger ──
   if (settings.loggerEnabled) {
-    if (settings.loggerLevel && settings.loggerLevel !== 'DEBUG') {
-      doc.logger = { level: settings.loggerLevel };
-    } else {
-      doc.logger = null;
-    }
+    const loggerDoc: Record<string, unknown> = {};
+    if (settings.loggerLevel && settings.loggerLevel !== 'DEBUG') loggerDoc.level = settings.loggerLevel;
+    if (settings._rawLoggerExtras?.logs) loggerDoc.logs = settings._rawLoggerExtras.logs;
+    doc.logger = Object.keys(loggerDoc).length > 0 ? loggerDoc : null;
   }
 
   // ── api ──

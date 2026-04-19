@@ -132,6 +132,7 @@ export function importYaml(text: string): ImportResult {
 
   // ── Board ────────────────────────────────────────────────────
   let board = null;
+  let rawPlatformExtras: Record<string, unknown> | undefined;
   const platformKey = doc.esp32 ? 'esp32' : doc.esp8266 ? 'esp8266' : null;
   if (platformKey) {
     const platformDoc = doc[platformKey] as Record<string, unknown> | null;
@@ -139,6 +140,14 @@ export function importYaml(text: string): ImportResult {
     if (boardId) {
       board = boards.find((b) => b.board === boardId) ?? null;
       if (!board) warnings.push(`Board "${boardId}" is not in ESPForge's board list. Select your board manually after import.`);
+    }
+    // Preserve everything except `board` (framework, variant, etc.) verbatim
+    if (platformDoc) {
+      const extras: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(platformDoc)) {
+        if (k !== 'board') extras[k] = v;
+      }
+      if (Object.keys(extras).length > 0) rawPlatformExtras = extras;
     }
   } else {
     warnings.push('No esp32/esp8266 section found. Select your board manually after import.');
@@ -199,6 +208,12 @@ export function importYaml(text: string): ImportResult {
     webServerPort: Number(webServerDoc.port ?? 80),
     loggerEnabled: doc.logger !== undefined,
     loggerLevel: strVal(loggerDoc.level, 'DEBUG'),
+    espFramework: (() => {
+      const fwRaw = doc.esp32 || doc.esp8266;
+      const fw = fwRaw && typeof fwRaw === 'object' ? (fwRaw as Record<string, unknown>).framework : null;
+      const fwType = fw && typeof fw === 'object' ? strVal((fw as Record<string, unknown>).type) : strVal(fw);
+      return (fwType === 'esp-idf' ? 'esp-idf' : 'arduino') as 'arduino' | 'esp-idf';
+    })(),
     captivePortalEnabled: doc.captive_portal !== undefined,
     fallbackApEnabled: !!apDoc.ssid,
     fallbackApSsid: isSecret(apDoc.ssid) ? '' : strVal(apDoc.ssid),
@@ -215,6 +230,14 @@ export function importYaml(text: string): ImportResult {
       const extras: Record<string, unknown> = {};
       if (timeDoc.id) extras.id = timeDoc.id;
       if (timeDoc.on_time) extras.on_time = timeDoc.on_time;
+      return Object.keys(extras).length > 0 ? extras : undefined;
+    })(),
+    _rawPlatformExtras: rawPlatformExtras,
+    _rawLoggerExtras: (() => {
+      const logDoc = doc.logger as Record<string, unknown> | null;
+      if (!logDoc) return undefined;
+      const extras: Record<string, unknown> = {};
+      if (logDoc.logs) extras.logs = logDoc.logs;
       return Object.keys(extras).length > 0 ? extras : undefined;
     })(),
   };

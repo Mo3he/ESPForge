@@ -46,6 +46,15 @@ export default function SettingsPanel() {
             onChange={(e) => update({ friendlyName: e.target.value })}
           />
         </div>
+        {project.board?.platform === 'esp32' && (
+          <div className="form-group">
+            <label>Framework</label>
+            <select value={s.espFramework} onChange={(e) => update({ espFramework: e.target.value as 'arduino' | 'esp-idf', _rawPlatformExtras: undefined })}>
+              <option value="arduino">Arduino</option>
+              <option value="esp-idf">ESP-IDF</option>
+            </select>
+          </div>
+        )}
       </fieldset>
 
       <fieldset className="config-fieldset">

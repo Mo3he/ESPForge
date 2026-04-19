@@ -186,6 +186,7 @@ export interface ProjectSettings {
   webServerPort: number;
   loggerEnabled: boolean;
   loggerLevel: string;
+  espFramework: 'arduino' | 'esp-idf';
   captivePortalEnabled: boolean;
   fallbackApEnabled: boolean;
   fallbackApSsid: string;
@@ -194,6 +195,8 @@ export interface ProjectSettings {
   useSecretsFallbackApPassword: boolean;
   _rawTimeExtras?: Record<string, unknown>;
   _rawOnBoot?: unknown;
+  _rawPlatformExtras?: Record<string, unknown>;
+  _rawLoggerExtras?: Record<string, unknown>;
   statusLedPin: string;
   timeEnabled: boolean;
   timeTimezone: string;
