@@ -1200,6 +1200,7 @@ select {
   padding: 24px;
   max-width: min(800px, 100%);
   width: 100%;
+  margin: 0 auto;
 }
 
 .automation-header {
@@ -1333,6 +1334,7 @@ select {
   padding: 24px;
   max-width: min(560px, 100%);
   width: 100%;
+  margin: 0 auto;
 }
 
 .settings-panel h2 {
