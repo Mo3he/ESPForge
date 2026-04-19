@@ -2,7 +2,7 @@
 
 Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings — get a ready-to-flash YAML file. No YAML knowledge required.
 
-[![Open ESPForge](https://img.shields.io/badge/Open_ESPForge-→-blue?style=for-the-badge&logoColor=white)](https://mo3he.github.io/ESPForge/)
+## Try it here [ESPForge](https://mo3he.github.io/ESPForge/)
 
 ![ESPForge Screenshot](docs/screenshot.png)
 
