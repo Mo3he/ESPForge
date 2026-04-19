@@ -948,6 +948,11 @@ export const boards: Board[] = [
       { gpio: 9,  label: 'BTN', side: 'right', capabilities: ['gpio', 'strapping'], notes: 'Built-in button' },
       { gpio: 7,  label: 'LED', side: 'right', capabilities: ['gpio'], notes: 'Status LED' },
     ],
+    defaultComponents: [
+      { type: 'switch.gpio', name: 'Relay', config: { inverted: false }, pins: { pin: 6 } },
+      { type: 'binary_sensor.gpio', name: 'Button', config: { inverted: true, internal: false }, pins: { pin: 9 } },
+      { type: 'output.gpio', name: 'Status LED', config: { inverted: true }, pins: { pin: 7 } },
+    ],
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -1026,6 +1031,11 @@ export const boards: Board[] = [
       { gpio: 0,  label: 'BTN', side: 'left',  capabilities: ['gpio', 'strapping'], notes: 'Built-in button' },
       { gpio: 13, label: 'LED', side: 'right', capabilities: ['gpio'], notes: 'Status LED' },
       { gpio: 14, label: 'D14', side: 'right', capabilities: ['gpio', 'pwm'], notes: 'Available on header' },
+    ],
+    defaultComponents: [
+      { type: 'switch.gpio', name: 'Relay', config: { inverted: false }, pins: { pin: 12 } },
+      { type: 'binary_sensor.gpio', name: 'Button', config: { inverted: true, internal: false }, pins: { pin: 0 } },
+      { type: 'output.gpio', name: 'Status LED', config: { inverted: true }, pins: { pin: 13 } },
     ],
   },
 ];
