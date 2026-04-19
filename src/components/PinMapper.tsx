@@ -59,7 +59,7 @@ export default function PinMapper() {
   // SVG dimensions
   const pinSpacing = 36;
   const boardWidth = 200;
-  const svgWidth = 680;
+  const svgWidth = 780;
   const pinLabelWidth = 180;
   const svgHeight = maxRows * pinSpacing + 80;
   const boardX = (svgWidth - boardWidth) / 2;

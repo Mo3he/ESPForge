@@ -1792,7 +1792,7 @@ select {
   .pin-mapper {
     padding: 12px;
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
   }
 
   /* Step guide */
