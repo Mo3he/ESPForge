@@ -565,33 +565,49 @@ export function generateYaml(project: Project): string {
   // ── Passthrough: sections from imported YAML that ESPForge doesn't manage ──
   if (project.passthroughYaml) {
     try {
-      const preprocessed = project.passthroughYaml.replace(/:\s*!secret\s+(\S+)/g, ': "__SECRET__$1"');
-      const passDoc = yaml.load(preprocessed) as Record<string, unknown>;
-      if (passDoc && typeof passDoc === 'object' && !Array.isArray(passDoc)) {
-        // Remove every key ESPForge already emitted above
-        const emittedKeys = new Set([
-          'esphome',
-          board.platform === 'esp32' ? 'esp32' : 'esp8266',
-          'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
-          'spi', 'i2c', 'one_wire', 'uart',
-          'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
-          'remote_transmitter', 'remote_receiver', 'i2s_audio',
-          'deep_sleep', 'dfplayer', 'rtttl', 'status_led', 'time',
-          'ld2410', 'ads1115', 'pcf8574', 'interval',
-          ...Array.from(domainMap.keys()),
-        ]);
-        const passthroughParts: string[] = [];
-        for (const [key, value] of Object.entries(passDoc)) {
-          if (emittedKeys.has(key)) continue;
-          passthroughParts.push(dumpSection(key, value));
-        }
-        if (passthroughParts.length > 0) {
-          parts.push('# (Passthrough — sections preserved from original YAML)');
-          parts.push(...passthroughParts);
+      const emittedKeys = new Set([
+        'esphome',
+        board.platform === 'esp32' ? 'esp32' : 'esp8266',
+        'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+        'spi', 'i2c', 'one_wire', 'uart',
+        'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
+        'remote_transmitter', 'remote_receiver', 'i2s_audio',
+        'deep_sleep', 'dfplayer', 'rtttl', 'status_led', 'time',
+        'ld2410', 'ads1115', 'pcf8574', 'interval',
+        ...Array.from(domainMap.keys()),
+      ]);
+
+      // Split the original YAML into top-level key blocks and re-emit verbatim.
+      // This preserves unicode escapes, lambdas, custom tags, etc. exactly as-is.
+      const lines = project.passthroughYaml.split('\n');
+      const blocks: { key: string; lines: string[] }[] = [];
+      let current: { key: string; lines: string[] } | null = null;
+
+      for (const line of lines) {
+        const topLevelMatch = line.match(/^([a-zA-Z0-9_]+)\s*:/);
+        if (topLevelMatch && !line.startsWith(' ') && !line.startsWith('\t') && !line.startsWith('#')) {
+          if (current) blocks.push(current);
+          current = { key: topLevelMatch[1], lines: [line] };
+        } else if (current) {
+          current.lines.push(line);
         }
       }
+      if (current) blocks.push(current);
+
+      const passthroughParts: string[] = [];
+      for (const block of blocks) {
+        if (emittedKeys.has(block.key)) continue;
+        // Trim trailing blank lines from each block
+        const trimmed = block.lines.join('\n').trimEnd();
+        passthroughParts.push(trimmed);
+      }
+
+      if (passthroughParts.length > 0) {
+        parts.push('# (Passthrough \u2014 sections preserved from original YAML)');
+        parts.push(...passthroughParts);
+      }
     } catch {
-      // Malformed passthrough — skip silently
+      // Skip silently if something goes wrong
     }
   }
 
