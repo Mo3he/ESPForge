@@ -77,7 +77,15 @@ type Action =
 function projectReducer(state: Project, action: Action): Project {
   switch (action.type) {
     case 'SET_BOARD':
-      return { ...state, board: action.board, components: [], automations: [] };
+      return {
+        ...state,
+        board: action.board,
+        components: (action.board.defaultComponents ?? []).map((dc) => ({
+          ...dc,
+          id: generateId('comp'),
+        })),
+        automations: [],
+      };
 
     case 'RESET_PROJECT':
       return initialProject;

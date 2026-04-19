@@ -1849,6 +1849,77 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'total_unit', label: 'Total Unit', type: 'text', default: 'Wh', group: 'Sub-entities' },
     ],
   },
+
+  // ═══════════════════════════════════════════
+  //  mmWave RADAR SENSORS
+  // ═══════════════════════════════════════════
+  {
+    type: 'sensor.ld2410',
+    platform: 'ld2410',
+    domain: 'sensor',
+    category: 'sensor',
+    name: 'LD2410 mmWave Presence Radar',
+    description: 'Hi-Link 24GHz mmWave radar. Detects presence (moving and stationary). Connects via UART.',
+    icon: 'Radar',
+    pins: [
+      { role: 'tx_pin', label: 'TX Pin (to sensor RX)', capabilities: ['gpio', 'uart_tx'] },
+      { role: 'rx_pin', label: 'RX Pin (from sensor TX)', capabilities: ['gpio', 'uart_rx'] },
+    ],
+    configFields: [
+      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Presence Radar' },
+      { key: 'presence_name', label: 'Presence Name', type: 'text', default: 'Presence', group: 'Sub-entities' },
+      { key: 'moving_target_name', label: 'Moving Target Name', type: 'text', default: 'Moving Target', group: 'Sub-entities' },
+      { key: 'still_target_name', label: 'Still Target Name', type: 'text', default: 'Still Target', group: 'Sub-entities' },
+      { key: 'moving_distance_name', label: 'Moving Distance Name', type: 'text', default: 'Moving Distance', group: 'Sub-entities' },
+      { key: 'still_distance_name', label: 'Still Distance Name', type: 'text', default: 'Still Distance', group: 'Sub-entities' },
+      { key: 'moving_energy_name', label: 'Moving Energy Name', type: 'text', default: 'Moving Energy', group: 'Sub-entities' },
+      { key: 'still_energy_name', label: 'Still Energy Name', type: 'text', default: 'Still Energy', group: 'Sub-entities' },
+      { key: 'detection_distance_name', label: 'Detection Distance Name', type: 'text', default: 'Detection Distance', group: 'Sub-entities' },
+      { key: 'max_move_distance', label: 'Max Move Gate (0-8)', type: 'number', default: 8 },
+      { key: 'max_still_distance', label: 'Max Still Gate (0-8)', type: 'number', default: 8 },
+      { key: 'timeout', label: 'Absence Timeout (s)', type: 'number', default: 5 },
+    ],
+    extraDomains: ['uart'],
+  },
+  {
+    type: 'sensor.ld2450',
+    platform: 'ld2450',
+    domain: 'sensor',
+    category: 'sensor',
+    name: 'LD2450 mmWave Multi-Target Radar',
+    description: 'Hi-Link 24GHz mmWave radar. Tracks up to 3 targets with X/Y coordinates and speed. Connects via UART.',
+    icon: 'Radar',
+    pins: [
+      { role: 'tx_pin', label: 'TX Pin (to sensor RX)', capabilities: ['gpio', 'uart_tx'] },
+      { role: 'rx_pin', label: 'RX Pin (from sensor TX)', capabilities: ['gpio', 'uart_rx'] },
+    ],
+    configFields: [
+      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Multi-Target Radar' },
+      { key: 'presence_name', label: 'Presence Name', type: 'text', default: 'Presence', group: 'Sub-entities' },
+      { key: 'target_count_name', label: 'Target Count Name', type: 'text', default: 'Target Count', group: 'Sub-entities' },
+      { key: 'fast_off_detection', label: 'Fast Off Detection', type: 'boolean', default: false },
+    ],
+    extraDomains: ['uart'],
+  },
+  {
+    type: 'sensor.ld2411s',
+    platform: 'ld2411s',
+    domain: 'sensor',
+    category: 'sensor',
+    name: 'LD2411S mmWave Presence + Illuminance',
+    description: 'Hi-Link 24GHz radar with built-in light sensor. Single-target presence detection with lux reading.',
+    icon: 'Radar',
+    pins: [
+      { role: 'tx_pin', label: 'TX Pin (to sensor RX)', capabilities: ['gpio', 'uart_tx'] },
+      { role: 'rx_pin', label: 'RX Pin (from sensor TX)', capabilities: ['gpio', 'uart_rx'] },
+    ],
+    configFields: [
+      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Presence + Light' },
+      { key: 'presence_name', label: 'Presence Name', type: 'text', default: 'Presence', group: 'Sub-entities' },
+      { key: 'illuminance_name', label: 'Illuminance Name', type: 'text', default: 'Illuminance', group: 'Sub-entities' },
+    ],
+    extraDomains: ['uart'],
+  },
 ];
 
 export function getDefinition(type: string): ComponentDefinition | undefined {

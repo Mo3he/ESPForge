@@ -33,6 +33,8 @@ export interface Board {
   defaultI2C?: { sda: number; scl: number };
   hasBLE?: boolean;
   hasPSRAM?: boolean;
+  /** Components to auto-add when this board is selected */
+  defaultComponents?: Array<Omit<ComponentInstance, 'id'>>;
 }
 
 // ── Component Types ──
