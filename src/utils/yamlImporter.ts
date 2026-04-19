@@ -145,6 +145,15 @@ export function importYaml(text: string): ImportResult {
   const components: ComponentInstance[] = [];
   let idCounter = 0;
 
+  // Collect output IDs that are consumed by monochromatic lights so we don't
+  // import them as standalone components (they'd cause a duplicate pin conflict).
+  const consumedOutputIds = new Set<string>();
+  const lightRaw = doc.light;
+  const lightEntries = Array.isArray(lightRaw) ? lightRaw : lightRaw ? [lightRaw] : [];
+  for (const le of lightEntries as Record<string, unknown>[]) {
+    if (le.platform === 'monochromatic' && le.output) consumedOutputIds.add(String(le.output));
+  }
+
   for (const domain of COMPONENT_DOMAINS) {
     const raw = doc[domain];
     if (!raw) continue;
@@ -159,6 +168,9 @@ export function importYaml(text: string): ImportResult {
         // Unknown platform — preserved verbatim in passthroughYaml, skip visual import
         continue;
       }
+
+      // Skip output entries that are internal helpers for a monochromatic light
+      if (domain === 'output' && entry.id && consumedOutputIds.has(String(entry.id))) continue;
 
       idCounter++;
       const id = `imported_${idCounter}`;
