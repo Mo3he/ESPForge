@@ -164,13 +164,6 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
       <header className="header">
         <div className="header-left">
           <div className="header-logo">
-            <svg viewBox="0 0 32 32" width="28" height="28">
-              <rect width="32" height="32" rx="4" fill="#58a6ff" />
-              <g transform="rotate(-45 16 16)">
-                <rect x="6" y="5" width="18" height="8" rx="2" fill="#fff" />
-                <rect x="14" y="13" width="4" height="14" rx="1" fill="#c0d0e0" />
-              </g>
-            </svg>
             <span className="header-title">ESPForge</span>
           </div>
 
