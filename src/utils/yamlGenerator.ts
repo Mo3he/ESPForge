@@ -635,7 +635,7 @@ function generateComponentEntry(
       break;
     }
     case 'sensor.bme280': {
-      base.platform = 'bme280';
+      base.platform = 'bme280_i2c';
       if (inst.config.address) base.address = inst.config.address;
       base.temperature = { name: str(inst.config.temperature_name, 'Temperature') };
       base.humidity = { name: str(inst.config.humidity_name, 'Humidity') };
@@ -644,7 +644,7 @@ function generateComponentEntry(
       break;
     }
     case 'sensor.bmp280': {
-      base.platform = 'bmp280';
+      base.platform = 'bmp280_i2c';
       if (inst.config.address) base.address = inst.config.address;
       base.temperature = { name: str(inst.config.temperature_name, 'Temperature') };
       base.pressure = { name: str(inst.config.pressure_name, 'Pressure') };
@@ -830,7 +830,6 @@ function generateComponentEntry(
     }
     case 'sensor.ina219': {
       base.platform = 'ina219';
-      base.name = str(inst.config.name, inst.name);
       if (inst.config.address) base.address = inst.config.address;
       if (inst.config.shunt_resistance) base.shunt_resistance = inst.config.shunt_resistance + ' ohm';
       if (inst.config.max_current) base.max_current = inst.config.max_current + 'A';
