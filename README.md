@@ -4,7 +4,7 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 
 ## Try it here [ESPForge](https://mo3he.github.io/ESPForge/)
 
-![ESPForge Screenshot](docs/screenshot.png)
+![ESPForge Screenshot](docs/screenshot1.png)
 
 ## Features
 
