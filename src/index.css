@@ -1165,6 +1165,8 @@ select {
 .pin-mapper-svg-container {
   overflow-x: auto;
   padding: 12px 0;
+  display: flex;
+  justify-content: center;
 }
 
 .pin-mapper-legend {
