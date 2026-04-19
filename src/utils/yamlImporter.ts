@@ -203,13 +203,20 @@ export function importYaml(text: string): ImportResult {
     fallbackApEnabled: !!apDoc.ssid,
     fallbackApSsid: isSecret(apDoc.ssid) ? '' : strVal(apDoc.ssid),
     fallbackApPassword: isSecret(apDoc.password) ? '' : strVal(apDoc.password),
-    useSecretsFallbackAp: isSecret(apDoc.ssid) || isSecret(apDoc.password),
+    useSecretsFallbackApSsid: isSecret(apDoc.ssid),
+    useSecretsFallbackApPassword: isSecret(apDoc.password),
     statusLedPin,
     timeEnabled: doc.time !== undefined,
     timeTimezone: strVal(timeDoc.timezone),
     timeServers: Array.isArray(timeDoc.servers)
       ? (timeDoc.servers as unknown[]).map(String).join(', ')
       : '',
+    _rawTimeExtras: (() => {
+      const extras: Record<string, unknown> = {};
+      if (timeDoc.id) extras.id = timeDoc.id;
+      if (timeDoc.on_time) extras.on_time = timeDoc.on_time;
+      return Object.keys(extras).length > 0 ? extras : undefined;
+    })(),
   };
 
   // ── Components ───────────────────────────────────────────────
@@ -295,6 +302,16 @@ export function importYaml(text: string): ImportResult {
           if (pinObj.inverted === true && config.inverted === undefined) config.inverted = true;
         }
       }
+
+      // Generic extra captures: id (separate from name), restore_mode, lambda, filters
+      if (entry.id !== undefined && String(entry.id) !== String(config.name ?? '')) {
+        config._yamlId = entry.id;
+      }
+      if (entry.restore_mode !== undefined && config.restore_mode === undefined) {
+        config.restore_mode = entry.restore_mode;
+      }
+      if (entry.lambda !== undefined) config._lambda = entry.lambda;
+      if (entry.filters !== undefined) config._filters = entry.filters;
 
       // Capture inline action blocks (on_press, on_state, on_value, etc.) so the
       // generator can re-attach them and the original behaviour is preserved.

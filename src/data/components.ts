@@ -624,6 +624,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     configFields: [
       { key: 'name', label: 'ID', type: 'text', required: true, placeholder: 'pwm_output' },
       { key: 'frequency', label: 'Frequency', type: 'text', default: '1000Hz' },
+      { key: 'inverted', label: 'Inverted', type: 'boolean', default: false },
     ],
   },
   {

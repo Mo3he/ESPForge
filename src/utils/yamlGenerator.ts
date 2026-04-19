@@ -80,8 +80,8 @@ export function generateYaml(project: Project): string {
 
     if (settings.fallbackApEnabled) {
       wifi.ap = {
-        ssid: settings.useSecretsFallbackAp ? '__SECRET__fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
-        password: settings.useSecretsFallbackAp ? '__SECRET__fallback_ap_password' : (settings.fallbackApPassword || 'fallback123'),
+        ssid: settings.useSecretsFallbackApSsid ? '__SECRET__fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
+        password: settings.useSecretsFallbackApPassword ? '__SECRET__fallback_ap_password' : (settings.fallbackApPassword || 'fallback123'),
       };
     }
     doc.wifi = wifi;
@@ -288,10 +288,12 @@ export function generateYaml(project: Project): string {
   // ── time (SNTP) ──
   if (settings.timeEnabled) {
     const time: Record<string, unknown> = { platform: 'sntp' };
+    if (settings._rawTimeExtras?.id) time.id = settings._rawTimeExtras.id;
     if (settings.timeTimezone) time.timezone = settings.timeTimezone;
     if (settings.timeServers) {
       time.servers = settings.timeServers.split(',').map((s) => s.trim()).filter(Boolean);
     }
+    if (settings._rawTimeExtras?.on_time) time.on_time = settings._rawTimeExtras.on_time;
     doc.time = [time];
   }
 
@@ -777,6 +779,7 @@ function generateComponentEntry(
       base.name = str(inst.config.name, inst.name);
       // Use original output id from import if present, otherwise auto-generate
       base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
+      if (inst.config.restore_mode) base.restore_mode = inst.config.restore_mode;
       break;
     }
     case 'light.neopixelbus': {
@@ -800,6 +803,7 @@ function generateComponentEntry(
       base.platform = 'ledc';
       if (inst.pins.pin != null) base.pin = `GPIO${inst.pins.pin}`;
       base.id = inst.config.name ? String(inst.config.name) : inst.id;
+      if (inst.config.inverted) base.inverted = true;
       if (inst.config.frequency) base.frequency = inst.config.frequency;
       break;
     }
@@ -1414,6 +1418,7 @@ function generateComponentEntry(
       base.platform = 'template';
       base.name = str(inst.config.name, inst.name);
       if (inst.config.device_class) base.device_class = inst.config.device_class;
+      if (inst.config._lambda) base.lambda = inst.config._lambda;
       break;
     }
     case 'binary_sensor.analog_threshold': {
@@ -1503,6 +1508,14 @@ function generateComponentEntry(
     for (const [key, value] of Object.entries(inst.config._inlineActions as Record<string, unknown>)) {
       base[key] = value;
     }
+  }
+
+  // Generic: emit _yamlId (component id distinct from name), _filters captured from import
+  if (inst.config._yamlId !== undefined && base.id === undefined) {
+    base.id = inst.config._yamlId;
+  }
+  if (inst.config._filters !== undefined && base.filters === undefined) {
+    base.filters = inst.config._filters;
   }
 
   return base;
@@ -1694,7 +1707,7 @@ function str(val: unknown, fallback: string): string {
 /** Generate a secrets.yaml file based on which secret flags are enabled */
 export function generateSecretsYaml(project: Project): string | null {
   const s = project.settings;
-  const anySecrets = s.useSecretsWifi || s.useSecretsApi || s.useSecretsOta || s.useSecretsMqtt || s.useSecretsFallbackAp;
+  const anySecrets = s.useSecretsWifi || s.useSecretsApi || s.useSecretsOta || s.useSecretsMqtt || s.useSecretsFallbackApSsid || s.useSecretsFallbackApPassword;
   if (!anySecrets) return null;
 
   const lines: string[] = [
@@ -1720,8 +1733,8 @@ export function generateSecretsYaml(project: Project): string | null {
     lines.push(`mqtt_password: "${s.mqttPassword || 'YOUR_MQTT_PASSWORD'}"`);
   }
 
-  if (s.useSecretsFallbackAp && s.fallbackApEnabled) {
-    lines.push(`fallback_ap_ssid: "${s.fallbackApSsid || 'YOUR_AP_NAME'}"`);
+  if ((s.useSecretsFallbackApSsid || s.useSecretsFallbackApPassword) && s.fallbackApEnabled) {
+    if (s.useSecretsFallbackApSsid) lines.push(`fallback_ap_ssid: "${s.fallbackApSsid || 'YOUR_AP_NAME'}"`);
     lines.push(`fallback_ap_password: "${s.fallbackApPassword || 'YOUR_AP_PASSWORD'}"`);
   }
 

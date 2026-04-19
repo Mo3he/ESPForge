@@ -190,7 +190,9 @@ export interface ProjectSettings {
   fallbackApEnabled: boolean;
   fallbackApSsid: string;
   fallbackApPassword: string;
-  useSecretsFallbackAp: boolean;
+  useSecretsFallbackApSsid: boolean;
+  useSecretsFallbackApPassword: boolean;
+  _rawTimeExtras?: Record<string, unknown>;
   _rawOnBoot?: unknown;
   statusLedPin: string;
   timeEnabled: boolean;

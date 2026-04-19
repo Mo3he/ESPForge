@@ -98,13 +98,13 @@ export default function SettingsPanel() {
               <label className="toggle-label">
                 <input
                   type="checkbox"
-                  checked={s.useSecretsFallbackAp}
-                  onChange={(e) => update({ useSecretsFallbackAp: e.target.checked })}
+                  checked={s.useSecretsFallbackApSsid && s.useSecretsFallbackApPassword}
+                  onChange={(e) => update({ useSecretsFallbackApSsid: e.target.checked, useSecretsFallbackApPassword: e.target.checked })}
                 />
                 <span className="toggle-text">Use secrets.yaml</span>
               </label>
             </div>
-            {!s.useSecretsFallbackAp && (
+            {!s.useSecretsFallbackApSsid && (
               <>
                 <div className="form-group">
                   <label>AP Name</label>
