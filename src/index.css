@@ -1400,18 +1400,21 @@ select {
 .mobile-nav-btn {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 8px 4px;
+  gap: 4px;
+  padding: 0 4px;
+  height: 38px;
   border: none;
   background: transparent;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
   cursor: pointer;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
   min-width: 0;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
 }
 
 .mobile-nav-btn:hover {
@@ -1421,11 +1424,11 @@ select {
 .mobile-nav-btn.active {
   color: var(--accent);
   font-weight: 600;
+  border-bottom-color: var(--accent);
 }
 
 .mobile-nav-btn .tab-badge {
-  margin-left: 0;
-  margin-top: 1px;
+  margin-left: 2px;
 }
 
 /* ── Responsive ── */
@@ -1521,14 +1524,6 @@ select {
     gap: 2px;
     flex-shrink: 0;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    max-width: calc(100vw - 140px);
-  }
-
-  .header-right::-webkit-scrollbar {
-    display: none;
   }
 
   .header-right .btn {
@@ -1537,13 +1532,30 @@ select {
     flex-shrink: 0;
   }
 
-  /* Mobile bottom nav tabs */
+  /* Hide text label on export button, keep icon */
+  .btn-export-label {
+    display: none;
+  }
+
+  /* Hide low-priority header buttons on mobile */
+  .header-btn-desktop {
+    display: none;
+  }
+
+  /* Mobile nav tabs (below header) */
   .mobile-nav {
     display: flex;
-    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     background: var(--bg-secondary);
     flex-shrink: 0;
     z-index: 20;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .mobile-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .board-selector {
@@ -1710,10 +1722,6 @@ select {
 
 @media (max-width: 480px) {
   .header-board-badge {
-    display: none;
-  }
-
-  .btn-group {
     display: none;
   }
 

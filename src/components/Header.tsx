@@ -192,7 +192,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               >
                 <Cpu size={14} /> {project.board.name}
               </button>
-              <div className="btn-group">
+              <div className="btn-group header-btn-desktop">
                 <button className="btn btn-ghost" onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)">
                   <Undo2 size={16} />
                 </button>
@@ -200,11 +200,11 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                   <Redo2 size={16} />
                 </button>
               </div>
-              <button className="btn btn-ghost" onClick={handleLoadProject} title="Load project">
+              <button className="btn btn-ghost header-btn-desktop" onClick={handleLoadProject} title="Load project">
                 <FolderOpen size={16} />
               </button>
               <button
-                className="btn btn-ghost"
+                className="btn btn-ghost header-btn-desktop"
                 onClick={() => {
                   if (confirm('Start a new project? All unsaved changes will be lost.')) {
                     dispatch({ type: 'RESET_PROJECT' });
@@ -215,10 +215,10 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               >
                 <FilePlus size={16} />
               </button>
-              <button className="btn btn-ghost" onClick={handleSaveProject} title="Save project (Ctrl+S)">
+              <button className="btn btn-ghost header-btn-desktop" onClick={handleSaveProject} title="Save project (Ctrl+S)">
                 <Save size={16} />
               </button>
-              <button className="btn btn-ghost" onClick={handleShareUrl} title="Copy share link">
+              <button className="btn btn-ghost header-btn-desktop" onClick={handleShareUrl} title="Copy share link">
                 <Link size={16} />
               </button>
               {issues.length > 0 && (
@@ -237,8 +237,8 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               >
                 {'{ }'}
               </button>
-              <button className="btn btn-primary" onClick={handleExport}>
-                <Download size={14} /> Export YAML
+              <button className="btn btn-primary btn-export" onClick={handleExport}>
+                <Download size={14} /> <span className="btn-export-label">Export YAML</span>
               </button>
             </>
           )}

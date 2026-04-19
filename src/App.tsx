@@ -131,6 +131,25 @@ export default function App() {
         onTabChange={setActiveTab}
       />
 
+      {/* Mobile top navigation tabs */}
+      <nav className="mobile-nav">
+        {[
+          { id: 'settings', label: 'Settings' },
+          { id: 'components', label: 'Components', count: project.components.length },
+          { id: 'pins', label: 'Pins' },
+          { id: 'automations', label: 'Automations', count: project.automations.length },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            className={`mobile-nav-btn ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+            {(tab.count ?? 0) > 0 && <span className="tab-badge">{tab.count}</span>}
+          </button>
+        ))}
+      </nav>
+
       <div className={`workspace ${yamlOpen ? 'with-yaml' : ''}`}>
         <main className="main-content">
           <StepGuide activeTab={activeTab} onNavigate={setActiveTab} />
@@ -163,25 +182,6 @@ export default function App() {
         )}
         <YamlPreview open={yamlOpen} onClose={() => setYamlOpen(false)} width={yamlWidth} />
       </div>
-
-      {/* Mobile bottom navigation */}
-      <nav className="mobile-nav">
-        {[
-          { id: 'settings', label: 'Settings' },
-          { id: 'components', label: 'Components', count: project.components.length },
-          { id: 'pins', label: 'Pins' },
-          { id: 'automations', label: 'Automations', count: project.automations.length },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            className={`mobile-nav-btn ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-            {(tab.count ?? 0) > 0 && <span className="tab-badge">{tab.count}</span>}
-          </button>
-        ))}
-      </nav>
     </div>
   );
 }
