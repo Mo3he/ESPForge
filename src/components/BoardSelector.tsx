@@ -123,7 +123,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
         </div>
 
         <div className="template-grid">
-          {projectTemplates.map((t) => (
+          {projectTemplates.slice(0, 1).map((t) => (
             <button
               key={t.id}
               className={`template-card ${t.id === 'blank' ? 'template-blank' : ''}`}
@@ -144,17 +144,34 @@ export default function BoardSelector({ onBoardSelected }: Props) {
               </div>
             </button>
           ))}
-        </div>
-
-        <div className="import-divider">
-          <span>or</span>
-        </div>
-        <div className="import-existing">
-          <button className="btn btn-ghost import-project-btn" onClick={handleImport}>
-            <Upload size={16} />
-            Import existing project or YAML
+          <button className="template-card template-import" onClick={handleImport}>
+            <div className="template-icon"><Upload size={28} strokeWidth={1.25} /></div>
+            <div className="template-info">
+              <h3>Import Project</h3>
+              <p>Load a saved <code>.json</code> project or an existing ESPHome <code>.yaml</code> file.</p>
+            </div>
           </button>
-          <p className="import-hint">Load a saved <code>.json</code> project or an existing ESPHome <code>.yaml</code> file</p>
+          {projectTemplates.slice(1).map((t) => (
+            <button
+              key={t.id}
+              className={`template-card ${t.id === 'blank' ? 'template-blank' : ''}`}
+              onClick={() => handleSelectTemplate(t)}
+            >
+              <div className="template-icon"><Icon name={t.icon} size={28} strokeWidth={1.25} /></div>
+              <div className="template-info">
+                <h3>{t.name}</h3>
+                <p>{t.description}</p>
+                {t.components.length > 0 && (
+                  <div className="template-meta">
+                    <span className="badge">{t.components.length} components</span>
+                    {t.automations.length > 0 && (
+                      <span className="badge">{t.automations.length} automation{t.automations.length > 1 ? 's' : ''}</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     );
