@@ -1695,29 +1695,6 @@ export const componentDefinitions: ComponentDefinition[] = [
   //  NEW — HIGH DEMAND
   // ═══════════════════════════════════════════
 
-  // ── LD2410 mmWave presence ──
-  {
-    type: 'sensor.ld2410',
-    platform: 'ld2410',
-    domain: 'sensor',
-    category: 'sensor',
-    name: 'LD2410 mmWave Presence',
-    description: 'HiLink LD2410 24GHz mmWave radar for human presence & motion detection.',
-    icon: 'Radio',
-    pins: [
-      { role: 'tx_pin', label: 'UART TX Pin', capabilities: ['gpio'] },
-      { role: 'rx_pin', label: 'UART RX Pin', capabilities: ['gpio'] },
-    ],
-    configFields: [
-      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Presence Sensor' },
-      { key: 'has_target', label: 'Has Target Binary Sensor', type: 'boolean', default: true },
-      { key: 'moving_distance', label: 'Moving Distance Sensor', type: 'boolean', default: true },
-      { key: 'still_distance', label: 'Still Distance Sensor', type: 'boolean', default: true },
-      { key: 'detection_distance', label: 'Detection Distance Sensor', type: 'boolean', default: true },
-    ],
-    extraDomains: ['uart'],
-  },
-
   // ── ADS1115 4-channel ADC ──
   {
     type: 'sensor.ads1115',

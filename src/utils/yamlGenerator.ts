@@ -226,12 +226,22 @@ export function generateYaml(project: Project): string {
     const def = getDefinition(c.type);
     return def?.extraDomains?.includes('uart');
   });
+  const mmwaveBaud: Record<string, number> = {
+    'sensor.ld2410': 256000,
+    'sensor.ld2450': 256000,
+    'sensor.ld2411s': 256000,
+  };
   if (uartComponents.length > 0) {
     doc.uart = uartComponents.map((inst) => {
       const entry: Record<string, unknown> = {};
       if (inst.pins.tx_pin != null) entry.tx_pin = `GPIO${inst.pins.tx_pin}`;
       if (inst.pins.rx_pin != null) entry.rx_pin = `GPIO${inst.pins.rx_pin}`;
-      entry.baud_rate = 9600;
+      const baud = mmwaveBaud[inst.type] ?? 9600;
+      entry.baud_rate = baud;
+      if (baud === 256000) {
+        entry.parity = 'NONE';
+        entry.stop_bits = 1;
+      }
       entry.id = `${inst.id}_uart`;
       return entry;
     });
@@ -294,7 +304,19 @@ export function generateYaml(project: Project): string {
   // ── ld2410 (top-level section) ──
   const ld2410Inst = components.find((c) => c.type === 'sensor.ld2410');
   if (ld2410Inst) {
-    doc.ld2410 = { uart_id: `${ld2410Inst.id}_uart` };
+    const ld2410Hub: Record<string, unknown> = { uart_id: `${ld2410Inst.id}_uart` };
+    if (ld2410Inst.config.max_move_distance != null) ld2410Hub.max_move_distance_gate = Number(ld2410Inst.config.max_move_distance);
+    if (ld2410Inst.config.max_still_distance != null) ld2410Hub.max_still_distance_gate = Number(ld2410Inst.config.max_still_distance);
+    if (ld2410Inst.config.timeout != null) ld2410Hub.timeout = Number(ld2410Inst.config.timeout);
+    doc.ld2410 = ld2410Hub;
+  }
+
+  // ── ld2450 (top-level section) ──
+  const ld2450Inst = components.find((c) => c.type === 'sensor.ld2450');
+  if (ld2450Inst) {
+    const ld2450Hub: Record<string, unknown> = { id: `${ld2450Inst.id}_hub`, uart_id: `${ld2450Inst.id}_uart` };
+    if (ld2450Inst.config.fast_off_detection) ld2450Hub.fast_off_detection = true;
+    doc.ld2450 = ld2450Hub;
   }
 
   // ── ads1115 (top-level hub) ──
@@ -356,14 +378,29 @@ export function generateYaml(project: Project): string {
 
   // Add LD2410 binary sensor entries
   for (const inst of components) {
-    if (inst.type === 'sensor.ld2410' && inst.config.has_target) {
-      if (!domainMap.has('binary_sensor')) domainMap.set('binary_sensor', []);
-      domainMap.get('binary_sensor')!.push({
-        platform: 'ld2410',
-        name: str(inst.config.name, inst.name) + ' Has Target',
-        has_target: null,
-      });
-    }
+    if (inst.type !== 'sensor.ld2410') continue;
+    const bsEntry: Record<string, unknown> = { platform: 'ld2410' };
+    const baseName = str(inst.config.name as string, inst.name);
+    const presenceName = (inst.config.presence_name as string) || baseName + ' Presence';
+    const movingTargetName = inst.config.moving_target_name as string | undefined;
+    const stillTargetName = inst.config.still_target_name as string | undefined;
+    bsEntry.has_target = { name: presenceName };
+    if (movingTargetName) bsEntry.has_moving_target = { name: movingTargetName };
+    if (stillTargetName) bsEntry.has_still_target = { name: stillTargetName };
+    if (!domainMap.has('binary_sensor')) domainMap.set('binary_sensor', []);
+    domainMap.get('binary_sensor')!.push(bsEntry);
+  }
+
+  // Add LD2450 binary sensor entries
+  for (const inst of components) {
+    if (inst.type !== 'sensor.ld2450') continue;
+    const bsEntry: Record<string, unknown> = { platform: 'ld2450', ld2450_id: `${inst.id}_hub` };
+    const presenceName = (inst.config.presence_name as string) || 'Presence';
+    bsEntry.has_target = { name: presenceName };
+    bsEntry.has_moving_target = { name: 'Moving Target' };
+    bsEntry.has_still_target = { name: 'Still Target' };
+    if (!domainMap.has('binary_sensor')) domainMap.set('binary_sensor', []);
+    domainMap.get('binary_sensor')!.push(bsEntry);
   }
 
   // Embed value_range automations into sensor entries
@@ -1247,10 +1284,33 @@ function generateComponentEntry(
     // ── LD2410 mmWave ──
     case 'sensor.ld2410': {
       base.platform = 'ld2410';
-      base.uart_id = `${inst.id}_uart`;
-      if (inst.config.moving_distance) base.moving_distance = { name: str(inst.config.name, inst.name) + ' Moving Distance' };
-      if (inst.config.still_distance) base.still_distance = { name: str(inst.config.name, inst.name) + ' Still Distance' };
-      if (inst.config.detection_distance) base.detection_distance = { name: str(inst.config.name, inst.name) + ' Detection Distance' };
+      // uart_id belongs only in the top-level ld2410: hub section, not here
+      const mdName = inst.config.moving_distance_name as string | undefined;
+      const sdName = inst.config.still_distance_name as string | undefined;
+      const ddName = inst.config.detection_distance_name as string | undefined;
+      const meName = inst.config.moving_energy_name as string | undefined;
+      const seName = inst.config.still_energy_name as string | undefined;
+      if (mdName) base.moving_distance = { name: mdName };
+      if (sdName) base.still_distance = { name: sdName };
+      if (ddName) base.detection_distance = { name: ddName };
+      if (meName) base.moving_energy = { name: meName };
+      if (seName) base.still_energy = { name: seName };
+      break;
+    }
+
+    // ── LD2450 mmWave multi-target ──
+    case 'sensor.ld2450': {
+      base.platform = 'ld2450';
+      base.ld2450_id = `${inst.id}_hub`;
+      const tcName = inst.config.target_count_name as string | undefined;
+      if (tcName) base.target_count = { name: tcName };
+      break;
+    }
+
+    // ── LD2411S mmWave ──
+    case 'sensor.ld2411s': {
+      base.platform = 'ld2411s';
+      base.name = str(inst.config.name as string, inst.name);
       break;
     }
 
