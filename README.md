@@ -9,18 +9,20 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 ## Features
 
 ### Build
-- **20+ boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack, Sonoff, XIAO, LilyGO, and more
-- **80+ components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR, media, displays, I/O expanders
+- **35+ boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6), Seeed XIAO (S3, S3 Sense, C6, S2), LilyGO (T-Display AMOLED, T-Beam, T-Watch S3, T-Dongle), Sonoff, and more
+- **80+ components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR, media, displays, I/O expanders, mmWave radar (LD2410, LD2450, LD2411S)
 - **10 starter templates** — Sensor Node, Smart Relay, LED Strip, BLE Gateway, Garage Door, Power Monitor, etc.
 - **Guided onboarding** — template → board → settings → components
+- Boards with onboard hardware (buttons, NeoPixels, displays) auto-add those components on selection
 
 ### Configure
 - **Form-based editing** — every field has labels, defaults, and hints
 - **Visual pin mapper** — color-coded board diagram with pin conflict detection
 - **Automation builder** — triggers (boot, interval, button press, sensor threshold), conditions, and actions for switches, lights, fans, covers, locks, numbers
-- **Full settings** — WiFi, static IP, MQTT, API encryption, OTA, logger levels, SNTP time, status LED
+- **Full settings** — WiFi, fallback AP, static IP, MQTT, API encryption, OTA, logger levels, SNTP time, status LED
 
-### Export
+### Import / Export
+- **YAML import** — load an existing ESPHome `.yaml` file and keep editing it visually
 - **Live YAML preview** — syntax-highlighted, updates as you type
 - **Validation** — catches missing WiFi, unassigned pins, empty fields, and conflicts before export
 - **Secrets file** — auto-generates `secrets.yaml` for `!secret` references
@@ -29,9 +31,10 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 ### Quality of life
 - Undo / Redo (Ctrl+Z / Ctrl+Shift+Z)
 - Save / Load projects as JSON
+- Inline project rename in the header
 - Light / Dark theme
 - Keyboard shortcuts (Ctrl+S save, Ctrl+E export)
-- Responsive layout for tablets
+- Responsive layout — works on mobile and tablet
 
 ## Quick Start
 
@@ -63,7 +66,7 @@ ESPForge runs entirely in the browser. Your configuration is never sent to a ser
 
 ## Tech Stack
 
-- React 18 + TypeScript + Vite 6
+- React 19 + TypeScript + Vite 8
 - [js-yaml](https://github.com/nodeca/js-yaml)
 - No backend — fully static, nothing stored server-side
 
