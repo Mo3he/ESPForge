@@ -1,13 +1,15 @@
 import { useProject } from '../context/ProjectContext';
 import { getDefinition } from '../data/components';
+import { ArrowLeft } from 'lucide-react';
 import { Icon } from './Icon';
 import type { ComponentInstance, Pin } from '../types';
 
 interface Props {
   componentId: string;
+  onMobileBack?: () => void;
 }
 
-export default function ComponentConfig({ componentId }: Props) {
+export default function ComponentConfig({ componentId, onMobileBack }: Props) {
   const { project, dispatch } = useProject();
   const inst = project.components.find((c) => c.id === componentId);
 
@@ -72,6 +74,11 @@ export default function ComponentConfig({ componentId }: Props) {
 
   return (
     <div className="component-config">
+      {onMobileBack && (
+        <button className="mobile-back-btn" onClick={onMobileBack}>
+          <ArrowLeft size={14} /> Back to components
+        </button>
+      )}
       <div className="config-header">
         <span className="config-icon"><Icon name={def.icon} size={20} /></span>
         <div>

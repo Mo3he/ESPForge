@@ -1379,6 +1379,43 @@ select {
   background: var(--border-light);
 }
 
+/* ── Mobile bottom nav (hidden on desktop) ── */
+
+.mobile-nav {
+  display: none;
+}
+
+.mobile-nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.15s;
+  min-width: 0;
+}
+
+.mobile-nav-btn:hover {
+  color: var(--text-primary);
+}
+
+.mobile-nav-btn.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.mobile-nav-btn .tab-badge {
+  margin-left: 0;
+  margin-top: 1px;
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 1024px) {
@@ -1387,55 +1424,127 @@ select {
   }
 }
 
+/* ── Mobile palette toggle ── */
+
+.mobile-palette-toggle {
+  display: none;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-palette-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.mobile-back-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--accent);
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.mobile-back-btn:hover {
+  background: var(--accent-subtle);
+}
+
+/* ── Mobile palette label alignment ── */
+
+.palette-category-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inline-icon {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
 @media (max-width: 768px) {
+  /* Header */
   .header {
-    padding: 8px 12px;
+    padding: 0 12px;
+    height: 48px;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .header-left {
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .header-title {
+    font-size: 14px;
   }
 
   .header-tabs {
-    order: 3;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    display: none;
   }
 
   .header-right {
-    gap: 4px;
-    flex-wrap: wrap;
+    gap: 2px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-width: calc(100vw - 140px);
+  }
+
+  .header-right::-webkit-scrollbar {
+    display: none;
   }
 
   .header-right .btn {
-    padding: 4px 8px;
+    padding: 5px 8px;
     font-size: 12px;
+    flex-shrink: 0;
   }
 
-  .components-layout {
-    flex-direction: column;
-  }
-
-  .component-palette {
-    width: 100%;
-    max-height: 300px;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .workspace.with-yaml {
-    flex-direction: column;
-  }
-
-  .yaml-panel {
-    width: 100%;
-    max-height: 50vh;
-    border-left: none;
+  /* Mobile bottom nav tabs */
+  .mobile-nav {
+    display: flex;
     border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+    flex-shrink: 0;
+    z-index: 20;
+  }
+
+  /* Board / template selector */
+  .board-selector {
+    padding: 24px 16px;
+  }
+
+  .board-selector-header {
+    margin-bottom: 24px;
+  }
+
+  .board-selector-header h1 {
+    font-size: 22px;
   }
 
   .board-grid {
@@ -1450,16 +1559,132 @@ select {
     display: none;
   }
 
+  /* Workspace */
+  .workspace {
+    flex-direction: column;
+  }
+
+  .workspace.with-yaml {
+    flex-direction: column;
+  }
+
+  /* Main content scrollable */
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  /* Components layout: mobile stack */
+  .components-layout {
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .palette-resize-handle {
+    display: none;
+  }
+
+  .component-palette {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-right: none;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .component-palette.mobile-open {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .component-palette.mobile-closed {
+    flex: 0;
+    height: 0;
+    overflow: hidden;
+    border-bottom: none;
+  }
+
+  .mobile-palette-toggle {
+    display: flex;
+  }
+
+  .mobile-back-btn {
+    display: flex;
+  }
+
+  .component-config {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  /* When palette is open, hide config to save space */
+  .component-palette.mobile-open ~ .palette-resize-handle ~ .component-config {
+    display: none;
+  }
+
+  /* YAML panel: slide up from bottom as a fixed overlay */
+  .yaml-resize-handle {
+    display: none;
+  }
+
+  .yaml-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 60vh;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+    border-radius: var(--radius) var(--radius) 0 0;
+    max-height: 60vh;
+  }
+
+  /* Settings & automation */
   .settings-panel {
     padding: 16px;
+    max-width: 100%;
+  }
+
+  .automation-builder {
+    padding: 16px;
+    max-width: 100%;
   }
 
   .pin-mapper {
     padding: 12px;
   }
 
+  /* Step guide */
   .step-guide {
     flex-wrap: wrap;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Board card */
+  .board-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  /* Template card */
+  .template-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  /* Validation panel */
+  .validation-panel {
+    max-height: 160px;
   }
 }
 
@@ -1472,7 +1697,12 @@ select {
     display: none;
   }
 
-  .validation-btn {
-    display: none;
+  .board-selector-header h1 {
+    font-size: 18px;
+  }
+
+  .config-form {
+    max-width: 100%;
   }
 }
+

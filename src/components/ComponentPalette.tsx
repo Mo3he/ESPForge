@@ -9,9 +9,11 @@ interface Props {
   onSelectComponent: (id: string) => void;
   selectedComponentId: string | null;
   width?: number;
+  mobileOpen?: boolean;
+  onMobileToggle?: () => void;
 }
 
-export default function ComponentPalette({ onSelectComponent, selectedComponentId, width = 320 }: Props) {
+export default function ComponentPalette({ onSelectComponent, selectedComponentId, width = 320, mobileOpen = true, onMobileToggle }: Props) {
   const { project, dispatch } = useProject();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(getCategories().map((c) => c.key)),
@@ -79,7 +81,13 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
   });
 
   return (
-    <div className="component-palette" style={{ width }}>
+    <div className={`component-palette${mobileOpen ? ' mobile-open' : ' mobile-closed'}`} style={{ width }}>
+      {onMobileToggle && (
+        <button className="mobile-palette-toggle" onClick={onMobileToggle}>
+          {mobileOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          {mobileOpen ? 'Hide palette' : `Component Palette (${project.components.length} added)`}
+        </button>
+      )}
       {/* Added components */}
       <div className="palette-section">
         <h3 className="palette-section-title">Added Components ({project.components.length})</h3>

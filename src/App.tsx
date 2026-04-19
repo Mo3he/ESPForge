@@ -10,10 +10,13 @@ import AutomationBuilder from './components/AutomationBuilder';
 import SettingsPanel from './components/SettingsPanel';
 import YamlPreview from './components/YamlPreview';
 
+const isMobile = () => window.innerWidth <= 768;
+
 export default function App() {
   const { project, dispatch } = useProject();
   const [activeTab, setActiveTab] = useState('settings');
   const [paletteWidth, setPaletteWidth] = useState(320);
+  const [mobilePaletteOpen, setMobilePaletteOpen] = useState(true);
   const isPaletteDragging = useRef(false);
   const paletteDragStartX = useRef(0);
   const paletteDragStartWidth = useRef(0);
@@ -47,7 +50,7 @@ export default function App() {
     };
   }, []);
 
-  const [yamlOpen, setYamlOpen] = useState(true);
+  const [yamlOpen, setYamlOpen] = useState(() => !isMobile());
   const [yamlWidth, setYamlWidth] = useState(420);
 
   const isDragging = useRef(false);
@@ -134,12 +137,20 @@ export default function App() {
           {activeTab === 'components' && (
             <div className="components-layout">
               <ComponentPalette
-                onSelectComponent={setSelectedComponentId}
+                onSelectComponent={(id) => {
+                  setSelectedComponentId(id);
+                  if (isMobile()) setMobilePaletteOpen(false);
+                }}
                 selectedComponentId={selectedComponentId}
                 width={paletteWidth}
+                mobileOpen={mobilePaletteOpen}
+                onMobileToggle={() => setMobilePaletteOpen(!mobilePaletteOpen)}
               />
               <div className="palette-resize-handle" onMouseDown={onPaletteDragStart} />
-              <ComponentConfig componentId={selectedComponentId || ''} />
+              <ComponentConfig
+                componentId={selectedComponentId || ''}
+                onMobileBack={() => setMobilePaletteOpen(true)}
+              />
             </div>
           )}
           {activeTab === 'pins' && <PinMapper />}
@@ -152,6 +163,25 @@ export default function App() {
         )}
         <YamlPreview open={yamlOpen} onClose={() => setYamlOpen(false)} width={yamlWidth} />
       </div>
+
+      {/* Mobile bottom navigation */}
+      <nav className="mobile-nav">
+        {[
+          { id: 'settings', label: 'Settings' },
+          { id: 'components', label: 'Components', count: project.components.length },
+          { id: 'pins', label: 'Pins' },
+          { id: 'automations', label: 'Automations', count: project.automations.length },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            className={`mobile-nav-btn ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+            {(tab.count ?? 0) > 0 && <span className="tab-badge">{tab.count}</span>}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
