@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   AlertTriangle, Coffee, Cpu, FilePlus, FolderOpen, Link, Moon,
-  Redo2, Save, Sun, Undo2, X, XCircle, Download,
+  MoreHorizontal, Redo2, Save, Sun, Undo2, X, XCircle, Download,
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml, generateSecretsYaml } from '../utils/yamlGenerator';
@@ -19,6 +19,19 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
   const { project, dispatch, undo, redo, canUndo, canRedo } = useProject();
   const [theme, setTheme] = useState(() => localStorage.getItem('espforge-theme') || 'dark');
   const [showValidation, setShowValidation] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [moreOpen]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -240,6 +253,45 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
               <button className="btn btn-primary btn-export" onClick={handleExport}>
                 <Download size={14} /> <span className="btn-export-label">Export YAML</span>
               </button>
+
+              {/* Mobile-only more menu */}
+              <div className="header-more-wrap" ref={moreRef}>
+                <button
+                  className="btn btn-ghost header-more-btn"
+                  onClick={() => setMoreOpen(!moreOpen)}
+                  title="More actions"
+                >
+                  <MoreHorizontal size={16} />
+                </button>
+                {moreOpen && (
+                  <div className="header-more-menu" onClick={() => setMoreOpen(false)}>
+                    <button className="more-menu-item" onClick={undo} disabled={!canUndo}>
+                      <Undo2 size={15} /> Undo
+                    </button>
+                    <button className="more-menu-item" onClick={redo} disabled={!canRedo}>
+                      <Redo2 size={15} /> Redo
+                    </button>
+                    <div className="more-menu-divider" />
+                    <button className="more-menu-item" onClick={handleLoadProject}>
+                      <FolderOpen size={15} /> Load project
+                    </button>
+                    <button className="more-menu-item" onClick={() => {
+                      if (confirm('Start a new project? All unsaved changes will be lost.')) {
+                        dispatch({ type: 'RESET_PROJECT' });
+                        onTabChange('board');
+                      }
+                    }}>
+                      <FilePlus size={15} /> New project
+                    </button>
+                    <button className="more-menu-item" onClick={handleSaveProject}>
+                      <Save size={15} /> Save project
+                    </button>
+                    <button className="more-menu-item" onClick={handleShareUrl}>
+                      <Link size={15} /> Copy share link
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           )}
           <button className="btn btn-ghost" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>

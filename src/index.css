@@ -1391,6 +1391,60 @@ select {
   background: var(--border-light);
 }
 
+/* ── Header more menu (mobile overflow actions) ── */
+
+.header-more-wrap {
+  position: relative;
+  display: none;
+}
+
+.header-more-btn {
+  padding: 5px 8px;
+}
+
+.header-more-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 200px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  padding: 4px 0;
+}
+
+.more-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.more-menu-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.more-menu-item:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.more-menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
 /* ── Mobile bottom nav (hidden on desktop) ── */
 
 .mobile-nav {
@@ -1540,6 +1594,11 @@ select {
   /* Hide low-priority header buttons on mobile */
   .header-btn-desktop {
     display: none;
+  }
+
+  /* Show the more menu on mobile */
+  .header-more-wrap {
+    display: block;
   }
 
   /* Mobile nav tabs (below header) */
