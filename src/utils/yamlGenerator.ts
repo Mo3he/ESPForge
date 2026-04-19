@@ -80,8 +80,8 @@ export function generateYaml(project: Project): string {
 
     if (settings.fallbackApEnabled) {
       wifi.ap = {
-        ssid: settings.useSecretsFallbackAp ? '!secret fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
-        password: settings.useSecretsFallbackAp ? '!secret fallback_ap_password' : (settings.fallbackApPassword || 'fallback123'),
+        ssid: settings.useSecretsFallbackAp ? '__SECRET__fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
+        password: settings.useSecretsFallbackAp ? '__SECRET__fallback_ap_password' : (settings.fallbackApPassword || 'fallback123'),
       };
     }
     doc.wifi = wifi;
