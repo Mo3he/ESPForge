@@ -190,6 +190,7 @@ export interface ProjectSettings {
   fallbackApEnabled: boolean;
   fallbackApSsid: string;
   fallbackApPassword: string;
+  useSecretsFallbackAp: boolean;
   statusLedPin: string;
   timeEnabled: boolean;
   timeTimezone: string;

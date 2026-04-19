@@ -34,6 +34,7 @@ const defaultSettings: ProjectSettings = {
   fallbackApEnabled: true,
   fallbackApSsid: '',
   fallbackApPassword: '',
+  useSecretsFallbackAp: false,
   statusLedPin: '',
   timeEnabled: false,
   timeTimezone: '',

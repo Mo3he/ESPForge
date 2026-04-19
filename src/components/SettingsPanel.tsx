@@ -95,23 +95,37 @@ export default function SettingsPanel() {
         {s.fallbackApEnabled && (
           <>
             <div className="form-group">
-              <label>AP Name</label>
-              <input
-                type="text"
-                value={s.fallbackApSsid}
-                placeholder={`${s.friendlyName} Fallback`}
-                onChange={(e) => update({ fallbackApSsid: e.target.value })}
-              />
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={s.useSecretsFallbackAp}
+                  onChange={(e) => update({ useSecretsFallbackAp: e.target.checked })}
+                />
+                <span className="toggle-text">Use secrets.yaml</span>
+              </label>
             </div>
-            <div className="form-group">
-              <label>AP Password</label>
-              <input
-                type="text"
-                value={s.fallbackApPassword}
-                placeholder="fallback123"
-                onChange={(e) => update({ fallbackApPassword: e.target.value })}
-              />
-            </div>
+            {!s.useSecretsFallbackAp && (
+              <>
+                <div className="form-group">
+                  <label>AP Name</label>
+                  <input
+                    type="text"
+                    value={s.fallbackApSsid}
+                    placeholder={`${s.friendlyName} Fallback`}
+                    onChange={(e) => update({ fallbackApSsid: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>AP Password</label>
+                  <input
+                    type="text"
+                    value={s.fallbackApPassword}
+                    placeholder="fallback123"
+                    onChange={(e) => update({ fallbackApPassword: e.target.value })}
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
         <div className="form-group">

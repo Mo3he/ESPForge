@@ -80,8 +80,8 @@ export function generateYaml(project: Project): string {
 
     if (settings.fallbackApEnabled) {
       wifi.ap = {
-        ssid: settings.fallbackApSsid || `${settings.friendlyName} Fallback`,
-        password: settings.fallbackApPassword || 'fallback123',
+        ssid: settings.useSecretsFallbackAp ? '!secret fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
+        password: settings.useSecretsFallbackAp ? '!secret fallback_ap_password' : (settings.fallbackApPassword || 'fallback123'),
       };
     }
     doc.wifi = wifi;
@@ -1688,7 +1688,7 @@ function str(val: unknown, fallback: string): string {
 /** Generate a secrets.yaml file based on which secret flags are enabled */
 export function generateSecretsYaml(project: Project): string | null {
   const s = project.settings;
-  const anySecrets = s.useSecretsWifi || s.useSecretsApi || s.useSecretsOta || s.useSecretsMqtt;
+  const anySecrets = s.useSecretsWifi || s.useSecretsApi || s.useSecretsOta || s.useSecretsMqtt || s.useSecretsFallbackAp;
   if (!anySecrets) return null;
 
   const lines: string[] = [
@@ -1712,6 +1712,11 @@ export function generateSecretsYaml(project: Project): string | null {
   if (s.useSecretsMqtt && s.mqttEnabled) {
     lines.push(`mqtt_username: "${s.mqttUsername || 'YOUR_MQTT_USERNAME'}"`);
     lines.push(`mqtt_password: "${s.mqttPassword || 'YOUR_MQTT_PASSWORD'}"`);
+  }
+
+  if (s.useSecretsFallbackAp && s.fallbackApEnabled) {
+    lines.push(`fallback_ap_ssid: "${s.fallbackApSsid || 'YOUR_AP_NAME'}"`);
+    lines.push(`fallback_ap_password: "${s.fallbackApPassword || 'YOUR_AP_PASSWORD'}"`);
   }
 
   lines.push('');
