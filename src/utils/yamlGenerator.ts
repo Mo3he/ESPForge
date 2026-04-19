@@ -571,12 +571,25 @@ export function generateYaml(project: Project): string {
     }
     if (curKey) blocks.push({ key: curKey, text: curLines.join('\n').trimEnd() });
 
+    // Infrastructure keys: only replace if ESPForge is actually generating them,
+    // otherwise preserve verbatim (e.g. spi with custom id/interface, uart with
+    // custom baud that ESPForge doesn't know about).
+    const infrastructureKeys = new Set(['spi', 'i2c', 'one_wire', 'uart', 'esp32_touch',
+      'esp32_ble_tracker', 'bluetooth_proxy', 'remote_transmitter', 'remote_receiver',
+      'i2s_audio', 'deep_sleep', 'dfplayer', 'rtttl', 'ld2410', 'ads1115', 'pcf8574']);
+
     const emittedKeys = new Set<string>();
 
     for (const block of blocks) {
       if (managedKeys.has(block.key)) {
-        // Emit the freshly generated version for this key
-        if (doc[block.key] !== undefined) {
+        const hasGenerated = doc[block.key] !== undefined || domainMap.has(block.key);
+        const isInfrastructure = infrastructureKeys.has(block.key);
+
+        if (isInfrastructure && !hasGenerated) {
+          // ESPForge has nothing to emit for this infrastructure key — keep original verbatim
+          parts.push(block.text);
+        } else if (doc[block.key] !== undefined) {
+          // Emit the freshly generated version for this key
           const comment = sectionComments[block.key] || domainComments[block.key];
           if (comment) parts.push(comment);
           parts.push(dumpSection(block.key, doc[block.key]));
