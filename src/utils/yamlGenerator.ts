@@ -715,7 +715,7 @@ function generateComponentEntry(
     case 'light.binary': {
       base.platform = 'binary';
       base.name = str(inst.config.name, inst.name);
-      base.output = `${inst.id}_output`;
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       break;
     }
     case 'light.monochromatic': {
@@ -738,14 +738,14 @@ function generateComponentEntry(
     case 'output.gpio': {
       base.platform = 'gpio';
       if (inst.pins.pin != null) base.pin = `GPIO${inst.pins.pin}`;
-      base.id = inst.id;
+      base.id = inst.config.name ? String(inst.config.name) : inst.id;
       if (inst.config.inverted) base.inverted = true;
       break;
     }
     case 'output.ledc': {
       base.platform = 'ledc';
       if (inst.pins.pin != null) base.pin = `GPIO${inst.pins.pin}`;
-      base.id = inst.id;
+      base.id = inst.config.name ? String(inst.config.name) : inst.id;
       if (inst.config.frequency) base.frequency = inst.config.frequency;
       break;
     }
@@ -919,7 +919,7 @@ function generateComponentEntry(
     case 'output.esp8266_pwm': {
       base.platform = 'esp8266_pwm';
       if (inst.pins.pin != null) base.pin = `GPIO${inst.pins.pin}`;
-      base.id = inst.id;
+      base.id = inst.config.name ? String(inst.config.name) : inst.id;
       if (inst.config.frequency) base.frequency = inst.config.frequency;
       break;
     }
@@ -1005,7 +1005,7 @@ function generateComponentEntry(
     // ── Misc ──
     case 'misc.servo': {
       base.id = inst.config.id || inst.id;
-      base.output = `${inst.id}_output`;
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       if (inst.config.min_level) base.min_level = inst.config.min_level;
       if (inst.config.idle_level) base.idle_level = inst.config.idle_level;
       if (inst.config.max_level) base.max_level = inst.config.max_level;
@@ -1055,21 +1055,21 @@ function generateComponentEntry(
     case 'fan.speed': {
       base.platform = 'speed';
       base.name = str(inst.config.name, inst.name);
-      base.output = `${inst.id}_output`;
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       if (inst.config.speed_count) base.speed_count = Number(inst.config.speed_count);
       break;
     }
     case 'fan.binary': {
       base.platform = 'binary';
       base.name = str(inst.config.name, inst.name);
-      base.output = `${inst.id}_output`;
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       break;
     }
     case 'fan.hbridge': {
       base.platform = 'hbridge';
       base.name = str(inst.config.name, inst.name);
-      base.pin_a = `${inst.id}_output_a`;
-      base.pin_b = `${inst.id}_output_b`;
+      base.pin_a = inst.config._outputId_pin_a ? String(inst.config._outputId_pin_a) : `${inst.id}_output_a`;
+      base.pin_b = inst.config._outputId_pin_b ? String(inst.config._outputId_pin_b) : `${inst.id}_output_b`;
       if (inst.config.speed_count) base.speed_count = Number(inst.config.speed_count);
       if (inst.config.decay_mode) base.decay_mode = inst.config.decay_mode;
       break;
@@ -1190,7 +1190,7 @@ function generateComponentEntry(
       base.platform = 'output';
       base.name = str(inst.config.name, inst.name);
       base.id = inst.id;
-      base.output = `${inst.id}_output`;
+      base.output = inst.config._outputId ? String(inst.config._outputId) : `${inst.id}_output`;
       break;
     }
     case 'lock.template': {
@@ -1404,8 +1404,8 @@ function generateComponentEntry(
     case 'light.cwww': {
       base.platform = 'cwww';
       base.name = str(inst.config.name, inst.name);
-      base.cold_white = `${inst.id}_cw_output`;
-      base.warm_white = `${inst.id}_ww_output`;
+      base.cold_white = inst.config._outputId_cold_white ? String(inst.config._outputId_cold_white) : `${inst.id}_cw_output`;
+      base.warm_white = inst.config._outputId_warm_white ? String(inst.config._outputId_warm_white) : `${inst.id}_ww_output`;
       if (inst.config.cold_white_color_temperature) base.cold_white_color_temperature = inst.config.cold_white_color_temperature;
       if (inst.config.warm_white_color_temperature) base.warm_white_color_temperature = inst.config.warm_white_color_temperature;
       break;
@@ -1413,18 +1413,18 @@ function generateComponentEntry(
     case 'light.rgb': {
       base.platform = 'rgb';
       base.name = str(inst.config.name, inst.name);
-      base.red = `${inst.id}_red_output`;
-      base.green = `${inst.id}_green_output`;
-      base.blue = `${inst.id}_blue_output`;
+      base.red   = inst.config._outputId_red   ? String(inst.config._outputId_red)   : `${inst.id}_red_output`;
+      base.green = inst.config._outputId_green ? String(inst.config._outputId_green) : `${inst.id}_green_output`;
+      base.blue  = inst.config._outputId_blue  ? String(inst.config._outputId_blue)  : `${inst.id}_blue_output`;
       break;
     }
     case 'light.rgbw': {
       base.platform = 'rgbw';
       base.name = str(inst.config.name, inst.name);
-      base.red = `${inst.id}_red_output`;
-      base.green = `${inst.id}_green_output`;
-      base.blue = `${inst.id}_blue_output`;
-      base.white = `${inst.id}_white_output`;
+      base.red   = inst.config._outputId_red   ? String(inst.config._outputId_red)   : `${inst.id}_red_output`;
+      base.green = inst.config._outputId_green ? String(inst.config._outputId_green) : `${inst.id}_green_output`;
+      base.blue  = inst.config._outputId_blue  ? String(inst.config._outputId_blue)  : `${inst.id}_blue_output`;
+      base.white = inst.config._outputId_white ? String(inst.config._outputId_white) : `${inst.id}_white_output`;
       break;
     }
 
@@ -1455,6 +1455,7 @@ function generateOutputForLight(
 ): Record<string, unknown> | Record<string, unknown>[] | null {
   switch (inst.type) {
     case 'light.binary': {
+      if (inst.config._outputId) return null;
       return {
         platform: 'gpio',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',
@@ -1472,6 +1473,7 @@ function generateOutputForLight(
       };
     }
     case 'light.cwww': {
+      if (inst.config._outputId_cold_white && inst.config._outputId_warm_white) return null;
       return [
         {
           platform: 'ledc',
@@ -1488,6 +1490,7 @@ function generateOutputForLight(
       ];
     }
     case 'light.rgb': {
+      if (inst.config._outputId_red && inst.config._outputId_green && inst.config._outputId_blue) return null;
       return [
         { platform: 'ledc', pin: inst.pins.red_pin != null ? `GPIO${inst.pins.red_pin}` : 'GPIOXX', id: `${inst.id}_red_output`, frequency: '1000Hz' },
         { platform: 'ledc', pin: inst.pins.green_pin != null ? `GPIO${inst.pins.green_pin}` : 'GPIOXX', id: `${inst.id}_green_output`, frequency: '1000Hz' },
@@ -1495,6 +1498,7 @@ function generateOutputForLight(
       ];
     }
     case 'light.rgbw': {
+      if (inst.config._outputId_red && inst.config._outputId_green && inst.config._outputId_blue && inst.config._outputId_white) return null;
       return [
         { platform: 'ledc', pin: inst.pins.red_pin != null ? `GPIO${inst.pins.red_pin}` : 'GPIOXX', id: `${inst.id}_red_output`, frequency: '1000Hz' },
         { platform: 'ledc', pin: inst.pins.green_pin != null ? `GPIO${inst.pins.green_pin}` : 'GPIOXX', id: `${inst.id}_green_output`, frequency: '1000Hz' },
@@ -1503,6 +1507,7 @@ function generateOutputForLight(
       ];
     }
     case 'fan.speed': {
+      if (inst.config._outputId) return null;
       return {
         platform: 'ledc',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',
@@ -1511,6 +1516,7 @@ function generateOutputForLight(
       };
     }
     case 'fan.binary': {
+      if (inst.config._outputId) return null;
       return {
         platform: 'gpio',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',
@@ -1518,12 +1524,14 @@ function generateOutputForLight(
       };
     }
     case 'fan.hbridge': {
+      if (inst.config._outputId_pin_a && inst.config._outputId_pin_b) return null;
       return [
         { platform: 'ledc', pin: inst.pins.pin_a != null ? `GPIO${inst.pins.pin_a}` : 'GPIOXX', id: `${inst.id}_output_a`, frequency: '1000Hz' },
         { platform: 'ledc', pin: inst.pins.pin_b != null ? `GPIO${inst.pins.pin_b}` : 'GPIOXX', id: `${inst.id}_output_b`, frequency: '1000Hz' },
       ];
     }
     case 'lock.gpio': {
+      if (inst.config._outputId) return null;
       return {
         platform: 'gpio',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',
@@ -1533,6 +1541,7 @@ function generateOutputForLight(
     }
     case 'media.rtttl':
     case 'misc.servo': {
+      if (inst.config._outputId) return null;
       return {
         platform: 'ledc',
         pin: inst.pins.pin != null ? `GPIO${inst.pins.pin}` : 'GPIOXX',

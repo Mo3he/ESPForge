@@ -182,16 +182,46 @@ export function importYaml(text: string): ImportResult {
 
       // light.monochromatic references an output by id rather than having a direct pin.
       // Resolve the referenced output entry to find its pin.
-      if (def.type === 'light.monochromatic' && pins.pin === null && entry.output) {
+      if (def.type === 'light.monochromatic' && entry.output) {
         const outputRaw = doc.output;
         const outputEntries = Array.isArray(outputRaw)
           ? (outputRaw as Record<string, unknown>[])
           : outputRaw ? [outputRaw as Record<string, unknown>] : [];
         const referencedOutput = outputEntries.find((o) => o.id === entry.output);
         if (referencedOutput) {
-          pins.pin = extractPin(referencedOutput, 'pin', true);
           // Store original output id so generator references it instead of auto-generating one
           config._outputId = entry.output;
+        }
+      }
+
+      // For all other components that reference outputs by id, store the ids.
+      // The output components themselves carry the pins; these components just reference them.
+      const outputRefFields: Record<string, { field: string; configKey: string }[]> = {
+        'light.binary':  [{ field: 'output', configKey: '_outputId' }],
+        'light.cwww':    [{ field: 'cold_white', configKey: '_outputId_cold_white' }, { field: 'warm_white', configKey: '_outputId_warm_white' }],
+        'light.rgb':     [{ field: 'red', configKey: '_outputId_red' }, { field: 'green', configKey: '_outputId_green' }, { field: 'blue', configKey: '_outputId_blue' }],
+        'light.rgbw':    [{ field: 'red', configKey: '_outputId_red' }, { field: 'green', configKey: '_outputId_green' }, { field: 'blue', configKey: '_outputId_blue' }, { field: 'white', configKey: '_outputId_white' }],
+        'fan.speed':     [{ field: 'output', configKey: '_outputId' }],
+        'fan.binary':    [{ field: 'output', configKey: '_outputId' }],
+        'fan.hbridge':   [{ field: 'pin_a', configKey: '_outputId_pin_a' }, { field: 'pin_b', configKey: '_outputId_pin_b' }],
+        'lock.gpio':     [{ field: 'output', configKey: '_outputId' }],
+        'misc.servo':    [{ field: 'output', configKey: '_outputId' }],
+        'media.rtttl':   [{ field: 'output', configKey: '_outputId' }],
+      };
+      if (def.type in outputRefFields) {
+        for (const { field, configKey } of outputRefFields[def.type]) {
+          if (entry[field] && typeof entry[field] === 'string') {
+            config[configKey] = entry[field];
+          }
+        }
+      }
+
+      // Capture inverted flag from nested pin objects (e.g. pin: {number: GPIO4, inverted: true})
+      if (def.pins.length === 1 && def.configFields.some((f) => f.key === 'inverted')) {
+        const rawPin = entry[def.pins[0].role] ?? entry['pin'];
+        if (rawPin && typeof rawPin === 'object' && !Array.isArray(rawPin)) {
+          const pinObj = rawPin as Record<string, unknown>;
+          if (pinObj.inverted === true && config.inverted === undefined) config.inverted = true;
         }
       }
 
