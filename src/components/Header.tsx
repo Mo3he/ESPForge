@@ -20,7 +20,10 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
   const [theme, setTheme] = useState(() => localStorage.getItem('espforge-theme') || 'dark');
   const [showValidation, setShowValidation] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [nameValue, setNameValue] = useState('');
   const moreRef = useRef<HTMLDivElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -165,6 +168,33 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
         <div className="header-left">
           <div className="header-logo">
             <span className="header-title">ESPForge</span>
+            {project.board && (
+              editingName ? (
+                <input
+                  ref={nameInputRef}
+                  className="header-project-name-input"
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                  onBlur={() => {
+                    const trimmed = nameValue.trim();
+                    if (trimmed) dispatch({ type: 'UPDATE_SETTINGS', settings: { name: trimmed } });
+                    setEditingName(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                    if (e.key === 'Escape') { setEditingName(false); }
+                  }}
+                />
+              ) : (
+                <button
+                  className="header-project-name"
+                  onClick={() => { setNameValue(project.settings.name || ''); setEditingName(true); setTimeout(() => nameInputRef.current?.select(), 0); }}
+                  title="Click to rename"
+                >
+                  {project.settings.name || 'Unnamed Project'}
+                </button>
+              )
+            )}
           </div>
 
           {project.board && (
