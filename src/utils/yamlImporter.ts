@@ -166,6 +166,8 @@ export function importYaml(text: string): ImportResult {
       // Config: pull known fields from the entry
       const config: Record<string, unknown> = {};
       if (entry.name !== undefined) config.name = entry.name;
+      // Some components (e.g. output.ledc) use `id` in YAML instead of `name`
+      if (config.name === undefined && entry.id !== undefined) config.name = entry.id;
       for (const field of def.configFields) {
         if (field.key === 'name') continue; // already handled above
         if (entry[field.key] !== undefined) config[field.key] = entry[field.key];
@@ -176,6 +178,17 @@ export function importYaml(text: string): ImportResult {
       const onlyPin = def.pins.length === 1;
       for (const pinReq of def.pins) {
         pins[pinReq.role] = extractPin(entry, pinReq.role, onlyPin);
+      }
+
+      // light.monochromatic references an output by id rather than having a direct pin.
+      // Resolve the referenced output entry to find its pin.
+      if (def.type === 'light.monochromatic' && pins.pin === null && entry.output) {
+        const outputRaw = doc.output;
+        const outputEntries = Array.isArray(outputRaw)
+          ? (outputRaw as Record<string, unknown>[])
+          : outputRaw ? [outputRaw as Record<string, unknown>] : [];
+        const referencedOutput = outputEntries.find((o) => o.id === entry.output);
+        if (referencedOutput) pins.pin = extractPin(referencedOutput, 'pin', true);
       }
 
       components.push({
