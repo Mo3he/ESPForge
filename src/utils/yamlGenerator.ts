@@ -883,6 +883,20 @@ function generateComponentEntry(
       base.name = str(inst.config.name, inst.name);
       break;
     }
+    case 'sensor.homeassistant': {
+      base.platform = 'homeassistant';
+      base.name = str(inst.config.name, inst.name);
+      if (inst.config.entity_id) base.entity_id = inst.config.entity_id;
+      if (inst.config.id) base.id = inst.config.id;
+      if (inst.config.accuracy_decimals != null) base.accuracy_decimals = inst.config.accuracy_decimals;
+      break;
+    }
+    case 'sensor.internal_temperature': {
+      base.platform = 'internal_temperature';
+      base.name = str(inst.config.name, inst.name);
+      if (inst.config.update_interval) base.update_interval = inst.config.update_interval;
+      break;
+    }
     // ── Binary sensors ──
     case 'binary_sensor.pir': {
       base.platform = 'gpio';

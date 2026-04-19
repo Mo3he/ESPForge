@@ -390,6 +390,37 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'name', label: 'Name', type: 'text', required: true, default: 'Uptime' },
     ],
   },
+  {
+    type: 'sensor.homeassistant',
+    platform: 'homeassistant',
+    domain: 'sensor',
+    category: 'sensor',
+    name: 'Home Assistant Sensor',
+    description: 'Mirror a sensor entity from Home Assistant into ESPHome.',
+    icon: 'Home',
+    pins: [],
+    configFields: [
+      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'HA Sensor' },
+      { key: 'entity_id', label: 'Entity ID', type: 'text', required: true, placeholder: 'sensor.living_room_temperature' },
+      { key: 'id', label: 'ESPHome ID (optional)', type: 'text', placeholder: 'ha_temp' },
+      { key: 'accuracy_decimals', label: 'Accuracy Decimals', type: 'number', default: 1 },
+    ],
+  },
+  {
+    type: 'sensor.internal_temperature',
+    platform: 'internal_temperature',
+    domain: 'sensor',
+    category: 'sensor',
+    name: 'ESP32 Internal Temperature',
+    description: 'Built-in chip temperature sensor (ESP32 only).',
+    icon: 'Thermometer',
+    pins: [],
+    platformFilter: ['esp32'],
+    configFields: [
+      { key: 'name', label: 'Name', type: 'text', required: true, default: 'Internal Temperature' },
+      { key: 'update_interval', label: 'Update Interval', type: 'text', default: '60s' },
+    ],
+  },
 
   // ═══════════════════════════════════════════
   //  BINARY SENSORS
