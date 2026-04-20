@@ -27,7 +27,7 @@ export function validateProject(project: Project): ValidationIssue[] {
     issues.push({ level: 'warning', message: 'WiFi password is empty.', tab: 'settings' });
   }
 
-  if (s.apiEnabled && !s.apiKey) {
+  if (s.apiEnabled && !s.useSecretsApi && !s.apiKey) {
     issues.push({ level: 'warning', message: 'API encryption key is empty — generate one for security.', tab: 'settings' });
   }
 

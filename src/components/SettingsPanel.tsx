@@ -69,28 +69,26 @@ export default function SettingsPanel() {
             <span className="toggle-text">Use !secret for WiFi credentials</span>
           </label>
         </div>
-        {!s.useSecretsWifi && (
-          <>
-            <div className="form-group">
-              <label>SSID</label>
-              <input
-                type="text"
-                value={s.wifiSsid}
-                placeholder="MyWiFi"
-                onChange={(e) => update({ wifiSsid: e.target.value })}
-              />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                value={s.wifiPassword}
-                placeholder="••••••••"
-                onChange={(e) => update({ wifiPassword: e.target.value })}
-              />
-            </div>
-          </>
-        )}
+        <div className="form-group">
+          <label>SSID</label>
+          <input
+            type="text"
+            value={s.wifiSsid}
+            placeholder="MyWiFi"
+            onChange={(e) => update({ wifiSsid: e.target.value })}
+          />
+          {s.useSecretsWifi && <span className="form-hint">Stored in secrets.yaml as <code>wifi_ssid</code>.</span>}
+        </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={s.wifiPassword}
+            placeholder="••••••••"
+            onChange={(e) => update({ wifiPassword: e.target.value })}
+          />
+          {s.useSecretsWifi && <span className="form-hint">Stored in secrets.yaml as <code>wifi_password</code>.</span>}
+        </div>
         <div className="form-group">
           <label className="toggle-label">
             <input
@@ -113,28 +111,26 @@ export default function SettingsPanel() {
                 <span className="toggle-text">Use secrets.yaml</span>
               </label>
             </div>
-            {!s.useSecretsFallbackApSsid && (
-              <>
-                <div className="form-group">
-                  <label>AP Name</label>
-                  <input
-                    type="text"
-                    value={s.fallbackApSsid}
-                    placeholder={`${s.friendlyName} Fallback`}
-                    onChange={(e) => update({ fallbackApSsid: e.target.value })}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>AP Password</label>
-                  <input
-                    type="text"
-                    value={s.fallbackApPassword}
-                    placeholder="fallback123"
-                    onChange={(e) => update({ fallbackApPassword: e.target.value })}
-                  />
-                </div>
-              </>
-            )}
+            <div className="form-group">
+              <label>AP Name</label>
+              <input
+                type="text"
+                value={s.fallbackApSsid}
+                placeholder={`${s.friendlyName} Fallback`}
+                onChange={(e) => update({ fallbackApSsid: e.target.value })}
+              />
+              {s.useSecretsFallbackApSsid && <span className="form-hint">Stored in secrets.yaml as <code>fallback_ap_ssid</code>.</span>}
+            </div>
+            <div className="form-group">
+              <label>AP Password</label>
+              <input
+                type="text"
+                value={s.fallbackApPassword}
+                placeholder="fallback123"
+                onChange={(e) => update({ fallbackApPassword: e.target.value })}
+              />
+              {s.useSecretsFallbackApPassword && <span className="form-hint">Stored in secrets.yaml as <code>fallback_ap_password</code>.</span>}
+            </div>
           </>
         )}
         <div className="form-group">
@@ -219,16 +215,16 @@ export default function SettingsPanel() {
                 <span className="toggle-text">Use !secret for API key</span>
               </label>
             </div>
-            {!s.useSecretsApi && (
-              <div className="form-group">
-                <label>Encryption Key</label>
-                <div className="input-with-btn">
-                  <input type="text" value={s.apiKey} placeholder="Base64 key" onChange={(e) => update({ apiKey: e.target.value })} />
-                  <button className="btn btn-sm" onClick={() => update({ apiKey: generateBase64Key() })} title="Generate random key">🔑 Generate</button>
-                </div>
-                <span className="form-hint">32-byte Base64-encoded key for API encryption.</span>
+            <div className="form-group">
+              <label>Encryption Key</label>
+              <div className="input-with-btn">
+                <input type="text" value={s.apiKey} placeholder="Base64 key" onChange={(e) => update({ apiKey: e.target.value })} />
+                <button className="btn btn-sm" onClick={() => update({ apiKey: generateBase64Key() })} title="Generate random key">🔑 Generate</button>
               </div>
-            )}
+              {s.useSecretsApi
+                ? <span className="form-hint">Stored in secrets.yaml as <code>api_key</code>.</span>
+                : <span className="form-hint">32-byte Base64-encoded key for API encryption.</span>}
+            </div>
           </>
         )}
         <div className="form-group">
@@ -249,15 +245,14 @@ export default function SettingsPanel() {
                 <span className="toggle-text">Use !secret for OTA password</span>
               </label>
             </div>
-            {!s.useSecretsOta && (
-              <div className="form-group">
-                <label>OTA Password</label>
-                <div className="input-with-btn">
-                  <input type="text" value={s.otaPassword} placeholder="Password" onChange={(e) => update({ otaPassword: e.target.value })} />
-                  <button className="btn btn-sm" onClick={() => update({ otaPassword: generatePassword() })} title="Generate random password">🔑 Generate</button>
-                </div>
+            <div className="form-group">
+              <label>OTA Password</label>
+              <div className="input-with-btn">
+                <input type="text" value={s.otaPassword} placeholder="Password" onChange={(e) => update({ otaPassword: e.target.value })} />
+                <button className="btn btn-sm" onClick={() => update({ otaPassword: generatePassword() })} title="Generate random password">🔑 Generate</button>
               </div>
-            )}
+              {s.useSecretsOta && <span className="form-hint">Stored in secrets.yaml as <code>ota_password</code>.</span>}
+            </div>
           </>
         )}
         <div className="form-group">
@@ -302,18 +297,16 @@ export default function SettingsPanel() {
                 <span className="toggle-text">Use !secret for credentials</span>
               </label>
             </div>
-            {!s.useSecretsMqtt && (
-              <>
-                <div className="form-group">
-                  <label>Username</label>
-                  <input type="text" value={s.mqttUsername} onChange={(e) => update({ mqttUsername: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input type="password" value={s.mqttPassword} onChange={(e) => update({ mqttPassword: e.target.value })} />
-                </div>
-              </>
-            )}
+            <div className="form-group">
+              <label>Username</label>
+              <input type="text" value={s.mqttUsername} onChange={(e) => update({ mqttUsername: e.target.value })} />
+              {s.useSecretsMqtt && <span className="form-hint">Stored in secrets.yaml as <code>mqtt_username</code>.</span>}
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input type="password" value={s.mqttPassword} onChange={(e) => update({ mqttPassword: e.target.value })} />
+              {s.useSecretsMqtt && <span className="form-hint">Stored in secrets.yaml as <code>mqtt_password</code>.</span>}
+            </div>
           </>
         )}
       </fieldset>
