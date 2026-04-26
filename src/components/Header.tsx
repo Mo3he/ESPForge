@@ -5,8 +5,8 @@ import {
 } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml, generateSecretsYaml } from '../utils/yamlGenerator';
-import { importYaml } from '../utils/yamlImporter';
 import { validateProject } from '../utils/validation';
+import ImportModal from './ImportModal';
 
 interface HeaderProps {
   yamlOpen: boolean;
@@ -79,32 +79,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
     URL.revokeObjectURL(url);
   }, [project]);
 
-  const handleLoadProject = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json,.yaml,.yml';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      try {
-        const text = await file.text();
-        if (file.name.endsWith('.json')) {
-          const data = JSON.parse(text);
-          dispatch({ type: 'LOAD_PROJECT', project: data });
-        } else {
-          const result = importYaml(text);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          dispatch({ type: 'LOAD_PROJECT', project: result.project as any });
-          if (result.warnings.length > 0) {
-            alert('YAML imported with warnings:\n\n' + result.warnings.join('\n'));
-          }
-        }
-      } catch (err) {
-        alert(`Import failed: ${(err as Error).message}`);
-      }
-    };
-    input.click();
-  };
+  const [importOpen, setImportOpen] = useState(false);
 
   const handleShareUrl = () => {
     const s = project.settings;
@@ -236,7 +211,7 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                   <Redo2 size={16} />
                 </button>
               </div>
-              <button className="btn btn-ghost header-btn-desktop" onClick={handleLoadProject} title="Load project">
+              <button className="btn btn-ghost header-btn-desktop" onClick={() => setImportOpen(true)} title="Import project">
                 <FolderOpen size={16} />
               </button>
               <button
@@ -295,8 +270,8 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
                       <Redo2 size={15} /> Redo
                     </button>
                     <div className="more-menu-divider" />
-                    <button className="more-menu-item" onClick={handleLoadProject}>
-                      <FolderOpen size={15} /> Load project
+                    <button className="more-menu-item" onClick={() => { setMoreOpen(false); setImportOpen(true); }}>
+                      <FolderOpen size={15} /> Import project
                     </button>
                     <button className="more-menu-item" onClick={() => {
                       if (confirm('Start a new project? All unsaved changes will be lost.')) {
@@ -349,6 +324,8 @@ export default function Header({ yamlOpen, onToggleYaml, activeTab, onTabChange 
           </a>
         </div>
       </header>
+
+      {importOpen && <ImportModal onClose={() => setImportOpen(false)} />}
 
       {/* Validation panel */}
       {showValidation && issues.length > 0 && (

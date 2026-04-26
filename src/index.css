@@ -223,6 +223,68 @@ body {
   color: var(--yellow);
 }
 
+/* ── Paste YAML Modal ── */
+
+.paste-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.paste-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  width: min(640px, 90vw);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.paste-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.paste-modal-textarea {
+  flex: 1;
+  min-height: 320px;
+  resize: vertical;
+  padding: 12px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  outline: none;
+}
+
+.paste-modal-error {
+  padding: 8px 16px;
+  background: var(--red-subtle);
+  color: var(--red);
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.paste-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
 /* ── Validation Panel ── */
 
 .validation-panel {
