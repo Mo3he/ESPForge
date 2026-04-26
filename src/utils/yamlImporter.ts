@@ -195,6 +195,7 @@ export function importYaml(text: string): ImportResult {
     gateway: strVal(manualIp.gateway),
     subnet: strVal(manualIp.subnet, '255.255.255.0'),
     dns: strVal(manualIp.dns1),
+    useAddress: strVal(wifiDoc.use_address),
     apiEnabled: doc.api !== undefined,
     apiKey: isSecret(apiEncryption.key) ? '' : strVal(apiEncryption.key),
     otaEnabled: doc.ota !== undefined,

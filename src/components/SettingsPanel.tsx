@@ -173,6 +173,15 @@ export default function SettingsPanel() {
             </div>
           </>
         )}
+        <div className="form-group">
+          <label>Use Address (optional)</label>
+          <input
+            type="text"
+            value={s.useAddress}
+            placeholder="192.168.1.50"
+            onChange={(e) => update({ useAddress: e.target.value })}
+          />
+        </div>
       </fieldset>
 
       <fieldset className="config-fieldset">

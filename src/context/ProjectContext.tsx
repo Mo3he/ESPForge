@@ -17,6 +17,7 @@ const defaultSettings: ProjectSettings = {
   gateway: '',
   subnet: '255.255.255.0',
   dns: '',
+  useAddress: '',
   apiEnabled: true,
   apiKey: '',
   otaEnabled: true,

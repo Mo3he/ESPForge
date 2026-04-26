@@ -173,6 +173,7 @@ export interface ProjectSettings {
   gateway: string;
   subnet: string;
   dns: string;
+  useAddress: string;
   apiEnabled: boolean;
   apiKey: string;
   otaEnabled: boolean;

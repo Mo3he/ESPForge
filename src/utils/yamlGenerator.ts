@@ -83,6 +83,10 @@ export function generateYaml(project: Project): string {
       };
     }
 
+    if (settings.useAddress) {
+      wifi.use_address = settings.useAddress;
+    }
+
     if (settings.fallbackApEnabled) {
       wifi.ap = {
         ssid: settings.useSecretsFallbackApSsid ? '__SECRET__fallback_ap_ssid' : (settings.fallbackApSsid || `${settings.friendlyName} Fallback`),
