@@ -1,0 +1,6 @@
+services:
+  espforge:
+    image: ghcr.io/mo3he/espforge:latest
+    ports:
+      - "8080:80"
+    restart: unless-stopped

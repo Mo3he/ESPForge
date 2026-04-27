@@ -9,7 +9,7 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 ## Features
 
 ### Build
-- **38+ boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6), Seeed XIAO (S3, S3 Sense, C6, S2), LilyGO (T-Display AMOLED, T-Beam, T-Watch S3, T-Dongle), Heltec (WiFi Kit 32, WiFi LoRa 32 v2/v3), Sonoff, and more
+- **35+ boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6), Seeed XIAO (S3, S3 Sense, C6, S2), LilyGO (T-Display AMOLED, T-Beam, T-Watch S3, T-Dongle), Sonoff, and more
 - **80+ components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR, media, displays, I/O expanders, mmWave radar (LD2410, LD2450, LD2411S)
 - **10 starter templates** — Sensor Node, Smart Relay, LED Strip, BLE Gateway, Garage Door, Power Monitor, etc.
 - **Guided onboarding** — template → board → settings → components
@@ -38,6 +38,30 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 
 ## Quick Start
 
+### Docker (easiest)
+
+```bash
+docker run -p 8080:80 ghcr.io/mo3he/espforge
+```
+
+Or with Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+Open [http://localhost:8080](http://localhost:8080) in your browser.
+
+To update to the latest image:
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+Supports `linux/amd64` and `linux/arm64` (Raspberry Pi, Home Assistant OS, etc.).
+
+### Local dev
+
 ```bash
 npm install
 npm run dev
@@ -52,6 +76,10 @@ npm run build
 ```
 
 Static output is in `dist/`, ready to deploy anywhere.
+
+## Deploy Docker Image
+
+The repo includes a GitHub Actions workflow (`.github/workflows/docker.yml`) that builds and pushes a multi-platform image to `ghcr.io` on every push to `main` and on releases.
 
 ## Deploy to GitHub Pages
 
