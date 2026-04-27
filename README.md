@@ -9,9 +9,9 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 ## Features
 
 ### Build
-- **35+ boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6), Seeed XIAO (S3, S3 Sense, C6, S2), LilyGO (T-Display AMOLED, T-Beam, T-Watch S3, T-Dongle), Sonoff, and more
-- **80+ components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR, media, displays, I/O expanders, mmWave radar (LD2410, LD2450, LD2411S)
-- **10 starter templates** — Sensor Node, Smart Relay, LED Strip, BLE Gateway, Garage Door, Power Monitor, etc.
+- **42 boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (ATOM Lite, AtomS3, Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6, StickC Plus2), Seeed XIAO (S3, S3 Sense, C6, S2, C3), LilyGO (T-Display S3, T-Display S3 AMOLED, T-Display S3 Pro, T-Beam v1.1, T-Beam Supreme, T-Watch S3, T-Dongle S3), Heltec (WiFi Kit 32, WiFi LoRa 32 v2/v3), CYD (Cheap Yellow Display), Olimex ESP32-PoE, AZ-Delivery, Sonoff, and more
+- **98 components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR, media, displays, I/O expanders, mmWave radar (LD2410, LD2450, LD2411S)
+- **10 starter templates** — Blank Project, Sensor Node, Smart Relay, LED Strip, Environment Monitor, Motion Light, BLE Gateway, Garage Door, Power Monitor, Fan Controller
 - **Guided onboarding** — template → board → settings → components
 - Boards with onboard hardware (buttons, NeoPixels, displays) auto-add those components on selection
 
