@@ -659,7 +659,7 @@ export const boards: Board[] = [
       { gpio: 35, label: 'GPIO35',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'CN1 connector — input only' },
     ],
     defaultComponents: [
-      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red: 4, green: 16, blue: 17 } },
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red_pin: 4, green_pin: 16, blue_pin: 17 } },
       { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
     ],
   },
@@ -701,7 +701,7 @@ export const boards: Board[] = [
       { gpio: 3,  label: 'USB_RX',   side: 'right', capabilities: ['gpio', 'uart_rx'],           notes: 'USB-C port RX (UART0)' },
     ],
     defaultComponents: [
-      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red: 4, green: 16, blue: 17 } },
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red_pin: 4, green_pin: 16, blue_pin: 17 } },
       { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
     ],
   },
