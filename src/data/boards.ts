@@ -623,6 +623,90 @@ export const boards: Board[] = [
   },
 
   // ═══════════════════════════════════════════════════════════
+  //  Cheap Yellow Display (CYD) — ESP32-2432S028
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: 'cyd_esp32_2432s028r',
+    name: 'Cheap Yellow Display (CYD 2.8")',
+    platform: 'esp32',
+    variant: 'esp32',
+    board: 'esp32dev',
+    description: 'ESP32-2432S028R: 2.8" ILI9341 TFT (SPI), XPT2046 resistive touch, RGB LED, LDR, and Grove I2C connector. One micro-USB port.',
+    hasBLE: true,
+    defaultI2C: { sda: 27, scl: 22 },
+    pins: [
+      // Display SPI (ILI9341)
+      { gpio: 14, label: 'LCD_CLK',  side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI SCLK' },
+      { gpio: 13, label: 'LCD_MOSI', side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI MOSI' },
+      { gpio: 12, label: 'LCD_MISO', side: 'left',  capabilities: ['gpio', 'pwm', 'spi', 'strapping'], notes: 'Display SPI MISO — must be LOW at boot' },
+      { gpio: 15, label: 'LCD_CS',   side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI CS' },
+      { gpio: 2,  label: 'LCD_DC',   side: 'left',  capabilities: ['gpio', 'pwm', 'strapping'],  notes: 'Display D/C line' },
+      { gpio: 21, label: 'LCD_BL',   side: 'left',  capabilities: ['gpio', 'pwm'],               notes: 'Display backlight (PWM)' },
+      // Touch SPI (XPT2046) — separate SPI bus
+      { gpio: 25, label: 'TP_CLK',   side: 'right', capabilities: ['gpio', 'dac', 'pwm', 'spi'], notes: 'Touch SPI SCLK' },
+      { gpio: 32, label: 'TP_MOSI',  side: 'right', capabilities: ['gpio', 'adc', 'pwm', 'spi'], notes: 'Touch SPI MOSI' },
+      { gpio: 39, label: 'TP_MISO',  side: 'right', capabilities: ['gpio', 'adc', 'input_only', 'spi'], notes: 'Touch SPI MISO' },
+      { gpio: 33, label: 'TP_CS',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'spi'], notes: 'Touch SPI CS' },
+      { gpio: 36, label: 'TP_IRQ',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Touch interrupt (active LOW)' },
+      // Built-in peripherals
+      { gpio: 34, label: 'LDR',      side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Photoresistor (lower = brighter)' },
+      { gpio: 4,  label: 'LED_R',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm'], notes: 'RGB LED — Red (active LOW)' },
+      { gpio: 16, label: 'LED_G',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_rx'],    notes: 'RGB LED — Green (active LOW)' },
+      { gpio: 17, label: 'LED_B',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_tx'],    notes: 'RGB LED — Blue (active LOW)' },
+      // User connector (Grove/QWIIC — CN1)
+      { gpio: 27, label: 'SDA',      side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'i2c_sda'], notes: 'Grove CN1 — I2C SDA' },
+      { gpio: 22, label: 'SCL',      side: 'right', capabilities: ['gpio', 'pwm', 'i2c_scl'],   notes: 'Grove CN1 — I2C SCL' },
+      { gpio: 35, label: 'GPIO35',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'CN1 connector — input only' },
+    ],
+    defaultComponents: [
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red: 4, green: 16, blue: 17 } },
+      { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
+    ],
+  },
+
+  {
+    id: 'cyd2_esp32_2432s028r',
+    name: 'Cheap Yellow Display 2USB (CYD2 2.8")',
+    platform: 'esp32',
+    variant: 'esp32',
+    board: 'esp32dev',
+    description: 'ESP32-2432S028R variant with two USB ports (micro + USB-C). Same display and touch hardware as CYD, but USB-C is connected to GPIO 1/3.',
+    hasBLE: true,
+    defaultI2C: { sda: 27, scl: 22 },
+    pins: [
+      // Display SPI (ILI9341)
+      { gpio: 14, label: 'LCD_CLK',  side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI SCLK' },
+      { gpio: 13, label: 'LCD_MOSI', side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI MOSI' },
+      { gpio: 12, label: 'LCD_MISO', side: 'left',  capabilities: ['gpio', 'pwm', 'spi', 'strapping'], notes: 'Display SPI MISO — must be LOW at boot' },
+      { gpio: 15, label: 'LCD_CS',   side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI CS' },
+      { gpio: 2,  label: 'LCD_DC',   side: 'left',  capabilities: ['gpio', 'pwm', 'strapping'],  notes: 'Display D/C line' },
+      { gpio: 21, label: 'LCD_BL',   side: 'left',  capabilities: ['gpio', 'pwm'],               notes: 'Display backlight (PWM)' },
+      // Touch SPI (XPT2046)
+      { gpio: 25, label: 'TP_CLK',   side: 'right', capabilities: ['gpio', 'dac', 'pwm', 'spi'], notes: 'Touch SPI SCLK' },
+      { gpio: 32, label: 'TP_MOSI',  side: 'right', capabilities: ['gpio', 'adc', 'pwm', 'spi'], notes: 'Touch SPI MOSI' },
+      { gpio: 39, label: 'TP_MISO',  side: 'right', capabilities: ['gpio', 'adc', 'input_only', 'spi'], notes: 'Touch SPI MISO' },
+      { gpio: 33, label: 'TP_CS',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'spi'], notes: 'Touch SPI CS' },
+      { gpio: 36, label: 'TP_IRQ',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Touch interrupt (active LOW)' },
+      // Built-in peripherals
+      { gpio: 34, label: 'LDR',      side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Photoresistor (lower = brighter)' },
+      { gpio: 4,  label: 'LED_R',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm'], notes: 'RGB LED — Red (active LOW)' },
+      { gpio: 16, label: 'LED_G',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_rx'],    notes: 'RGB LED — Green (active LOW)' },
+      { gpio: 17, label: 'LED_B',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_tx'],    notes: 'RGB LED — Blue (active LOW)' },
+      // User connector (Grove/QWIIC — CN1)
+      { gpio: 27, label: 'SDA',      side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'i2c_sda'], notes: 'Grove CN1 — I2C SDA' },
+      { gpio: 22, label: 'SCL',      side: 'right', capabilities: ['gpio', 'pwm', 'i2c_scl'],   notes: 'Grove CN1 — I2C SCL' },
+      { gpio: 35, label: 'GPIO35',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'CN1 connector — input only' },
+      // Second USB (USB-C) — GPIO1/3 via internal bridge
+      { gpio: 1,  label: 'USB_TX',   side: 'right', capabilities: ['gpio', 'uart_tx'],           notes: 'USB-C port TX (UART0)' },
+      { gpio: 3,  label: 'USB_RX',   side: 'right', capabilities: ['gpio', 'uart_rx'],           notes: 'USB-C port RX (UART0)' },
+    ],
+    defaultComponents: [
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red: 4, green: 16, blue: 17 } },
+      { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
   //  Popular Third-Party Boards
   // ═══════════════════════════════════════════════════════════
   {
