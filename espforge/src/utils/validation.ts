@@ -60,6 +60,18 @@ export function validateProject(project: Project): ValidationIssue[] {
     }
   }
 
+  // ── IR/RF Proxy requires at least one transmitter or receiver ──
+  const hasIrProxy = project.components.some((c) => c.type === 'ir.proxy');
+  const hasIrTransmitter = project.components.some((c) => c.type === 'ir.transmitter');
+  const hasIrReceiver = project.components.some((c) => c.type === 'ir.receiver');
+  if (hasIrProxy && !hasIrTransmitter && !hasIrReceiver) {
+    issues.push({
+      level: 'warning',
+      message: 'IR/RF Proxy requires at least one IR Transmitter or IR Receiver component to reference.',
+      tab: 'components',
+    });
+  }
+
   // ── Pin conflict detection ──
   const pinUsage = new Map<number, ComponentInstance[]>();
   for (const inst of project.components) {
