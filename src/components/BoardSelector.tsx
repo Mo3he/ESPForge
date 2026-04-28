@@ -5,57 +5,131 @@ import { projectTemplates, type ProjectTemplate } from '../data/templates';
 import { useProject } from '../context/ProjectContext';
 import { Icon } from './Icon';
 import ImportModal from './ImportModal';
-import type { Board } from '../types';
+import type { Board, ComponentInstance, Automation } from '../types';
 
 interface Props {
   onBoardSelected?: (tab?: string) => void;
 }
 
+/** Merge components from multiple templates, deduplicating shared utility components by type. */
+function mergeTemplates(templates: ProjectTemplate[]): {
+  components: ComponentInstance[];
+  automations: Automation[];
+  settingsOverrides: Record<string, unknown>;
+} {
+  const seenTypes = new Set<string>();
+  const mergedComponents: ComponentInstance[] = [];
+  const idMap = new Map<string, string>(); // old template ID -> new merged ID
+  let nextId = 1;
+
+  for (const template of templates) {
+    for (const comp of template.components) {
+      if (seenTypes.has(comp.type)) {
+        // Map duplicate to the already-added component's ID
+        const existing = mergedComponents.find((c) => c.type === comp.type);
+        if (existing) idMap.set(comp.id, existing.id);
+        continue;
+      }
+      seenTypes.add(comp.type);
+      const newId = `tpl_${nextId++}`;
+      idMap.set(comp.id, newId);
+      mergedComponents.push({ ...comp, id: newId });
+    }
+  }
+
+  let autoIdx = 1;
+  const mergedAutomations: Automation[] = [];
+  for (const template of templates) {
+    for (const auto of template.automations) {
+      const newAutoId = `auto_${autoIdx++}`;
+      mergedAutomations.push({
+        ...auto,
+        id: newAutoId,
+        trigger: {
+          ...auto.trigger,
+          componentId: auto.trigger.componentId
+            ? idMap.get(auto.trigger.componentId) ?? auto.trigger.componentId
+            : auto.trigger.componentId,
+        },
+        actions: auto.actions.map((act, i) => ({
+          ...act,
+          id: `${newAutoId}_act_${i + 1}`,
+          config: {
+            ...act.config,
+            targetId: act.config.targetId
+              ? idMap.get(act.config.targetId as string) ?? act.config.targetId
+              : act.config.targetId,
+          },
+        })),
+      });
+    }
+  }
+
+  const settingsOverrides: Record<string, unknown> = {};
+  for (const template of templates) {
+    if (template.settingsOverrides) Object.assign(settingsOverrides, template.settingsOverrides);
+  }
+
+  return { components: mergedComponents, automations: mergedAutomations, settingsOverrides };
+}
+
 export default function BoardSelector({ onBoardSelected }: Props) {
   const { dispatch } = useProject();
   const [search, setSearch] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
+  const [selectedTemplates, setSelectedTemplates] = useState<ProjectTemplate[]>([]);
   const [step, setStep] = useState<'template' | 'board'>('template');
   const [importOpen, setImportOpen] = useState(false);
 
   const handleSelectBoard = (board: Board) => {
     dispatch({ type: 'SET_BOARD', board });
 
-    // If a template was selected, load its components and automations
-    if (selectedTemplate && selectedTemplate.id !== 'blank') {
-      // Small delay to let the board set first, then load components via dispatch
-      for (const comp of selectedTemplate.components) {
-        dispatch({ type: 'ADD_COMPONENT', component: { ...comp } });
+    if (selectedTemplates.length > 0) {
+      const { components, automations, settingsOverrides } = mergeTemplates(selectedTemplates);
+      for (const comp of components) {
+        dispatch({ type: 'ADD_COMPONENT', component: comp });
       }
-      for (const auto of selectedTemplate.automations) {
-        dispatch({ type: 'ADD_AUTOMATION', automation: { ...auto } });
+      for (const auto of automations) {
+        dispatch({ type: 'ADD_AUTOMATION', automation: auto });
       }
-      if (selectedTemplate.settingsOverrides) {
-        dispatch({ type: 'UPDATE_SETTINGS', settings: selectedTemplate.settingsOverrides as Record<string, string> });
+      if (Object.keys(settingsOverrides).length > 0) {
+        dispatch({ type: 'UPDATE_SETTINGS', settings: settingsOverrides as Record<string, string> });
       }
     }
 
     onBoardSelected?.('settings');
   };
 
-  const handleSelectTemplate = (template: ProjectTemplate) => {
-    setSelectedTemplate(template);
-    setStep('board');
+  const handleToggleTemplate = (template: ProjectTemplate) => {
+    // "Blank Project" goes straight to board selection with no templates
+    if (template.id === 'blank') {
+      setSelectedTemplates([]);
+      setStep('board');
+      return;
+    }
+    setSelectedTemplates((prev) => {
+      const exists = prev.find((t) => t.id === template.id);
+      if (exists) return prev.filter((t) => t.id !== template.id);
+      return [...prev, template];
+    });
+  };
+
+  const handleContinue = () => {
+    if (selectedTemplates.length > 0) setStep('board');
   };
 
   const handleBackToTemplates = () => {
-    setSelectedTemplate(null);
     setStep('template');
     setSearch('');
   };
 
   const query = search.toLowerCase();
 
-  // If a template has recommended boards, show those first
-  const sortedBoards = selectedTemplate && selectedTemplate.recommendedBoards.length > 0
+  // Collect recommended boards from all selected templates
+  const allRecommended = new Set(selectedTemplates.flatMap((t) => t.recommendedBoards));
+  const sortedBoards = allRecommended.size > 0
     ? [...boards].sort((a, b) => {
-        const aRec = selectedTemplate.recommendedBoards.includes(a.id) ? 0 : 1;
-        const bRec = selectedTemplate.recommendedBoards.includes(b.id) ? 0 : 1;
+        const aRec = allRecommended.has(a.id) ? 0 : 1;
+        const bRec = allRecommended.has(b.id) ? 0 : 1;
         return aRec - bRec;
       })
     : boards;
@@ -74,7 +148,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
       <div className="board-selector">
         <div className="board-selector-header">
           <h1>Welcome to ESPForge</h1>
-          <p>Start with a template or build from scratch. No YAML knowledge required.</p>
+          <p>Pick one or more templates to combine, or start from scratch. No YAML knowledge required.</p>
         </div>
 
         <div className="onboarding-steps">
@@ -94,25 +168,28 @@ export default function BoardSelector({ onBoardSelected }: Props) {
           </div>
         </div>
 
+        {selectedTemplates.length > 0 && (
+          <div className="template-continue">
+            <span className="template-continue-count">
+              {selectedTemplates.length} template{selectedTemplates.length > 1 ? 's' : ''} selected
+            </span>
+            <button className="btn btn-primary" onClick={handleContinue}>
+              Continue to Board Selection →
+            </button>
+          </div>
+        )}
+
         <div className="template-grid">
           {projectTemplates.slice(0, 1).map((t) => (
             <button
               key={t.id}
               className={`template-card ${t.id === 'blank' ? 'template-blank' : ''}`}
-              onClick={() => handleSelectTemplate(t)}
+              onClick={() => handleToggleTemplate(t)}
             >
               <div className="template-icon"><Icon name={t.icon} size={28} strokeWidth={1.25} /></div>
               <div className="template-info">
                 <h3>{t.name}</h3>
                 <p>{t.description}</p>
-                {t.components.length > 0 && (
-                  <div className="template-meta">
-                    <span className="badge">{t.components.length} components</span>
-                    {t.automations.length > 0 && (
-                      <span className="badge">{t.automations.length} automation{t.automations.length > 1 ? 's' : ''}</span>
-                    )}
-                  </div>
-                )}
               </div>
             </button>
           ))}
@@ -123,28 +200,37 @@ export default function BoardSelector({ onBoardSelected }: Props) {
               <p>Load a saved <code>.json</code> project or an existing ESPHome <code>.yaml</code> file.</p>
             </div>
           </button>
-          {projectTemplates.slice(1).map((t) => (
-            <button
-              key={t.id}
-              className={`template-card ${t.id === 'blank' ? 'template-blank' : ''}`}
-              onClick={() => handleSelectTemplate(t)}
-            >
-              <div className="template-icon"><Icon name={t.icon} size={28} strokeWidth={1.25} /></div>
-              <div className="template-info">
-                <h3>{t.name}</h3>
-                <p>{t.description}</p>
-                {t.components.length > 0 && (
-                  <div className="template-meta">
-                    <span className="badge">{t.components.length} components</span>
-                    {t.automations.length > 0 && (
-                      <span className="badge">{t.automations.length} automation{t.automations.length > 1 ? 's' : ''}</span>
-                    )}
+          {projectTemplates.slice(1).map((t) => {
+            const isSelected = selectedTemplates.some((s) => s.id === t.id);
+            return (
+              <button
+                key={t.id}
+                className={`template-card ${isSelected ? 'template-selected' : ''}`}
+                onClick={() => handleToggleTemplate(t)}
+              >
+                {isSelected && (
+                  <div className="template-check">
+                    <Check size={16} />
                   </div>
                 )}
-              </div>
-            </button>
-          ))}
+                <div className="template-icon"><Icon name={t.icon} size={28} strokeWidth={1.25} /></div>
+                <div className="template-info">
+                  <h3>{t.name}</h3>
+                  <p>{t.description}</p>
+                  {t.components.length > 0 && (
+                    <div className="template-meta">
+                      <span className="badge">{t.components.length} components</span>
+                      {t.automations.length > 0 && (
+                        <span className="badge">{t.automations.length} automation{t.automations.length > 1 ? 's' : ''}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
+
         {importOpen && (
           <ImportModal onClose={() => setImportOpen(false)} onSuccess={() => onBoardSelected?.('settings')} />
         )}
@@ -160,10 +246,15 @@ export default function BoardSelector({ onBoardSelected }: Props) {
           ← Back to Templates
         </button>
         <h1>Select Your Board</h1>
-        {selectedTemplate && selectedTemplate.id !== 'blank' ? (
+        {selectedTemplates.length > 0 ? (
           <p>
-            Template: <strong><Icon name={selectedTemplate.icon} size={14} className="inline-icon" /> {selectedTemplate.name}</strong>
-            {selectedTemplate.recommendedBoards.length > 0 && ' — recommended boards shown first'}
+            Templates: {selectedTemplates.map((t, i) => (
+              <span key={t.id}>
+                {i > 0 && ', '}
+                <strong><Icon name={t.icon} size={14} className="inline-icon" /> {t.name}</strong>
+              </span>
+            ))}
+            {allRecommended.size > 0 && ' - recommended boards shown first'}
           </p>
         ) : (
           <p>Choose the ESP board you&apos;re using.</p>
@@ -200,7 +291,7 @@ export default function BoardSelector({ onBoardSelected }: Props) {
           <p className="palette-empty" style={{ gridColumn: '1 / -1' }}>No boards match &ldquo;{search}&rdquo;</p>
         )}
         {filteredBoards.map((board) => {
-          const isRecommended = selectedTemplate?.recommendedBoards.includes(board.id);
+          const isRecommended = allRecommended.has(board.id);
           return (
             <button
               key={board.id}

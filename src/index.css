@@ -750,6 +750,53 @@ body {
   opacity: 1;
 }
 
+/* ── Multi-select template ── */
+
+.template-card {
+  position: relative;
+}
+
+.template-selected {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.template-selected:hover {
+  border-color: var(--accent-hover);
+}
+
+.template-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.template-continue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.template-continue-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
 /* ── Back Button ── */
 
 .back-btn {
