@@ -6,7 +6,7 @@ description: >-
 version: "0.1.0"
 slug: espforge
 url: "https://github.com/mo3he/ESPForge"
-image: "ghcr.io/mo3he/espforge:{version}"
+image: "ghcr.io/mo3he/espforge"
 arch:
   - aarch64
   - amd64
