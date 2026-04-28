@@ -71,6 +71,7 @@ Supports `linux/amd64` and `linux/arm64` (Raspberry Pi, Home Assistant OS, etc.)
 ### Local dev
 
 ```bash
+cd espforge
 npm install
 npm run dev
 ```
@@ -80,10 +81,11 @@ Open [http://localhost:5173/ESPForge/](http://localhost:5173/ESPForge/) in your 
 ## Build
 
 ```bash
+cd espforge
 npm run build
 ```
 
-Static output is in `dist/`, ready to deploy anywhere.
+Static output is in `espforge/dist/`, ready to deploy anywhere.
 
 ## Deploy Docker Image
 
