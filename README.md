@@ -38,9 +38,9 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 
 ## Quick Start
 
-### Home Assistant Addon
+### Home Assistant App
 
-1. In Home Assistant, go to **Settings > Add-ons > Add-on Store**
+1. In Home Assistant, go to **Settings > Apps > App Store**
 2. Click the overflow menu (top right) > **Repositories**
 3. Add `https://github.com/mo3he/ESPForge` and click **Add**
 4. ESPForge will appear in the store -- install and start it
