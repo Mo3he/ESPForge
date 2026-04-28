@@ -48,6 +48,8 @@ jobs:
         run: |
           VERSION=$(grep '^version:' espforge/config.yaml | sed 's/version: *"//;s/"//')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "repo_lc=$REPO_LC" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -69,7 +71,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.version }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ steps.get_version.outputs.repo_lc }}:${{ steps.get_version.outputs.version }}
+            ghcr.io/${{ steps.get_version.outputs.repo_lc }}:latest
           build-args: |
             VITE_BASE_PATH=./
