@@ -3,7 +3,7 @@ description: >-
   Visual browser-based configuration tool for ESPHome. Pick a board, add
   components, configure settings and get a ready-to-flash YAML file. No YAML
   knowledge required.
-version: "0.1.1"
+version: "0.1.2"
 slug: espforge
 url: "https://github.com/mo3he/ESPForge"
 image: "ghcr.io/mo3he/espforge"

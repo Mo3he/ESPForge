@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- Fixed header layout in Home Assistant (tabs now always in their own row below the header bar)
+- Board badge and project name hide at narrow widths to prevent overflow
+- Mobile breakpoint lowered to 900px to better handle HA sidebar viewport
+
 ## 0.1.1
 
 - Added IR/RF Proxy template and component for universal IR remote control via Home Assistant

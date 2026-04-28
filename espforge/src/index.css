@@ -125,7 +125,7 @@ body {
   padding: 2px 6px;
   border-radius: var(--radius);
   cursor: pointer;
-  max-width: 180px;
+  max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -148,8 +148,7 @@ body {
 }
 
 .header-tabs {
-  display: flex;
-  gap: 2px;
+  display: none;
 }
 
 .tab-btn {
@@ -1599,9 +1598,19 @@ select {
   margin: 4px 0;
 }
 
-/* ── Mobile bottom nav (hidden on desktop) ── */
+/* ── Tab nav row (always visible below header) ── */
 
 .mobile-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mobile-nav::-webkit-scrollbar {
   display: none;
 }
 
@@ -1705,7 +1714,17 @@ select {
   margin-right: 2px;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 901px) and (max-width: 1300px) {
+  .btn.header-board-badge {
+    display: none;
+  }
+  .header-project-name,
+  .header-project-name-input {
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 900px) {
   /* Header */
   .header {
     padding: 0 12px;
@@ -1750,25 +1769,14 @@ select {
     display: none;
   }
 
+  /* Hide board badge on mobile (already in tab row context) */
+  .btn.header-board-badge {
+    display: none;
+  }
+
   /* Show the more menu on mobile */
   .header-more-wrap {
     display: block;
-  }
-
-  /* Mobile nav tabs (below header) */
-  .mobile-nav {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-secondary);
-    flex-shrink: 0;
-    z-index: 20;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .mobile-nav::-webkit-scrollbar {
-    display: none;
   }
 
   .board-selector {
