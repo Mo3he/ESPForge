@@ -46,7 +46,7 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 4. ESPForge will appear in the store -- install and start it
 5. Once installed and started, open it via **Open Web UI** on the app's page
 
-### Docker (easiest)
+### Docker
 
 ```bash
 docker run -p 8080:80 ghcr.io/mo3he/espforge
