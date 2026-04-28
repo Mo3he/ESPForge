@@ -57,6 +57,14 @@
   padding: 0;
 }
 
+button, [role="button"], a, label[for], select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 html, body, #root {
   height: 100%;
   max-width: 100vw;
