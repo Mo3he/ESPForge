@@ -24,10 +24,12 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+        working-directory: espforge
       - run: npm run build
+        working-directory: espforge
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: espforge/dist
 
   deploy:
     needs: build
