@@ -7,7 +7,41 @@ on:
     types: [published]
 
 jobs:
+  auto-release:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version from config.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' espforge/config.yaml | sed 's/version: *"//;s/"//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create release if tag does not exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          TAG="v${VERSION}"
+          if git ls-remote --tags origin "$TAG" | grep -q "$TAG"; then
+            echo "Tag $TAG already exists, skipping release."
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes "Release $TAG" \
+              --target main
+            echo "Created release $TAG"
+          fi
+
   build-and-push:
+    needs: [auto-release]
+    if: always()
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,6 +49,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
