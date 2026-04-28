@@ -3,17 +3,12 @@ name: Publish Docker Image
 on:
   push:
     branches: [main]
-  release:
-    types: [published]
 
 jobs:
   auto-release:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    outputs:
-      version: ${{ steps.get_version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,8 +35,6 @@ jobs:
           fi
 
   build-and-push:
-    needs: [auto-release]
-    if: always()
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,8 +42,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-tags: true
+
+      - name: Read version from config.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' espforge/config.yaml | sed 's/version: *"//;s/"//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -65,24 +62,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest,enable={{is_default_branch}}
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: ./espforge
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.version }}
+            ghcr.io/${{ github.repository }}:latest
           build-args: |
             VITE_BASE_PATH=./
