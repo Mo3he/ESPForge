@@ -34,7 +34,7 @@ jobs:
           else
             gh release create "$TAG" \
               --title "$TAG" \
-              --notes "Release $TAG" \
+              --generate-notes \
               --target main
             echo "Created release $TAG"
           fi
