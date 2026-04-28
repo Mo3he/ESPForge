@@ -39,6 +39,10 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 
 ESPForge runs entirely in the browser. Your configuration is never sent to a server -- everything stays local.
 
+### Web
+
+Just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- nothing to install.
+
 ### Home Assistant App
 
 1. In Home Assistant, go to **Settings > Apps > App Store**
@@ -66,10 +70,6 @@ To update:
 ```bash
 docker compose pull && docker compose up -d
 ```
-
-### Web (no install)
-
-Just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- nothing to install.
 
 ## License
 
