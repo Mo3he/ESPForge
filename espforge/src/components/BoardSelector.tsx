@@ -265,7 +265,6 @@ export default function BoardSelector({ onBoardSelected }: Props) {
           placeholder="Search boards... (e.g. S3, C3, Sonoff, M5Stack)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          autoFocus
         />
       </div>
 

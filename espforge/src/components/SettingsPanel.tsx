@@ -16,6 +16,7 @@ function generatePassword(length = 16): string {
 export default function SettingsPanel() {
   const { project, dispatch } = useProject();
   const s = project.settings;
+  const board = project.board;
 
   const update = (patch: Partial<typeof s>) => {
     dispatch({ type: 'UPDATE_SETTINGS', settings: patch });
@@ -324,7 +325,12 @@ export default function SettingsPanel() {
         <legend>Advanced</legend>
         <div className="form-group">
           <label>Status LED Pin</label>
-          <input type="text" value={s.statusLedPin} placeholder="GPIO2 (leave empty to disable)" onChange={(e) => update({ statusLedPin: e.target.value })} />
+          <select value={s.statusLedPin} onChange={(e) => update({ statusLedPin: e.target.value })}>
+            <option value="">(disabled)</option>
+            {board?.pins.map((p) => (
+              <option key={p.gpio} value={`GPIO${p.gpio}`}>GPIO{p.gpio} — {p.label}{p.notes ? ` (${p.notes})` : ''}</option>
+            ))}
+          </select>
           <span className="form-hint">Built-in LED that blinks to show device status.</span>
         </div>
         <div className="form-group">

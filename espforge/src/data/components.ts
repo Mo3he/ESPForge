@@ -810,7 +810,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  IR (Infrared) — TRANSMITTER & RECEIVER
+  //  IR / CLIMATE — TRANSMITTER, RECEIVER, PROXY & AC
   // ═══════════════════════════════════════════
   {
     type: 'ir.receiver',
@@ -848,10 +848,21 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'carrier_duty_percent', label: 'Carrier Duty %', type: 'number', default: 50 },
     ],
   },
+  {
+    type: 'ir.proxy',
+    platform: 'ir_rf_proxy',
+    domain: 'infrared',
+    category: 'ir',
+    name: 'IR/RF Proxy',
+    description: 'Expose IR transmitter and/or receiver to Home Assistant as a universal remote proxy — no reflash needed to add new devices. Experimental ESPHome feature.',
+    icon: 'Wifi',
+    pins: [],
+    configFields: [
+      { key: 'receiver_frequency', label: 'Receiver Demod Frequency', type: 'text', default: '38kHz', placeholder: '38kHz (e.g. TSOP38238)' },
+    ],
+  },
 
-  // ═══════════════════════════════════════════
-  //  CLIMATE (IR-based AC control)
-  // ═══════════════════════════════════════════
+  // ── CLIMATE (IR-based AC) ──
   {
     type: 'climate.ir',
     platform: 'climate_ir',
@@ -1388,7 +1399,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  MORE SENSORS (common ones still missing)
+  //  SENSORS (CONTINUED)
   // ═══════════════════════════════════════════
   {
     type: 'sensor.sgp30',
@@ -1580,7 +1591,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  MORE BINARY SENSORS
+  //  BINARY SENSORS (CONTINUED)
   // ═══════════════════════════════════════════
   {
     type: 'binary_sensor.template',
@@ -1621,7 +1632,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  MORE SWITCHES
+  //  SWITCHES (CONTINUED)
   // ═══════════════════════════════════════════
   {
     type: 'switch.template',
@@ -1664,7 +1675,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  MORE LIGHTS
+  //  LIGHTS (CONTINUED)
   // ═══════════════════════════════════════════
   {
     type: 'light.cwww',
@@ -1724,7 +1735,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   },
 
   // ═══════════════════════════════════════════
-  //  NEW — HIGH DEMAND
+  //  SENSORS — ADC, ENERGY & NETWORK
   // ═══════════════════════════════════════════
 
   // ── ADS1115 4-channel ADC ──

@@ -253,6 +253,9 @@ export const boards: Board[] = [
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
+  //  LilyGO
+  // ═══════════════════════════════════════════════════════════
   {
     id: 'lilygo_t_display_s3',
     name: 'LilyGO T-Display S3',
@@ -280,7 +283,6 @@ export const boards: Board[] = [
     ],
   },
 
-  // ── LilyGO T-Display AMOLED, T-Display S3 Pro, T-Dongle S3, T-Beam, T-Watch ──
   {
     id: 'lilygo_t_amoled_s3',
     name: 'LilyGO T-Display S3 AMOLED',
@@ -462,6 +464,9 @@ export const boards: Board[] = [
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
+  //  Seeed XIAO (C3, S3, S3 Sense, C6, S2)
+  // ═══════════════════════════════════════════════════════════
   {
     id: 'seeed_xiao_esp32c3',
     name: 'Seeed XIAO ESP32C3',
@@ -486,7 +491,6 @@ export const boards: Board[] = [
     ],
   },
 
-  // ── Seeed XIAO S3 / S3 Sense / C6 / S2 ──────────────────────
   {
     id: 'seeed_xiao_esp32s3',
     name: 'Seeed XIAO ESP32S3',
@@ -707,7 +711,7 @@ export const boards: Board[] = [
   },
 
   // ═══════════════════════════════════════════════════════════
-  //  Popular Third-Party Boards
+  //  AZ-Delivery / Generic ESP32
   // ═══════════════════════════════════════════════════════════
   {
     id: 'az_delivery_devkit_v4',
@@ -745,6 +749,9 @@ export const boards: Board[] = [
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
+  //  M5Stack
+  // ═══════════════════════════════════════════════════════════
   {
     id: 'm5stack_atom_lite',
     name: 'M5Stack ATOM Lite',
@@ -799,9 +806,6 @@ export const boards: Board[] = [
     ],
   },
 
-  // ═══════════════════════════════════════════════════════════
-  //  M5Stack Recent (Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6)
-  // ═══════════════════════════════════════════════════════════
   {
     id: 'm5stack_core2',
     name: 'M5Stack Core2',
@@ -980,6 +984,9 @@ export const boards: Board[] = [
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
+  //  LOLIN / Wemos
+  // ═══════════════════════════════════════════════════════════
   {
     id: 'lolin_d32',
     name: 'LOLIN D32',
@@ -1016,6 +1023,9 @@ export const boards: Board[] = [
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
+  //  Sonoff (ESP32)
+  // ═══════════════════════════════════════════════════════════
   {
     id: 'sonoff_basic_r4',
     name: 'Sonoff Basic R4',

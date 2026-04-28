@@ -194,7 +194,7 @@ export function generateYaml(project: Project): string {
   for (const inst of irTransmitters) {
     const entry: Record<string, unknown> = {};
     if (inst.pins.pin != null) entry.pin = `GPIO${inst.pins.pin}`;
-    entry.carrier_duty_percent = Number(inst.config.carrier_duty_percent) || 50;
+    entry.carrier_duty_percent = `${Number(inst.config.carrier_duty_percent) || 50}%`;
     entry.id = inst.id;
     allTransmitterEntries.push(entry);
   }
@@ -228,6 +228,32 @@ export function generateYaml(project: Project): string {
       entry.id = inst.id;
       return entry;
     });
+  }
+
+  // ── infrared (ir_rf_proxy) ──
+  const irProxyInst = components.find((c) => c.type === 'ir.proxy');
+  if (irProxyInst) {
+    const infraredEntries: Record<string, unknown>[] = [];
+    for (const tx of irTransmitters) {
+      infraredEntries.push({
+        platform: 'ir_rf_proxy',
+        name: `${tx.name} Proxy`,
+        remote_transmitter_id: tx.id,
+      });
+    }
+    for (const rx of irReceivers) {
+      const entry: Record<string, unknown> = {
+        platform: 'ir_rf_proxy',
+        name: `${rx.name} Proxy`,
+        remote_receiver_id: rx.id,
+      };
+      const freq = irProxyInst.config.receiver_frequency;
+      if (freq) entry.receiver_frequency = freq;
+      infraredEntries.push(entry);
+    }
+    if (infraredEntries.length > 0) {
+      doc.infrared = infraredEntries;
+    }
   }
 
   // ── uart (for PZEM, DFPlayer, etc.) ──
