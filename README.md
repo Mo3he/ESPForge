@@ -1,8 +1,6 @@
 # ESPForge
 
-Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings — get a ready-to-flash YAML file. No YAML knowledge required.
-
-## Try it here [ESPForge](https://mo3he.github.io/ESPForge/)
+Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings -- get a ready-to-flash YAML file. No YAML knowledge required.
 
 ![ESPForge Screenshot](docs/screenshot.png)
 
@@ -36,7 +34,9 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 - Keyboard shortcuts (Ctrl+S save, Ctrl+E export)
 - Responsive layout — works on mobile and tablet
 
-## Quick Start
+## How to use it
+
+ESPForge runs entirely in the browser. Your configuration is never sent to a server -- everything stays local.
 
 ### Home Assistant App
 
@@ -60,13 +60,24 @@ docker compose up -d
 
 Open [http://localhost:8080](http://localhost:8080) in your browser.
 
-To update to the latest image:
+To update:
 
 ```bash
 docker compose pull && docker compose up -d
 ```
 
-Supports `linux/amd64` and `linux/arm64` (Raspberry Pi, Home Assistant OS, etc.).
+### Web (no install)
+
+Just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- nothing to install.
+
+## License
+
+MIT
+
+---
+
+<details>
+<summary>Development</summary>
 
 ### Local dev
 
@@ -78,40 +89,34 @@ npm run dev
 
 Open [http://localhost:5173/ESPForge/](http://localhost:5173/ESPForge/) in your browser.
 
-## Build
+### Build
 
 ```bash
 cd espforge
 npm run build
 ```
 
-Static output is in `espforge/dist/`, ready to deploy anywhere.
+Static output is in `espforge/dist/`.
 
-## Deploy Docker Image
+### Deploy Docker Image
 
-The repo includes a GitHub Actions workflow (`.github/workflows/docker.yml`) that builds and pushes a multi-platform image to `ghcr.io` on every push to `main` and on releases.
+A GitHub Actions workflow (`.github/workflows/docker.yml`) builds and pushes a multi-platform image to `ghcr.io` on every push to `main` and on releases.
 
-## Deploy to GitHub Pages
+### Deploy to GitHub Pages
 
-The repo includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that builds and deploys on push to `main`:
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and deploys on push to `main`:
 
 1. **Settings → Pages** → set Source to **GitHub Actions**
 2. Push to `main`
 
-## How it works
-
-ESPForge runs entirely in the browser. Your configuration is never sent to a server. The app builds a structured project in memory and serializes it to valid ESPHome YAML using [js-yaml](https://github.com/nodeca/js-yaml). Share links encode the project as Base64 in the URL hash.
-
-## Tech Stack
+### Tech Stack
 
 - React 19 + TypeScript + Vite 8
 - [js-yaml](https://github.com/nodeca/js-yaml)
-- No backend — fully static, nothing stored server-side
+- No backend -- fully static, nothing stored server-side
 
-## Contributing
+### Contributing
 
-Issues and PRs welcome. If you'd like to add a board, component, or template, the definitions live in `src/data/`.
+Issues and PRs welcome. If you'd like to add a board, component, or template, the definitions live in `espforge/src/data/`.
 
-## License
-
-MIT
+</details>
