@@ -1,0 +1,21 @@
+name: ESPForge
+description: >-
+  Visual browser-based configuration tool for ESPHome. Pick a board, add
+  components, configure settings and get a ready-to-flash YAML file. No YAML
+  knowledge required.
+version: "0.1.0"
+slug: espforge
+url: "https://github.com/mo3he/ESPForge"
+image: "ghcr.io/mo3he/espforge:{version}"
+arch:
+  - aarch64
+  - amd64
+  - armv7
+startup: application
+boot: auto
+ingress: true
+ingress_port: 80
+panel_icon: mdi:chip
+panel_title: ESPForge
+options: {}
+schema: {}
