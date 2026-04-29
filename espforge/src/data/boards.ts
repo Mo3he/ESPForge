@@ -465,7 +465,7 @@ export const boards: Board[] = [
   },
 
   // ═══════════════════════════════════════════════════════════
-  //  Seeed XIAO (C3, S3, S3 Sense, C6, S2)
+  //  Seeed XIAO (C3, S3, S3 Sense, C6)
   // ═══════════════════════════════════════════════════════════
   {
     id: 'seeed_xiao_esp32c3',
@@ -567,30 +567,6 @@ export const boards: Board[] = [
       { gpio: 18, label: 'SCK',   side: 'right', capabilities: ['gpio', 'spi'] },
       { gpio: 19, label: 'MISO',  side: 'right', capabilities: ['gpio', 'spi'] },
       { gpio: 20, label: 'MOSI',  side: 'right', capabilities: ['gpio', 'spi'] },
-    ],
-  },
-
-  {
-    id: 'seeed_xiao_esp32s2',
-    name: 'Seeed XIAO ESP32S2',
-    platform: 'esp32',
-    variant: 'esp32s2',
-    board: 'seeed_xiao_esp32s2',
-    description: 'Tiny ESP32-S2 with USB-C OTG. No Bluetooth. Battery charging built-in.',
-    hasBLE: false,
-    defaultI2C: { sda: 5, scl: 6 },
-    pins: [
-      { gpio: 1,  label: 'A0/D0', side: 'left',  capabilities: ['gpio', 'adc', 'pwm'] },
-      { gpio: 2,  label: 'A1/D1', side: 'left',  capabilities: ['gpio', 'adc', 'pwm'] },
-      { gpio: 3,  label: 'A2/D2', side: 'left',  capabilities: ['gpio', 'adc', 'pwm'] },
-      { gpio: 4,  label: 'A3/D3', side: 'left',  capabilities: ['gpio', 'adc', 'pwm'] },
-      { gpio: 5,  label: 'SDA',   side: 'left',  capabilities: ['gpio', 'pwm', 'i2c_sda'] },
-      { gpio: 6,  label: 'SCL',   side: 'left',  capabilities: ['gpio', 'pwm', 'i2c_scl'] },
-      { gpio: 43, label: 'TX',    side: 'right', capabilities: ['gpio', 'uart_tx'] },
-      { gpio: 44, label: 'RX',    side: 'right', capabilities: ['gpio', 'uart_rx'] },
-      { gpio: 7,  label: 'SCK',   side: 'right', capabilities: ['gpio', 'spi'] },
-      { gpio: 8,  label: 'MISO',  side: 'right', capabilities: ['gpio', 'spi'] },
-      { gpio: 9,  label: 'MOSI',  side: 'right', capabilities: ['gpio', 'spi'] },
     ],
   },
 
