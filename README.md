@@ -48,8 +48,10 @@ Just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- 
 1. In Home Assistant, go to **Settings > Apps > App Store**
 2. Click the overflow menu (top right) > **Repositories**
 3. Add `https://github.com/mo3he/ESPForge` and click **Add**
-4. ESPForge will appear in the store -- install and start it
-5. Once installed and started, open it via **Open Web UI** on the app's page
+4. Find **ESPForge** in the store and click it
+5. Click **Install**
+6. Once installed, click **Start**
+7. Click **Open Web UI**
 
 ### Docker
 
