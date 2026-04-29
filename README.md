@@ -8,7 +8,7 @@ Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pic
 
 ### Build
 - **41 boards** — ESP32, S2, S3, C3, C6, ESP8266, plus M5Stack (ATOM Lite, AtomS3, Core2, CoreS3, Cardputer, Dial, StampS3, NanoC6, StickC Plus2), Seeed XIAO (C3, S3, S3 Sense, C6), LilyGO (T-Display S3, T-Display S3 AMOLED, T-Display S3 Pro, T-Beam v1.1, T-Beam Supreme, T-Watch S3, T-Dongle S3), Heltec (WiFi Kit 32, WiFi LoRa 32 v2/v3), CYD (Cheap Yellow Display), Olimex ESP32-PoE, AZ-Delivery, Sonoff, and more
-- **99 components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR (transmitter, receiver, IR/RF Proxy), media, displays, I/O expanders, mmWave radar (LD2410, LD2450, LD2411S)
+- **98 components** — sensors, switches, lights, fans, covers, locks, climate, BLE, IR (transmitter, receiver, IR/RF Proxy), media, displays, I/O expanders, mmWave radar (LD2410, LD2450)
 - **14 starter templates** — Blank Project, Basic Sensor Node, Smart Relay / Plug, Addressable LED Strip, Environment Monitor, Motion-Activated Light, BLE Gateway / Proxy, Garage Door Controller, Power Monitor, PWM Fan Controller, Presence Sensor (mmWave), IR Blaster / AC Controller, IR/RF Proxy, OLED Status Display
 - **Multi-template selection** — combine templates and ESPForge merges them, deduplicating shared components automatically
 - **Guided onboarding** — template → board → settings → components

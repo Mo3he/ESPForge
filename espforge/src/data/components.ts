@@ -1371,7 +1371,7 @@ export const componentDefinitions: ComponentDefinition[] = [
   // ═══════════════════════════════════════════
   {
     type: 'lock.gpio',
-    platform: 'gpio',
+    platform: 'output',
     domain: 'lock',
     category: 'lock',
     name: 'GPIO Lock',
@@ -1567,7 +1567,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     pins: [],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'NTC Temperature' },
-      { key: 'sensor_id', label: 'ADC Sensor ID', type: 'text', required: true, placeholder: 'adc_sensor_1' },
+      { key: 'sensor', label: 'ADC Sensor ID', type: 'text', required: true, placeholder: 'adc_sensor_1' },
       { key: 'b_constant', label: 'B Constant', type: 'number', default: 3950 },
       { key: 'reference_temperature', label: 'Reference Temp (°C)', type: 'text', default: '25°C' },
       { key: 'reference_resistance', label: 'Reference Resistance', type: 'text', default: '10kΩ' },
@@ -1918,25 +1918,6 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'presence_name', label: 'Presence Name', type: 'text', default: 'Presence', group: 'Sub-entities' },
       { key: 'target_count_name', label: 'Target Count Name', type: 'text', default: 'Target Count', group: 'Sub-entities' },
       { key: 'fast_off_detection', label: 'Fast Off Detection', type: 'boolean', default: false },
-    ],
-    extraDomains: ['uart'],
-  },
-  {
-    type: 'sensor.ld2411s',
-    platform: 'ld2411s',
-    domain: 'sensor',
-    category: 'sensor',
-    name: 'LD2411S mmWave Presence + Illuminance',
-    description: 'Hi-Link 24GHz radar with built-in light sensor. Single-target presence detection with lux reading.',
-    icon: 'Radar',
-    pins: [
-      { role: 'tx_pin', label: 'TX Pin (to sensor RX)', capabilities: ['gpio', 'uart_tx'] },
-      { role: 'rx_pin', label: 'RX Pin (from sensor TX)', capabilities: ['gpio', 'uart_rx'] },
-    ],
-    configFields: [
-      { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Presence + Light' },
-      { key: 'presence_name', label: 'Presence Name', type: 'text', default: 'Presence', group: 'Sub-entities' },
-      { key: 'illuminance_name', label: 'Illuminance Name', type: 'text', default: 'Illuminance', group: 'Sub-entities' },
     ],
     extraDomains: ['uart'],
   },

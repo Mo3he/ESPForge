@@ -264,7 +264,6 @@ export function generateYaml(project: Project): string {
   const mmwaveBaud: Record<string, number> = {
     'sensor.ld2410': 256000,
     'sensor.ld2450': 256000,
-    'sensor.ld2411s': 256000,
   };
   if (uartComponents.length > 0) {
     doc.uart = uartComponents.map((inst) => {
@@ -1411,13 +1410,6 @@ function generateComponentEntry(
       base.ld2450_id = `${inst.id}_hub`;
       const tcName = inst.config.target_count_name as string | undefined;
       if (tcName) base.target_count = { name: tcName };
-      break;
-    }
-
-    // ── LD2411S mmWave ──
-    case 'sensor.ld2411s': {
-      base.platform = 'ld2411s';
-      base.name = str(inst.config.name as string, inst.name);
       break;
     }
 
