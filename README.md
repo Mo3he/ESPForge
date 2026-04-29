@@ -78,6 +78,12 @@ docker compose pull && docker compose up -d
 
 MIT
 
+## Roadmap
+
+- **Display page builder** - visual drag-and-drop widget system for graphical displays (SSD1306, ST7789V, ILI9xxx, etc.): add text rows, sensor values, clock, icons, and shapes per page; ESPForge generates the `font:` declarations and `lambda:` / `pages:` YAML automatically
+- More display drivers (ILI9xxx, e-paper, LCD character, LVGL)
+- More board definitions
+
 ---
 
 <details>
