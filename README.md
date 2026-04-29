@@ -45,7 +45,7 @@ Just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- 
 
 ### Home Assistant App
 
-1. In Home Assistant, go to **Settings > Apps > App Store**
+1. In Home Assistant, go to **Settings > Apps** and click **Install app**
 2. Click the overflow menu (top right) > **Repositories**
 3. Add `https://github.com/mo3he/ESPForge` and click **Add**
 4. Find **ESPForge** in the store and click it
