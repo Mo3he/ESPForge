@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.4
+
+- Added **Custom Board** option as the first board in the selector - enter any ESPHome board ID, platform, and ESP32 variant manually
+- Added **OpenThread** component (Thread mesh networking) for ESP32-C5, C6, and H2 boards; generates `network: enable_ipv6`, `openthread:` section, and skips WiFi/captive_portal automatically
+- Added **variant-aware component filtering** (`variantFilter`): components that require specific ESP32 hardware are hidden when an incompatible variant is selected
+  - OpenThread: ESP32-C5, C6, H2 only (Thread radio required)
+  - ESP32 Touch Pad: ESP32, S2, S3 only (capacitive touch hardware required)
+- Added `esp32c5` to supported board variants
+- Added `Network` icon to icon set
+
 ## 0.1.3
 
 - Removed XIAO ESP32-S2 board (does not exist in the Seeed XIAO lineup)

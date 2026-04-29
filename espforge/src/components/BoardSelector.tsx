@@ -11,6 +11,8 @@ interface Props {
   onBoardSelected?: (tab?: string) => void;
 }
 
+type CustomBoardVariant = 'esp32' | 'esp32s2' | 'esp32s3' | 'esp32c3' | 'esp32c5' | 'esp32c6' | 'esp32h2';
+
 /** Merge components from multiple templates, deduplicating shared utility components by type. */
 function mergeTemplates(templates: ProjectTemplate[]): {
   components: ComponentInstance[];
@@ -79,6 +81,10 @@ export default function BoardSelector({ onBoardSelected }: Props) {
   const [selectedTemplates, setSelectedTemplates] = useState<ProjectTemplate[]>([]);
   const [step, setStep] = useState<'template' | 'board'>('template');
   const [importOpen, setImportOpen] = useState(false);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customPlatform, setCustomPlatform] = useState<'esp32' | 'esp8266'>('esp32');
+  const [customVariant, setCustomVariant] = useState<CustomBoardVariant>('esp32');
+  const [customBoardId, setCustomBoardId] = useState('');
 
   const handleSelectBoard = (board: Board) => {
     dispatch({ type: 'SET_BOARD', board });
@@ -97,6 +103,20 @@ export default function BoardSelector({ onBoardSelected }: Props) {
     }
 
     onBoardSelected?.('settings');
+  };
+
+  const handleSelectCustomBoard = () => {
+    const boardId = customBoardId.trim() || (customPlatform === 'esp8266' ? 'nodemcuv2' : 'esp32dev');
+    const customBoard: Board = {
+      id: 'custom',
+      name: 'Custom Board',
+      platform: customPlatform,
+      variant: customPlatform === 'esp8266' ? undefined : customVariant,
+      board: boardId,
+      description: `Custom board: ${boardId}`,
+      pins: [],
+    };
+    handleSelectBoard(customBoard);
   };
 
   const handleToggleTemplate = (template: ProjectTemplate) => {
@@ -286,9 +306,81 @@ export default function BoardSelector({ onBoardSelected }: Props) {
       </div>
 
       <div className="board-grid">
-        {filteredBoards.length === 0 && (
+        {filteredBoards.length === 0 && !customOpen && (
           <p className="palette-empty" style={{ gridColumn: '1 / -1' }}>No boards match &ldquo;{search}&rdquo;</p>
         )}
+
+        {/* Custom Board card — always first, hidden when search has text */}
+        {!search && (
+          <div className={`board-card custom-board-card ${customOpen ? 'custom-board-open' : ''}`}>
+            {!customOpen ? (
+              <button className="custom-board-trigger" onClick={() => setCustomOpen(true)}>
+                <div className="board-card-chip">
+                  <svg viewBox="0 0 60 80" width="60" height="80">
+                    <rect x="5" y="5" width="50" height="70" rx="4" fill="var(--bg-tertiary)" stroke="var(--text-tertiary)" strokeWidth="1.5" strokeDasharray="4 3" />
+                    <text x="30" y="42" textAnchor="middle" fill="var(--text-tertiary)" fontSize="18" fontFamily="monospace">?</text>
+                  </svg>
+                </div>
+                <div className="board-card-info">
+                  <h3>Custom Board</h3>
+                  <p>My board isn&apos;t listed. Enter the ESPHome board identifier manually.</p>
+                  <div className="board-card-meta">
+                    <span className="badge badge-outline">Custom</span>
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <div className="custom-board-form">
+                <h3>Custom Board Setup</h3>
+                <div className="custom-board-fields">
+                  <label>
+                    <span>Platform</span>
+                    <select
+                      value={customPlatform}
+                      onChange={(e) => {
+                        setCustomPlatform(e.target.value as 'esp32' | 'esp8266');
+                        if (e.target.value === 'esp8266') setCustomVariant('esp32');
+                      }}
+                    >
+                      <option value="esp32">ESP32</option>
+                      <option value="esp8266">ESP8266</option>
+                    </select>
+                  </label>
+                  {customPlatform === 'esp32' && (
+                    <label>
+                      <span>Variant</span>
+                      <select value={customVariant} onChange={(e) => setCustomVariant(e.target.value as CustomBoardVariant)}>
+                        <option value="esp32">ESP32 (original)</option>
+                        <option value="esp32s2">ESP32-S2</option>
+                        <option value="esp32s3">ESP32-S3</option>
+                        <option value="esp32c3">ESP32-C3</option>
+                        <option value="esp32c5">ESP32-C5</option>
+                        <option value="esp32c6">ESP32-C6</option>
+                        <option value="esp32h2">ESP32-H2</option>
+                      </select>
+                    </label>
+                  )}
+                  <label>
+                    <span>ESPHome Board ID</span>
+                    <input
+                      type="text"
+                      placeholder={customPlatform === 'esp8266' ? 'e.g. nodemcuv2' : 'e.g. esp32dev'}
+                      value={customBoardId}
+                      onChange={(e) => setCustomBoardId(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleSelectCustomBoard(); }}
+                    />
+                    <small>Find your board ID at <a href="https://registry.platformio.org/platforms/platformio/espressif32/boards" target="_blank" rel="noreferrer">PlatformIO board registry</a></small>
+                  </label>
+                </div>
+                <div className="custom-board-actions">
+                  <button className="btn btn-ghost" onClick={() => setCustomOpen(false)}>Cancel</button>
+                  <button className="btn btn-primary" onClick={handleSelectCustomBoard}>Use This Board →</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {filteredBoards.map((board) => {
           const isRecommended = allRecommended.has(board.id);
           return (

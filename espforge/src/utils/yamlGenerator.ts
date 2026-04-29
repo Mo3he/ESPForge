@@ -63,8 +63,11 @@ export function generateYaml(project: Project): string {
     doc.ota = [ota];
   }
 
-  // ── wifi ──
-  {
+  // ── wifi / network (OpenThread replaces WiFi) ──
+  const hasOpenThread = components.some((c) => c.type === 'misc.openthread');
+  if (hasOpenThread) {
+    doc.network = { enable_ipv6: true };
+  } else {
     const wifi: Record<string, unknown> = {};
     if (settings.useSecretsWifi) {
       wifi.ssid = '__SECRET__wifi_ssid';
@@ -97,7 +100,7 @@ export function generateYaml(project: Project): string {
   }
 
   // ── captive_portal ──
-  if (settings.captivePortalEnabled && settings.fallbackApEnabled) {
+  if (!hasOpenThread && settings.captivePortalEnabled && settings.fallbackApEnabled) {
     doc.captive_portal = null;
   }
 
@@ -314,6 +317,32 @@ export function generateYaml(project: Project): string {
     doc.rtttl = { output: `${rtttlInst.id}_output` };
   }
 
+  // ── openthread ──
+  const openThreadInst = components.find((c) => c.type === 'misc.openthread');
+  if (openThreadInst) {
+    const ot: Record<string, unknown> = {};
+    if (openThreadInst.config.tlv) {
+      ot.tlv = openThreadInst.config.tlv;
+    } else {
+      if (openThreadInst.config.device_type && openThreadInst.config.device_type !== 'FTD') {
+        ot.device_type = openThreadInst.config.device_type;
+      }
+      if (openThreadInst.config.channel) ot.channel = Number(openThreadInst.config.channel);
+      if (openThreadInst.config.network_name) ot.network_name = openThreadInst.config.network_name;
+      if (openThreadInst.config.network_key) ot.network_key = openThreadInst.config.network_key;
+      if (openThreadInst.config.pan_id) ot.pan_id = openThreadInst.config.pan_id;
+      if (openThreadInst.config.ext_pan_id) ot.ext_pan_id = openThreadInst.config.ext_pan_id;
+      if (openThreadInst.config.pskc) ot.pskc = openThreadInst.config.pskc;
+      if (openThreadInst.config.mesh_local_prefix) ot.mesh_local_prefix = openThreadInst.config.mesh_local_prefix;
+      if (openThreadInst.config.force_dataset) ot.force_dataset = true;
+      if (openThreadInst.config.output_power != null && openThreadInst.config.output_power !== '') {
+        ot.output_power = Number(openThreadInst.config.output_power);
+      }
+      if (openThreadInst.config.poll_period) ot.poll_period = openThreadInst.config.poll_period;
+    }
+    doc.openthread = Object.keys(ot).length > 0 ? ot : null;
+  }
+
   // ── status_led ──
   if (settings.statusLedPin) {
     doc.status_led = { pin: settings.statusLedPin };
@@ -499,7 +528,8 @@ export function generateYaml(project: Project): string {
   const sectionOrder = [
     'esphome',
     board.platform === 'esp32' ? 'esp32' : 'esp8266',
-    'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+    'logger', 'api', 'ota', 'network', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+    'openthread',
     'time', 'status_led',
     'i2c', 'one_wire', 'uart', 'spi',
     'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
@@ -515,8 +545,10 @@ export function generateYaml(project: Project): string {
     logger: '# Enable logging',
     api: '# Home Assistant API',
     ota: '# Over-the-Air updates',
+    network: '# Network configuration (IPv6)',
     wifi: '# WiFi configuration',
     captive_portal: '# Captive portal (for WiFi setup fallback)',
+    openthread: '# OpenThread (Thread mesh networking)',
     web_server: '# Built-in web server',
     mqtt: '# MQTT broker',
     i2c: '# I²C bus',
@@ -583,7 +615,8 @@ export function generateYaml(project: Project): string {
     const platformKey = board.platform === 'esp32' ? 'esp32' : 'esp8266';
     const managedKeys = new Set([
       'esphome', platformKey,
-      'logger', 'api', 'ota', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+      'logger', 'api', 'ota', 'network', 'wifi', 'captive_portal', 'web_server', 'mqtt',
+      'openthread',
       'spi', 'i2c', 'one_wire', 'uart',
       'esp32_ble_tracker', 'bluetooth_proxy', 'esp32_touch',
       'remote_transmitter', 'remote_receiver', 'i2s_audio',
@@ -1141,6 +1174,7 @@ function generateComponentEntry(
     case 'media.i2s_audio':
     case 'misc.deep_sleep':
     case 'misc.pcf8574':
+    case 'misc.openthread':
       return null; // handled as top-level sections
 
     // ── Fans ──

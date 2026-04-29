@@ -64,13 +64,18 @@ export default function ComponentPalette({ onSelectComponent, selectedComponentI
 
   const categories = getCategories();
 
-  // Filter definitions by board platform and BLE capability
+  // Filter definitions by board platform, variant, and BLE capability
   const platform = project.board?.platform;
+  const boardVariant = project.board?.variant;
   const boardHasBLE = project.board?.hasBLE;
   const availableDefinitions = componentDefinitions.filter((def) => {
     // Filter by platform
     if (def.platformFilter && platform) {
       if (!def.platformFilter.includes(platform as 'esp32' | 'esp8266')) return false;
+    }
+    // Filter by variant
+    if (def.variantFilter && boardVariant) {
+      if (!def.variantFilter.includes(boardVariant as 'esp32' | 'esp32s2' | 'esp32s3' | 'esp32c3' | 'esp32c5' | 'esp32c6' | 'esp32h2')) return false;
     }
     // Filter platform-specific outputs
     if (def.type === 'output.ledc' && platform === 'esp8266') return false;

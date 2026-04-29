@@ -1817,6 +1817,7 @@ export const componentDefinitions: ComponentDefinition[] = [
     description: 'Built-in capacitive touch sensor on ESP32 GPIO pins.',
     icon: 'Fingerprint',
     platformFilter: ['esp32'],
+    variantFilter: ['esp32', 'esp32s2', 'esp32s3'],
     pins: [{ role: 'pin', label: 'Touch Pin', capabilities: ['touch'] }],
     configFields: [
       { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Touch Button' },
@@ -1920,6 +1921,39 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'fast_off_detection', label: 'Fast Off Detection', type: 'boolean', default: false },
     ],
     extraDomains: ['uart'],
+  },
+
+  // ═══════════════════════════════════════════
+  //  THREAD NETWORKING
+  // ═══════════════════════════════════════════
+  {
+    type: 'misc.openthread',
+    platform: 'openthread',
+    domain: 'openthread',
+    category: 'misc',
+    name: 'OpenThread (Thread Networking)',
+    description: 'Thread mesh networking via IEEE 802.15.4 radio. Supported on ESP32-C5, C6, and H2. Requires ESP-IDF framework. Replaces WiFi as the network transport.',
+    icon: 'Network',
+    pins: [],
+    platformFilter: ['esp32'],
+    variantFilter: ['esp32c5', 'esp32c6', 'esp32h2'],
+    configFields: [
+      { key: 'device_type', label: 'Device Type', type: 'select', default: 'FTD', options: [
+        { label: 'FTD - Full Thread Device (Router Eligible)', value: 'FTD' },
+        { label: 'MTD - Minimal Thread Device (End Device)', value: 'MTD' },
+      ]},
+      { key: 'channel', label: 'Channel (11-26)', type: 'number', placeholder: 'e.g. 15 (optional)' },
+      { key: 'network_name', label: 'Network Name', type: 'text', placeholder: 'MyThreadNet (optional)' },
+      { key: 'network_key', label: 'Network Key', type: 'text', placeholder: '0xdfd34f0f05cad978ec4e32b0413038ff (optional)' },
+      { key: 'pan_id', label: 'PAN ID', type: 'text', placeholder: '0x1234 (optional)' },
+      { key: 'ext_pan_id', label: 'Extended PAN ID', type: 'text', placeholder: '0xd63e8e3e495ebbc3 (optional)', group: 'Advanced' },
+      { key: 'pskc', label: 'PSKc', type: 'text', placeholder: '0xc23a76e9... (optional)', group: 'Advanced' },
+      { key: 'mesh_local_prefix', label: 'Mesh Local Prefix', type: 'text', placeholder: 'fd53:145f:ed22:ad81::/64 (optional)', group: 'Advanced' },
+      { key: 'force_dataset', label: 'Force Dataset', type: 'boolean', default: false, group: 'Advanced' },
+      { key: 'output_power', label: 'Output Power (dBm)', type: 'number', placeholder: '0 (optional, -15 to 20)', group: 'Advanced' },
+      { key: 'poll_period', label: 'Poll Period (MTD Sleepy End Device)', type: 'text', placeholder: 'e.g. 10s (optional)', group: 'Advanced' },
+      { key: 'tlv', label: 'Dataset TLV (from Home Assistant)', type: 'text', placeholder: 'Paste full TLV string to auto-configure (optional)', group: 'TLV Import' },
+    ],
   },
 ];
 

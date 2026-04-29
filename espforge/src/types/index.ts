@@ -26,7 +26,7 @@ export interface Board {
   id: string;
   name: string;
   platform: 'esp32' | 'esp8266';
-  variant?: 'esp32' | 'esp32s2' | 'esp32s3' | 'esp32c3' | 'esp32c6' | 'esp32h2';
+  variant?: 'esp32' | 'esp32s2' | 'esp32s3' | 'esp32c3' | 'esp32c5' | 'esp32c6' | 'esp32h2';
   board: string; // ESPHome board identifier
   description: string;
   pins: Pin[];
@@ -96,6 +96,8 @@ export interface ComponentDefinition {
   extraDomains?: string[];
   /** Only show for these platforms. Omit = all platforms. */
   platformFilter?: ('esp32' | 'esp8266')[];
+  /** Only show for these ESP32 variants. Omit = all variants. */
+  variantFilter?: ('esp32' | 'esp32s2' | 'esp32s3' | 'esp32c3' | 'esp32c5' | 'esp32c6' | 'esp32h2')[];
   /** Requires BLE hardware */
   requiresBLE?: boolean;
 }
