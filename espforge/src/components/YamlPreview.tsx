@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Check, Copy, X } from 'lucide-react';
+import { Check, Copy, Zap, X } from 'lucide-react';
 import { useProject } from '../context/ProjectContext';
 import { generateYaml } from '../utils/yamlGenerator';
 
@@ -12,6 +12,8 @@ interface Props {
 export default function YamlPreview({ open, onClose, width = 420 }: Props) {
   const { project } = useProject();
   const [copied, setCopied] = useState(false);
+  const [flashed, setFlashed] = useState(false);
+  const [flashError, setFlashError] = useState(false);
 
   const yamlStr = useMemo(() => generateYaml(project), [project]);
 
@@ -19,6 +21,18 @@ export default function YamlPreview({ open, onClose, width = 420 }: Props) {
     await navigator.clipboard.writeText(yamlStr);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleFlash = async () => {
+    try {
+      await navigator.clipboard.writeText(yamlStr);
+      setFlashed(true);
+      setTimeout(() => setFlashed(false), 2000);
+    } catch {
+      setFlashError(true);
+      setTimeout(() => setFlashError(false), 3000);
+    }
+    window.open('https://web.esphome.io/', '_blank', 'noopener,noreferrer');
   };
 
   if (!open) return null;
@@ -30,6 +44,10 @@ export default function YamlPreview({ open, onClose, width = 420 }: Props) {
         <div className="yaml-panel-actions">
           <button className="btn btn-sm btn-ghost" onClick={handleCopy} title="Copy to clipboard">
             {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied!' : 'Copy'}
+          </button>
+          <button className="btn btn-sm btn-ghost" onClick={handleFlash} title="Copy YAML and open web flasher">
+            {flashed ? <Check size={14} /> : <Zap size={14} />}{' '}
+            {flashError ? 'Copy YAML manually, then paste' : flashed ? 'Copied! Paste in flasher' : 'Flash'}
           </button>
           <button className="btn-icon" onClick={onClose}>
             <X size={16} />

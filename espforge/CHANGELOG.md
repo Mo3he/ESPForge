@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+- Added **Flash** button to the YAML preview panel — copies configuration to clipboard and opens web.esphome.io in one click
+- Added stricter field validation: number fields are checked for valid values, percentage fields enforced to 0–100, I2C addresses validated to the 7-bit range (0–127), and cross-field checks for min/max pairs (value, temperature, length)
+- Added device name format validation — catches spaces and special characters that ESPHome does not allow in device names
+
 ## 0.1.4
 
 - Added **Custom Board** option as the first board in the selector - enter any ESPHome board ID, platform, and ESP32 variant manually

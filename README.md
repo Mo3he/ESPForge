@@ -81,6 +81,8 @@ MIT
 ## Roadmap
 
 - **Display page builder** - visual drag-and-drop widget system for graphical displays (SSD1306, ST7789V, ILI9xxx, etc.): add text rows, sensor values, clock, icons, and shapes per page; ESPForge generates the `font:` declarations and `lambda:` / `pages:` YAML automatically
+- **Device catalog** - a "I have this product" flow: pick a known branded device (Sonoff Basic, Shelly, etc.) and ESPForge pre-configures the exact board, components, and pin assignments for that hardware out of the box
+- **Stricter field validation** - validate component field values against known constraints (ranges, formats, cross-field consistency) to catch more configuration errors before export
 - More display drivers (ILI9xxx, e-paper, LCD character, LVGL)
 - More board definitions
 
