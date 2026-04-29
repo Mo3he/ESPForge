@@ -2,7 +2,7 @@
 
 ## 0.1.3
 
-- Removed hallucinated XIAO ESP32-S2 board (never existed in Seeed XIAO lineup)
+- Removed XIAO ESP32-S2 board (does not exist in the Seeed XIAO lineup)
 - Fixed T-Display S3 Pro description: 2.33" display, camera POGO expansion, dual QWIIC ports
 - Fixed AtomS3 Grove PORT.CUSTOM I2C: G2/G1 (was G38/G39)
 - Fixed Cardputer Grove PORT.CUSTOM I2C: G2/G1 (was G13/G15)
