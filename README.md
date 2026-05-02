@@ -1,6 +1,12 @@
 # ESPForge
 
-Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings -- get a ready-to-flash YAML file. No YAML knowledge required.
+Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings -- get a ready-to-flash YAML file. No YAML knowledge required.  
+
+To try it now just visit **[ESPForge on GitHub Pages](https://mo3he.github.io/ESPForge/)** -- nothing to install, or keep reading for more info.
+
+[![License](https://img.shields.io/github/license/Mo3he/ESPForge)](LICENSE)  
+[![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-lightgrey?logo=github)](https://github.com/sponsors/Mo3he)  
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-orange?style=flat&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/mo3he)
 
 ![ESPForge Screenshot](docs/screenshot.png)
 
