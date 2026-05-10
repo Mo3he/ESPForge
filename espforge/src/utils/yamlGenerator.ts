@@ -8,6 +8,11 @@ export function generateYaml(project: Project): string {
   const doc: Record<string, unknown> = {};
   const { settings, board, components, automations } = project;
 
+  // ── substitutions ──
+  if (settings.substitutions && Object.keys(settings.substitutions).length > 0) {
+    doc.substitutions = settings.substitutions;
+  }
+
   // ── esphome ──
   doc.esphome = {
     name: settings.name,
@@ -129,11 +134,24 @@ export function generateYaml(project: Project): string {
     const def = getDefinition(c.type);
     return def?.needsSPI;
   });
-  if (needsSPI) {
+  const secondarySPIBuses = components.filter((c) => c.type === 'misc.spi_bus');
+  if (needsSPI || secondarySPIBuses.length > 0) {
     const spiDefaults = board.platform === 'esp8266'
       ? { clk_pin: 'GPIO14', mosi_pin: 'GPIO13', miso_pin: 'GPIO12' }
       : { clk_pin: 'GPIO18', mosi_pin: 'GPIO23', miso_pin: 'GPIO19' };
-    doc.spi = spiDefaults;
+    if (secondarySPIBuses.length === 0) {
+      doc.spi = spiDefaults;
+    } else {
+      const primaryBus: Record<string, unknown> = { id: 'spi_main', ...spiDefaults };
+      const extraBuses = secondarySPIBuses.map((inst) => {
+        const entry: Record<string, unknown> = { id: (inst.config.bus_id as string) || inst.id };
+        if (inst.pins.clk_pin != null) entry.clk_pin = `GPIO${inst.pins.clk_pin}`;
+        if (inst.pins.mosi_pin != null) entry.mosi_pin = `GPIO${inst.pins.mosi_pin}`;
+        if (inst.pins.miso_pin != null) entry.miso_pin = `GPIO${inst.pins.miso_pin}`;
+        return entry;
+      });
+      doc.spi = [primaryBus, ...extraBuses];
+    }
   }
 
   // ── i2c ──
@@ -141,12 +159,38 @@ export function generateYaml(project: Project): string {
     const def = getDefinition(c.type);
     return def?.needsI2C;
   });
-  if (needsI2C && board.defaultI2C) {
-    doc.i2c = {
-      sda: `GPIO${board.defaultI2C.sda}`,
-      scl: `GPIO${board.defaultI2C.scl}`,
-      scan: true,
-    };
+  const secondaryI2CBuses = components.filter((c) => c.type === 'misc.i2c_bus');
+  if ((needsI2C && board.defaultI2C) || secondaryI2CBuses.length > 0) {
+    if (secondaryI2CBuses.length === 0) {
+      // Single bus - existing behaviour
+      if (board.defaultI2C) {
+        doc.i2c = {
+          sda: `GPIO${board.defaultI2C.sda}`,
+          scl: `GPIO${board.defaultI2C.scl}`,
+          scan: true,
+        };
+      }
+    } else {
+      // Multiple buses - emit as list
+      const buses: Record<string, unknown>[] = [];
+      if (board.defaultI2C) {
+        buses.push({
+          id: 'i2c_main',
+          sda: `GPIO${board.defaultI2C.sda}`,
+          scl: `GPIO${board.defaultI2C.scl}`,
+          scan: true,
+        });
+      }
+      for (const inst of secondaryI2CBuses) {
+        const entry: Record<string, unknown> = { id: (inst.config.bus_id as string) || inst.id };
+        if (inst.pins.sda_pin != null) entry.sda = `GPIO${inst.pins.sda_pin}`;
+        if (inst.pins.scl_pin != null) entry.scl = `GPIO${inst.pins.scl_pin}`;
+        entry.scan = true;
+        if (inst.config.frequency) entry.frequency = inst.config.frequency;
+        buses.push(entry);
+      }
+      doc.i2c = buses;
+    }
   }
 
   // ── one_wire ──
@@ -356,7 +400,28 @@ export function generateYaml(project: Project): string {
     if (settings.timeServers) {
       time.servers = settings.timeServers.split(',').map((s) => s.trim()).filter(Boolean);
     }
-    if (settings._rawTimeExtras?.on_time) time.on_time = settings._rawTimeExtras.on_time;
+
+    // Merge raw on_time from import with time_schedule automations
+    const scheduleAutos = automations.filter((a) => a.trigger.type === 'time_schedule');
+    const scheduleEntries = scheduleAutos.map((a) => {
+      const entry: Record<string, unknown> = {};
+      if (a.trigger.config.seconds != null) entry.seconds = a.trigger.config.seconds;
+      if (a.trigger.config.minutes != null) entry.minutes = a.trigger.config.minutes;
+      if (a.trigger.config.hours != null) entry.hours = a.trigger.config.hours;
+      if (a.trigger.config.days_of_week) entry.days_of_week = a.trigger.config.days_of_week;
+      entry.then = a.actions.map((act) => formatAction(act, project));
+      return entry;
+    });
+
+    if (settings._rawTimeExtras?.on_time || scheduleEntries.length > 0) {
+      const rawEntries = settings._rawTimeExtras?.on_time
+        ? (Array.isArray(settings._rawTimeExtras.on_time)
+          ? settings._rawTimeExtras.on_time
+          : [settings._rawTimeExtras.on_time])
+        : [];
+      time.on_time = [...(rawEntries as unknown[]), ...scheduleEntries];
+    }
+
     doc.time = [time];
   }
 
@@ -496,6 +561,23 @@ export function generateYaml(project: Project): string {
     }
   }
 
+  // Embed on_value automations into sensor entries
+  const onValueAutos = automations.filter((a) => a.trigger.type === 'on_value' && a.trigger.componentId);
+  if (onValueAutos.length > 0 && domainMap.has('sensor')) {
+    const sensorEntries = domainMap.get('sensor')! as Record<string, unknown>[];
+    for (const auto of onValueAutos) {
+      const targetInst = components.find((c) => c.id === auto.trigger.componentId);
+      if (!targetInst) continue;
+      const sensorEntry = sensorEntries.find(
+        (e) => e.name === str(targetInst.config.name as string, targetInst.name),
+      );
+      if (!sensorEntry) continue;
+      const thenBlock = { then: auto.actions.map((act) => formatAction(act, project)) };
+      if (!sensorEntry.on_value) sensorEntry.on_value = [];
+      (sensorEntry.on_value as unknown[]).push(thenBlock);
+    }
+  }
+
   for (const [domain, entries] of domainMap) {
     doc[domain] = entries;
   }
@@ -526,6 +608,7 @@ export function generateYaml(project: Project): string {
 
   // Serialize each section separately with comments for readability
   const sectionOrder = [
+    'substitutions',
     'esphome',
     board.platform === 'esp32' ? 'esp32' : 'esp8266',
     'logger', 'api', 'ota', 'network', 'wifi', 'captive_portal', 'web_server', 'mqtt',
@@ -539,6 +622,7 @@ export function generateYaml(project: Project): string {
   ];
 
   const sectionComments: Record<string, string> = {
+    substitutions: '# Substitutions (reference with ${key})',
     esphome: '# Device configuration',
     esp32: '# ESP32 board settings',
     esp8266: '# ESP8266 board settings',
@@ -614,6 +698,7 @@ export function generateYaml(project: Project): string {
     // generated in-place and everything else verbatim.
     const platformKey = board.platform === 'esp32' ? 'esp32' : 'esp8266';
     const managedKeys = new Set([
+      'substitutions',
       'esphome', platformKey,
       'logger', 'api', 'ota', 'network', 'wifi', 'captive_portal', 'web_server', 'mqtt',
       'openthread',
@@ -1577,6 +1662,15 @@ function generateComponentEntry(
   }
   if (inst.config._filters !== undefined && base.filters === undefined) {
     base.filters = inst.config._filters;
+  }
+
+  // Multi-bus: inject i2c_id / spi_id when the component is assigned to a non-primary bus
+  const compDef = getDefinition(type);
+  if (compDef?.needsI2C && inst.config._i2c_id) {
+    base.i2c_id = String(inst.config._i2c_id);
+  }
+  if (compDef?.needsSPI && inst.config._spi_id) {
+    base.spi_id = String(inst.config._spi_id);
   }
 
   return base;

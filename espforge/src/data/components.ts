@@ -1955,6 +1955,42 @@ export const componentDefinitions: ComponentDefinition[] = [
       { key: 'tlv', label: 'Dataset TLV (from Home Assistant)', type: 'text', placeholder: 'Paste full TLV string to auto-configure (optional)', group: 'TLV Import' },
     ],
   },
+
+  // ─── Infrastructure bus components ───────────────────
+  {
+    type: 'misc.i2c_bus',
+    platform: 'esphome',
+    domain: 'misc',
+    category: 'misc',
+    name: 'Secondary I2C Bus',
+    description: 'Define an additional I2C bus with custom SDA/SCL pins. I2C components can then reference it by its Bus ID.',
+    icon: 'GitMerge',
+    pins: [
+      { role: 'sda_pin', label: 'SDA', capabilities: ['gpio'] },
+      { role: 'scl_pin', label: 'SCL', capabilities: ['gpio'] },
+    ],
+    configFields: [
+      { key: 'bus_id', label: 'Bus ID', type: 'text', required: true, placeholder: 'i2c_secondary', default: 'i2c_secondary' },
+      { key: 'frequency', label: 'Frequency', type: 'text', placeholder: '100kHz (optional)' },
+    ],
+  },
+  {
+    type: 'misc.spi_bus',
+    platform: 'esphome',
+    domain: 'misc',
+    category: 'misc',
+    name: 'Secondary SPI Bus',
+    description: 'Define an additional SPI bus with custom CLK/MOSI/MISO pins. SPI components can then reference it by its Bus ID.',
+    icon: 'GitMerge',
+    pins: [
+      { role: 'clk_pin', label: 'CLK', capabilities: ['spi'] },
+      { role: 'mosi_pin', label: 'MOSI', capabilities: ['spi'] },
+      { role: 'miso_pin', label: 'MISO', capabilities: ['spi'], optional: true },
+    ],
+    configFields: [
+      { key: 'bus_id', label: 'Bus ID', type: 'text', required: true, placeholder: 'spi_secondary', default: 'spi_secondary' },
+    ],
+  },
 ];
 
 export function getDefinition(type: string): ComponentDefinition | undefined {

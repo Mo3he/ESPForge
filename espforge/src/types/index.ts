@@ -113,7 +113,7 @@ export interface ComponentInstance {
 // ── Automation Types ──
 
 export interface AutomationTrigger {
-  type: 'component_state' | 'time_interval' | 'on_boot' | 'value_range' | 'mqtt_message';
+  type: 'component_state' | 'time_interval' | 'on_boot' | 'value_range' | 'mqtt_message' | 'on_value' | 'time_schedule';
   componentId?: string;
   event?: string; // on_press, on_release, on_state, on_value
   config: Record<string, unknown>;
@@ -204,6 +204,7 @@ export interface ProjectSettings {
   timeEnabled: boolean;
   timeTimezone: string;
   timeServers: string;
+  substitutions: Record<string, string>;
 }
 
 export interface Project {

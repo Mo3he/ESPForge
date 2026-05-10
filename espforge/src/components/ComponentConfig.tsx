@@ -127,13 +127,56 @@ export default function ComponentConfig({ componentId, onMobileBack }: Props) {
           </fieldset>
         )}
 
-        {/* I2C notice */}
-        {def.needsI2C && project.board?.defaultI2C && (
-          <div className="config-notice">
-            ℹ️ Uses I²C bus (SDA: GPIO{project.board.defaultI2C.sda}, SCL: GPIO
-            {project.board.defaultI2C.scl})
-          </div>
-        )}
+        {/* I2C notice / bus picker */}
+        {def.needsI2C && project.board?.defaultI2C && (() => {
+          const secondaryBuses = project.components.filter((c) => c.type === 'misc.i2c_bus');
+          if (secondaryBuses.length === 0) {
+            return (
+              <div className="config-notice">
+                Uses I2C bus (SDA: GPIO{project.board!.defaultI2C!.sda}, SCL: GPIO
+                {project.board!.defaultI2C!.scl})
+              </div>
+            );
+          }
+          return (
+            <div className="form-group">
+              <label>I2C Bus</label>
+              <select
+                value={(inst.config._i2c_id as string) || ''}
+                onChange={(e) => updateConfig('_i2c_id', e.target.value || undefined)}
+              >
+                <option value="">Primary (GPIO{project.board!.defaultI2C!.sda}/GPIO{project.board!.defaultI2C!.scl})</option>
+                {secondaryBuses.map((b) => (
+                  <option key={b.id} value={(b.config.bus_id as string) || b.id}>
+                    {(b.config.bus_id as string) || b.id} (GPIO{b.pins.sda_pin ?? '?'}/GPIO{b.pins.scl_pin ?? '?'})
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        })()}
+
+        {/* SPI bus picker */}
+        {def.needsSPI && (() => {
+          const secondaryBuses = project.components.filter((c) => c.type === 'misc.spi_bus');
+          if (secondaryBuses.length === 0) return null;
+          return (
+            <div className="form-group">
+              <label>SPI Bus</label>
+              <select
+                value={(inst.config._spi_id as string) || ''}
+                onChange={(e) => updateConfig('_spi_id', e.target.value || undefined)}
+              >
+                <option value="">Primary (default)</option>
+                {secondaryBuses.map((b) => (
+                  <option key={b.id} value={(b.config.bus_id as string) || b.id}>
+                    {(b.config.bus_id as string) || b.id}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        })()}
 
         {/* Config fields grouped */}
         {Array.from(groups.entries()).map(([group, fields]) => (

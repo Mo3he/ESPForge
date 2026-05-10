@@ -42,6 +42,7 @@ const defaultSettings: ProjectSettings = {
   timeEnabled: false,
   timeTimezone: '',
   timeServers: '',
+  substitutions: {},
 };
 
 const STORAGE_KEY = 'espforge_autosave';

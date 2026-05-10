@@ -241,6 +241,13 @@ export function importYaml(text: string): ImportResult {
       if (logDoc.logs) extras.logs = logDoc.logs;
       return Object.keys(extras).length > 0 ? extras : undefined;
     })(),
+    substitutions: (() => {
+      const sub = doc.substitutions;
+      if (!sub || typeof sub !== 'object') return {};
+      return Object.fromEntries(
+        Object.entries(sub as Record<string, unknown>).map(([k, v]) => [k, String(v)]),
+      );
+    })(),
   };
 
   // ── Components ───────────────────────────────────────────────

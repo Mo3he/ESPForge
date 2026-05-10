@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.6
+
+- Added **Secondary I2C Bus** component (`misc.i2c_bus`) -- define additional I2C buses with custom SDA/SCL pins; the I2C section is emitted as a list when more than one bus is present, and I2C components gain a "I2C Bus" dropdown to select the target bus (writes `i2c_id:` in the YAML)
+- Added **Secondary SPI Bus** component (`misc.spi_bus`) -- same pattern for SPI; SPI components gain an `spi_id:` selector when a secondary bus is present
+- Added **On Value** automation trigger -- fires every time a sensor reports a new reading; embedded as `on_value:` inside the sensor entry
+- Added **Time Schedule** automation trigger -- fires at specific hours/minutes/seconds (optionally filtered to certain days of the week); embedded as `on_time:` inside the `time:` section; requires Time (SNTP) enabled in Settings
+- Added **Substitutions** block -- add key-value pairs in Settings; emitted as the `substitutions:` block at the top of the YAML (reference with `${key}`); substitutions are preserved on import/export round-trips
+
 ## 0.1.5
 
 - Added **Flash** button to the YAML preview panel — copies configuration to clipboard and opens web.esphome.io in one click

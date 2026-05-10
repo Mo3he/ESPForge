@@ -432,6 +432,56 @@ export default function SettingsPanel() {
 
       {/* Change board */}
       <fieldset className="config-fieldset">
+        <legend>Substitutions</legend>
+        <p className="form-hint" style={{ marginBottom: 8 }}>
+          Key-value pairs emitted as <code>substitutions:</code> at the top of your YAML. Reference them with <code>{'${key}'}</code>.
+        </p>
+        {Object.entries(s.substitutions || {}).map(([key, val]) => (
+          <div key={key} className="form-group" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <input
+              type="text"
+              value={key}
+              style={{ width: '40%' }}
+              onChange={(e) => {
+                const newKey = e.target.value;
+                if (newKey === key) return;
+                const next = { ...s.substitutions };
+                delete next[key];
+                if (newKey) next[newKey] = val;
+                update({ substitutions: next });
+              }}
+              placeholder="key"
+            />
+            <span style={{ flexShrink: 0 }}>=</span>
+            <input
+              type="text"
+              value={val}
+              style={{ flex: 1 }}
+              onChange={(e) => update({ substitutions: { ...s.substitutions, [key]: e.target.value } })}
+              placeholder="value"
+            />
+            <button
+              className="btn-icon btn-remove"
+              onClick={() => {
+                const next = { ...s.substitutions };
+                delete next[key];
+                update({ substitutions: next });
+              }}
+              title="Remove"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        <button
+          className="btn btn-sm"
+          onClick={() => update({ substitutions: { ...s.substitutions, '': '' } })}
+        >
+          + Add substitution
+        </button>
+      </fieldset>
+
+      <fieldset className="config-fieldset">
         <legend>Project</legend>
         <button
           className="btn btn-danger"

@@ -217,7 +217,9 @@ function AutomationEditor({
             <option value="time_interval">Time Interval</option>
             {binarySensors.length > 0 && <option value="component_state">Component State (Binary)</option>}
             {sensors.length > 0 && <option value="value_range">Sensor Value Threshold</option>}
+            {sensors.length > 0 && <option value="on_value">Sensor On Value (every reading)</option>}
             {mqttEnabled && <option value="mqtt_message">MQTT Message</option>}
+            <option value="time_schedule">Time Schedule (cron)</option>
           </select>
         </div>
 
@@ -325,6 +327,66 @@ function AutomationEditor({
               onChange={(e) => updateTrigger({ config: { ...automation.trigger.config, topic: e.target.value } })}
             />
           </div>
+        )}
+
+        {automation.trigger.type === 'on_value' && (
+          <div className="form-group">
+            <label>Sensor</label>
+            <select
+              value={automation.trigger.componentId || ''}
+              onChange={(e) => updateTrigger({ componentId: e.target.value })}
+            >
+              <option value="">— Select —</option>
+              {sensors.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {(c.config.name as string) || c.name}
+                </option>
+              ))}
+            </select>
+            <span className="form-hint">Fires every time the sensor reports a new reading.</span>
+          </div>
+        )}
+
+        {automation.trigger.type === 'time_schedule' && (
+          <>
+            <div className="form-group">
+              <label>Seconds</label>
+              <input
+                type="text"
+                value={(automation.trigger.config.seconds as string) || '0'}
+                placeholder="0"
+                onChange={(e) => updateTrigger({ config: { ...automation.trigger.config, seconds: e.target.value } })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Minutes</label>
+              <input
+                type="text"
+                value={(automation.trigger.config.minutes as string) || '0'}
+                placeholder="0 or 0,30 or /5"
+                onChange={(e) => updateTrigger({ config: { ...automation.trigger.config, minutes: e.target.value } })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Hours</label>
+              <input
+                type="text"
+                value={(automation.trigger.config.hours as string) || '*'}
+                placeholder="* or 7 or 7,19"
+                onChange={(e) => updateTrigger({ config: { ...automation.trigger.config, hours: e.target.value } })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Days of Week</label>
+              <input
+                type="text"
+                value={(automation.trigger.config.days_of_week as string) || ''}
+                placeholder="MON-FRI or MON,WED,FRI (optional)"
+                onChange={(e) => updateTrigger({ config: { ...automation.trigger.config, days_of_week: e.target.value } })}
+              />
+            </div>
+            <span className="form-hint">Requires Time (SNTP) enabled in Settings.</span>
+          </>
         )}
       </fieldset>
 
@@ -590,6 +652,10 @@ function triggerLabel(trigger: AutomationTrigger): string {
       return `Sensor ${trigger.config.direction || 'above'} ${trigger.config.threshold ?? '?'}`;
     case 'mqtt_message':
       return `MQTT: ${trigger.config.topic || '?'}`;
+    case 'on_value':
+      return 'On sensor value';
+    case 'time_schedule':
+      return `Schedule ${trigger.config.hours || '*'}:${String(trigger.config.minutes || '0').padStart(2, '0')}`;
     default:
       return trigger.type;
   }
