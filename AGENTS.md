@@ -27,8 +27,14 @@ All commands run from `espforge/`:
 | `npm run dev` | Start Vite dev server |
 | `npm run build` | Type-check + production build |
 | `npm run preview` | Preview production build locally |
+| `npm run test` | Run the Vitest suite once |
+| `npm run test:watch` | Run Vitest in watch mode |
 
-No test runner is configured. TypeScript (`strict: true`, `noUnusedLocals`, `noUnusedParameters`) is the sole static analysis tool.
+Tests live in `src/**/*.test.ts` (Vitest). The suite covers the YAML generator
+(golden-file snapshots, one per template — update with `vitest -u` when output
+intentionally changes) and a generate→import round-trip. TypeScript strict mode
+(`strict: true`, `noUnusedLocals`, `noUnusedParameters`) remains the static
+analysis baseline.
 
 The only build-time env var is `VITE_BASE_PATH` (defaults to `/ESPForge/` for GitHub Pages; Docker sets it to `./`).
 

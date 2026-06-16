@@ -5,7 +5,7 @@ import { projectTemplates, type ProjectTemplate } from '../data/templates';
 import { useProject } from '../context/ProjectContext';
 import { Icon } from './Icon';
 import ImportModal from './ImportModal';
-import type { Board, ComponentInstance, Automation } from '../types';
+import type { Board, ComponentInstance, Automation, ProjectSettings } from '../types';
 
 interface Props {
   onBoardSelected?: (tab?: string) => void;
@@ -87,19 +87,17 @@ export default function BoardSelector({ onBoardSelected }: Props) {
   const [customBoardId, setCustomBoardId] = useState('');
 
   const handleSelectBoard = (board: Board) => {
-    dispatch({ type: 'SET_BOARD', board });
-
     if (selectedTemplates.length > 0) {
       const { components, automations, settingsOverrides } = mergeTemplates(selectedTemplates);
-      for (const comp of components) {
-        dispatch({ type: 'ADD_COMPONENT', component: comp });
-      }
-      for (const auto of automations) {
-        dispatch({ type: 'ADD_AUTOMATION', automation: auto });
-      }
-      if (Object.keys(settingsOverrides).length > 0) {
-        dispatch({ type: 'UPDATE_SETTINGS', settings: settingsOverrides as Record<string, string> });
-      }
+      dispatch({
+        type: 'SET_BOARD',
+        board,
+        templateComponents: components,
+        templateAutomations: automations,
+        settingsOverrides: settingsOverrides as Partial<ProjectSettings>,
+      });
+    } else {
+      dispatch({ type: 'SET_BOARD', board });
     }
 
     onBoardSelected?.('settings');

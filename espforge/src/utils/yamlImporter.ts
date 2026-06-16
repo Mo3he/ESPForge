@@ -110,7 +110,7 @@ function strVal(val: unknown, fallback = ''): string {
 const COMPONENT_DOMAINS = [
   'sensor', 'binary_sensor', 'switch', 'light', 'output',
   'display', 'climate', 'fan', 'cover', 'button', 'number',
-  'select', 'lock', 'text',
+  'select', 'lock', 'text', 'text_sensor',
 ];
 
 export function importYaml(text: string): ImportResult {
@@ -263,7 +263,19 @@ export function importYaml(text: string): ImportResult {
       const platform = strVal(entry.platform);
       if (!platform) continue;
 
-      const def = componentDefinitions.find((d) => d.domain === domain && d.platform === platform);
+      let def = componentDefinitions.find((d) => d.domain === domain && d.platform === platform);
+      // Multi-bus sensors are emitted with an _i2c/_spi suffix (e.g. bme280_i2c → bme280)
+      if (!def) {
+        const basePlatform = platform.replace(/_(i2c|spi)$/, '');
+        if (basePlatform !== platform) {
+          def = componentDefinitions.find((d) => d.domain === domain && d.platform === basePlatform);
+        }
+      }
+      // IR climate units are emitted with the AC protocol as the platform (daikin, lg, …);
+      // they always carry a transmitter_id, which disambiguates them from other climate platforms.
+      if (!def && domain === 'climate' && entry.transmitter_id !== undefined) {
+        def = componentDefinitions.find((d) => d.type === 'climate.ir');
+      }
       if (!def) {
         // Unknown platform — preserved verbatim in passthroughYaml, skip visual import
         continue;
@@ -279,8 +291,22 @@ export function importYaml(text: string): ImportResult {
       if (config.name === undefined && entry.id !== undefined) config.name = entry.id;
       for (const field of def.configFields) {
         if (field.key === 'name') continue; // already handled above
-        if (entry[field.key] !== undefined) config[field.key] = entry[field.key];
+        if (entry[field.key] !== undefined) {
+          config[field.key] = entry[field.key];
+          continue;
+        }
+        // Recover nested sub-entity names: `temperature_name` <- `temperature: { name: ... }`
+        // (also ip_address_name <- ip_address.name, ssid_name <- ssid.name, etc.)
+        if (field.key.endsWith('_name')) {
+          const nested = entry[field.key.slice(0, -'_name'.length)];
+          if (nested && typeof nested === 'object' && 'name' in (nested as object)) {
+            config[field.key] = (nested as Record<string, unknown>).name;
+          }
+        }
       }
+
+      // IR climate carries its protocol as the YAML platform, not a config key.
+      if (def.type === 'climate.ir') config.protocol = platform;
 
       // Pins
       const pins: Record<string, number | null> = {};
@@ -360,6 +386,49 @@ export function importYaml(text: string): ImportResult {
         pins,
       });
     }
+  }
+
+  // ── Top-level hardware blocks (no `platform:` key, so not caught above) ──
+
+  // bluetooth_proxy: → bluetooth.proxy
+  if (doc.bluetooth_proxy !== undefined) {
+    const bp = (doc.bluetooth_proxy as Record<string, unknown>) ?? {};
+    const config: Record<string, unknown> = {};
+    if (bp.active !== undefined) config.active = bp.active;
+    components.push({ id: `imported_${++idCounter}`, type: 'bluetooth.proxy', name: 'Bluetooth Proxy', config, pins: {} });
+  }
+
+  // remote_transmitter: → ir.transmitter (skip entries auto-generated for climate.ir)
+  if (doc.remote_transmitter !== undefined) {
+    const arr = Array.isArray(doc.remote_transmitter) ? doc.remote_transmitter : [doc.remote_transmitter];
+    for (const entry of arr as Record<string, unknown>[]) {
+      if (typeof entry.id === 'string' && entry.id.endsWith('_transmitter')) continue;
+      const config: Record<string, unknown> = {};
+      const duty = parseFloat(String(entry.carrier_duty_percent));
+      if (!isNaN(duty)) config.carrier_duty_percent = duty;
+      components.push({ id: `imported_${++idCounter}`, type: 'ir.transmitter', name: 'IR Transmitter', config, pins: { pin: extractPin(entry, 'pin', true) } });
+    }
+  }
+
+  // remote_receiver: → ir.receiver
+  if (doc.remote_receiver !== undefined) {
+    const arr = Array.isArray(doc.remote_receiver) ? doc.remote_receiver : [doc.remote_receiver];
+    for (const entry of arr as Record<string, unknown>[]) {
+      const config: Record<string, unknown> = {};
+      if (entry.dump !== undefined) config.dump = entry.dump;
+      const tol = parseFloat(String(entry.tolerance));
+      if (!isNaN(tol)) config.tolerance = tol;
+      components.push({ id: `imported_${++idCounter}`, type: 'ir.receiver', name: 'IR Receiver', config, pins: { pin: extractPin(entry, 'pin', true) } });
+    }
+  }
+
+  // infrared: (one entry per linked transmitter/receiver) → a single ir.proxy
+  if (doc.infrared !== undefined) {
+    const arr = Array.isArray(doc.infrared) ? doc.infrared : [doc.infrared];
+    const withFreq = (arr as Record<string, unknown>[]).find((e) => e && e.receiver_frequency);
+    const config: Record<string, unknown> = {};
+    if (withFreq?.receiver_frequency) config.receiver_frequency = withFreq.receiver_frequency;
+    components.push({ id: `imported_${++idCounter}`, type: 'ir.proxy', name: 'IR/RF Proxy', config, pins: {} });
   }
 
   // ── Automations ──────────────────────────────────────────────

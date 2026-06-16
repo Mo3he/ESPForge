@@ -3,7 +3,7 @@ import type { Project, ProjectSettings, Board, ComponentInstance, Automation } f
 
 // ── Default state ──
 
-const defaultSettings: ProjectSettings = {
+export const defaultSettings: ProjectSettings = {
   name: 'my-esp-device',
   friendlyName: 'My ESP Device',
   wifiSsid: '',
@@ -64,10 +64,37 @@ const initialProject: Project = {
   automations: [],
 };
 
+// ── Component reconciliation ──
+
+/**
+ * Combine a board's auto-added default components with the components a template
+ * brings, avoiding duplicates: a board default is dropped when a template already
+ * provides that component type, and the surviving template component inherits the
+ * board default's hardware pin assignments where it has none of its own. This keeps
+ * the board's correct pins while preserving the template's config and automation wiring.
+ */
+export function reconcileComponents(
+  boardDefaults: ComponentInstance[],
+  templateComponents: ComponentInstance[],
+): ComponentInstance[] {
+  const templateTypes = new Set(templateComponents.map((c) => c.type));
+  const keptDefaults = boardDefaults.filter((d) => !templateTypes.has(d.type));
+  const reconciledTemplate = templateComponents.map((comp) => {
+    const matchingDefault = boardDefaults.find((d) => d.type === comp.type);
+    if (!matchingDefault) return comp;
+    const pins = { ...comp.pins };
+    for (const [role, gpio] of Object.entries(matchingDefault.pins)) {
+      if (pins[role] == null && gpio != null) pins[role] = gpio;
+    }
+    return { ...comp, pins };
+  });
+  return [...keptDefaults, ...reconciledTemplate];
+}
+
 // ── Actions ──
 
 type Action =
-  | { type: 'SET_BOARD'; board: Board }
+  | { type: 'SET_BOARD'; board: Board; templateComponents?: ComponentInstance[]; templateAutomations?: Automation[]; settingsOverrides?: Partial<ProjectSettings> }
   | { type: 'RESET_PROJECT' }
   | { type: 'UPDATE_SETTINGS'; settings: Partial<ProjectSettings> }
   | { type: 'ADD_COMPONENT'; component: ComponentInstance }
@@ -81,16 +108,21 @@ type Action =
 
 function projectReducer(state: Project, action: Action): Project {
   switch (action.type) {
-    case 'SET_BOARD':
+    case 'SET_BOARD': {
+      const boardDefaults = (action.board.defaultComponents ?? []).map((dc) => ({
+        ...dc,
+        id: generateId('comp'),
+      }));
       return {
         ...state,
         board: action.board,
-        components: (action.board.defaultComponents ?? []).map((dc) => ({
-          ...dc,
-          id: generateId('comp'),
-        })),
-        automations: [],
+        components: reconcileComponents(boardDefaults, action.templateComponents ?? []),
+        automations: action.templateAutomations ?? [],
+        settings: action.settingsOverrides
+          ? { ...state.settings, ...action.settingsOverrides }
+          : state.settings,
       };
+    }
 
     case 'RESET_PROJECT':
       return initialProject;
@@ -146,11 +178,7 @@ function projectReducer(state: Project, action: Action): Project {
       return { ...state, automations: state.automations.filter((a) => a.id !== action.id) };
 
     case 'LOAD_PROJECT': {
-      const maxId = action.project.components.reduce((max, c) => {
-        const match = c.id.match(/_(\d+)$/);
-        return match ? Math.max(max, Number(match[1])) : max;
-      }, 0);
-      _nextId = maxId + 1;
+      syncNextId(action.project);
       return action.project;
     }
 
@@ -229,6 +257,9 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   // Load from localStorage on first render, but only if no share link in URL
   const hasShareLink = window.location.hash.startsWith('#project=');
   const savedProject = !hasShareLink ? loadFromStorage() : null;
+  // Advance the ID counter past restored components so new IDs don't collide
+  // (LOAD_PROJECT does this on its own, but autosave rehydration bypasses it).
+  if (savedProject) syncNextId(savedProject);
 
   const [historyState, historyDispatch] = useReducer(historyReducer, {
     past: [],
@@ -277,4 +308,14 @@ export function useProject(): ProjectContextValue {
 let _nextId = 1;
 export function generateId(prefix: string): string {
   return `${prefix}_${_nextId++}`;
+}
+
+/** Advance the ID counter past any IDs already present in a loaded project so
+ *  freshly generated IDs can't collide with restored ones. */
+export function syncNextId(project: Project): void {
+  const maxId = project.components.reduce((max, c) => {
+    const match = c.id.match(/_(\d+)$/);
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  _nextId = Math.max(_nextId, maxId + 1);
 }

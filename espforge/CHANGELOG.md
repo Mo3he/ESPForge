@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.7
+
+- Fixed **YAML import** dropping several component types on round-trip — Bluetooth Proxy, IR Transmitter/Receiver, IR/RF Proxy, IR Climate (AC), the BME280/BMP280 I²C sensors, and the WiFi Info text sensor are now reconstructed when loading an existing config
+- Import now recovers nested sub-entity names (e.g. temperature/humidity/pressure names on multi-value sensors) instead of losing them
+- Fixed **duplicate components** when a starter template is applied to a board that auto-adds its own hardware (e.g. Sonoff Basic + Smart Relay): the template now supersedes the board default and inherits its correct pins, and applying a template is a single undo step
+- Fixed component IDs not advancing past autosaved projects on reload, which could let a new component collide with a restored one
+- Added a **Vitest** test suite (`npm run test`): golden-file snapshots for the YAML generator (one per template) plus a generate→import round-trip
+
 ## 0.1.6
 
 - Added **Secondary I2C Bus** component (`misc.i2c_bus`) -- define additional I2C buses with custom SDA/SCL pins; the I2C section is emitted as a list when more than one bus is present, and I2C components gain a "I2C Bus" dropdown to select the target bus (writes `i2c_id:` in the YAML)

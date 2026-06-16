@@ -1,0 +1,1031 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateYaml — template golden files > generates stable YAML for "basic_sensor_node" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Sensors
+sensor:
+  - platform: dht
+    model: DHT22
+    temperature:
+      name: Temperature
+    humidity:
+      name: Humidity
+    update_interval: 60s
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "blank" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "ble_gateway" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# BLE scanner
+esp32_ble_tracker:
+
+# Bluetooth proxy for Home Assistant
+bluetooth_proxy:
+  active: true
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "environment_monitor" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# I²C bus
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+
+# Sensors
+sensor:
+  - platform: bme280_i2c
+    address: "0x76"
+    temperature:
+      name: Temperature
+    humidity:
+      name: Humidity
+    pressure:
+      name: Pressure
+    update_interval: 60s
+  - platform: scd4x
+    co2:
+      name: CO2
+    temperature:
+      name: SCD41 Temp
+    humidity:
+      name: SCD41 Humidity
+    update_interval: 60s
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "fan_controller" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Fans
+fan:
+  - platform: speed
+    name: Fan
+    output: fan_1_output
+    speed_count: 4
+
+# Binary sensors
+binary_sensor:
+  - platform: gpio
+    pin:
+      mode:
+        input: true
+    name: Fan Button
+    device_class: None
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+
+# Outputs
+output:
+  - platform: ledc
+    pin: GPIOXX
+    id: fan_1_output
+    frequency: 1000Hz
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "garage_door" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Covers / Blinds
+cover:
+  - platform: time_based
+    name: Garage Door
+    device_class: garage
+    open_action:
+      - switch.turn_on: cover_1_open
+    open_duration: 15s
+    close_action:
+      - switch.turn_on: cover_1_close
+    close_duration: 15s
+    stop_action:
+      - switch.turn_off: cover_1_open
+      - switch.turn_off: cover_1_close
+
+# Binary sensors
+binary_sensor:
+  - platform: gpio
+    pin:
+      mode:
+        input: true
+    name: Door Open
+    device_class: garage_door
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "ir_blaster" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# IR transmitter
+remote_transmitter:
+  - carrier_duty_percent: 50%
+    id: ir_1
+
+# IR receiver
+remote_receiver:
+  - dump: all
+    tolerance: 25%
+    id: ir_2
+
+# Climate / HVAC
+climate:
+  - platform: daikin
+    name: Air Conditioner
+    transmitter_id: ir_1
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "ir_rf_proxy" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# IR transmitter
+remote_transmitter:
+  - carrier_duty_percent: 50%
+    id: ir_1
+
+# IR receiver
+remote_receiver:
+  - dump: all
+    tolerance: 25%
+    id: ir_2
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+
+infrared:
+  - platform: ir_rf_proxy
+    name: IR Transmitter Proxy
+    remote_transmitter_id: ir_1
+  - platform: ir_rf_proxy
+    name: IR Receiver Proxy
+    remote_receiver_id: ir_2
+    receiver_frequency: 38kHz
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "led_strip" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Lights
+light:
+  - platform: neopixelbus
+    name: LED Strip
+    type: GRB
+    variant: WS2812X
+    num_leds: 60
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "motion_light" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Binary sensors
+binary_sensor:
+  - platform: gpio
+    pin:
+      mode:
+        input: true
+    name: Motion
+    device_class: motion
+    on_press:
+      then:
+        - switch.turn_on: switch_2
+    on_release:
+      then:
+        - delay: 2min
+        - switch.turn_off: switch_2
+
+# Switches
+switch:
+  - platform: gpio
+    name: Light
+    id: switch_2
+    restore_mode: RESTORE_DEFAULT_OFF
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "oled_status" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# I²C bus
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+
+# Displays
+display:
+  - platform: ssd1306_i2c
+    model: SSD1306_128X64
+    address: "0x3C"
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "power_monitor" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Sensors
+sensor:
+  - platform: hlw8012
+    voltage:
+      name: Voltage
+    current:
+      name: Current
+    power:
+      name: Power
+    current_resistor: 0.001
+    voltage_divider: 2351
+    update_interval: 10s
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "presence_sensor" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP32 board settings
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# UART bus
+uart:
+  - baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+    id: sensor_1_uart
+
+# LD2410 mmWave radar
+ld2410:
+  uart_id: sensor_1_uart
+  max_move_distance_gate: 8
+  max_still_distance_gate: 8
+  timeout: 5
+
+# Sensors
+sensor:
+  - platform: ld2410
+    moving_distance:
+      name: Moving Distance
+    still_distance:
+      name: Still Distance
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Switches
+switch:
+  - platform: gpio
+    name: Light
+    id: switch_2
+    restore_mode: RESTORE_DEFAULT_OFF
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+
+# Binary sensors
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: Presence
+    has_moving_target:
+      name: Moving Target
+    has_still_target:
+      name: Still Target
+"
+`;
+
+exports[`generateYaml — template golden files > generates stable YAML for "smart_relay" 1`] = `
+"# Device configuration
+esphome:
+  name: test-device
+  friendly_name: Test Device
+
+# ESP8266 board settings
+esp8266:
+  board: esp01_1m
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Home Assistant API
+api:
+  encryption:
+    key: AABBCCDDEEFF00112233445566778899AABBCCDDEEFF001122334455667788
+
+# Over-the-Air updates
+ota:
+  - platform: esphome
+
+# WiFi configuration
+wifi:
+  ssid: TestNetwork
+  password: test-password
+  ap:
+    ssid: Test Device Fallback
+    password: fallback123
+
+# Captive portal (for WiFi setup fallback)
+captive_portal:
+
+# Outputs
+output:
+  - platform: gpio
+    pin: GPIO13
+    id: dc_3
+    inverted: true
+
+# Switches
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO12
+    name: Relay
+    id: switch_1
+    restore_mode: RESTORE_DEFAULT_OFF
+
+# Binary sensors
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+    name: Button
+    device_class: None
+    on_press:
+      then:
+        - switch.toggle: switch_1
+
+# Sensors
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime
+
+# Text sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+    ssid:
+      name: Connected SSID
+
+# Buttons
+button:
+  - platform: restart
+    name: Restart
+"
+`;
