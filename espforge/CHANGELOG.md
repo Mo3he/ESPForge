@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8
+
+- Added **CYD 3.5" boards** (`ESP32-3248S035R` and `ESP32-3248S035C`) — the 3.5" 480×320 ST7796 siblings of the existing Cheap Yellow Display boards. The **R** variant uses XPT2046 resistive touch sharing the display SPI bus; the **C** variant uses GT911 capacitive touch on I²C. Both include the RGB LED and LDR as default components (closes #5)
+
 ## 0.1.7
 
 - Fixed **YAML import** dropping several component types on round-trip — Bluetooth Proxy, IR Transmitter/Receiver, IR/RF Proxy, IR Climate (AC), the BME280/BMP280 I²C sensors, and the WiFi Info text sensor are now reconstructed when loading an existing config

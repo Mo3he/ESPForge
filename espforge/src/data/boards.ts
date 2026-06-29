@@ -684,6 +684,86 @@ export const boards: Board[] = [
   },
 
   // ═══════════════════════════════════════════════════════════
+  //  Cheap Yellow Display 3.5" — ESP32-3248S035 (Sunton)
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: 'cyd_esp32_3248s035r',
+    name: 'Cheap Yellow Display (CYD 3.5" Resistive)',
+    platform: 'esp32',
+    variant: 'esp32',
+    board: 'esp32dev',
+    description: 'ESP32-3248S035R: 3.5" ST7796 480×320 TFT (SPI), XPT2046 resistive touch sharing the display SPI bus (touch CS on GPIO33, IRQ on GPIO36), RGB LED, LDR, and free connector GPIOs. Pinout per rzeldent/esp32-smartdisplay.',
+    hasBLE: true,
+    defaultI2C: { sda: 21, scl: 22 },
+    pins: [
+      // Display + touch SPI (ST7796 display and XPT2046 touch share SPI2)
+      { gpio: 14, label: 'SCLK',     side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Shared SPI SCLK (display + touch)' },
+      { gpio: 13, label: 'MOSI',     side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Shared SPI MOSI (display + touch)' },
+      { gpio: 12, label: 'MISO',     side: 'left',  capabilities: ['gpio', 'pwm', 'spi', 'strapping'], notes: 'Shared SPI MISO — must be LOW at boot' },
+      { gpio: 15, label: 'LCD_CS',   side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI CS' },
+      { gpio: 2,  label: 'LCD_DC',   side: 'left',  capabilities: ['gpio', 'pwm', 'strapping'],  notes: 'Display D/C line' },
+      { gpio: 27, label: 'LCD_BL',   side: 'left',  capabilities: ['gpio', 'pwm'],               notes: 'Display backlight (PWM)' },
+      // Touch (XPT2046) — shares the SPI bus above, dedicated CS + IRQ
+      { gpio: 33, label: 'TP_CS',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'spi'], notes: 'Touch SPI CS' },
+      { gpio: 36, label: 'TP_IRQ',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Touch interrupt (active LOW)' },
+      // Built-in peripherals
+      { gpio: 34, label: 'LDR',      side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Photoresistor (lower = brighter)' },
+      { gpio: 4,  label: 'LED_R',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm'], notes: 'RGB LED — Red (active LOW)' },
+      { gpio: 16, label: 'LED_G',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_rx'],    notes: 'RGB LED — Green (active LOW)' },
+      { gpio: 17, label: 'LED_B',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_tx'],    notes: 'RGB LED — Blue (active LOW)' },
+      { gpio: 26, label: 'SPEAK',    side: 'right', capabilities: ['gpio', 'adc', 'dac', 'pwm'], notes: 'Onboard speaker amp (DAC)' },
+      // Free connector GPIOs (CN1/P3/P5) — default I2C bus uses 21/22
+      { gpio: 21, label: 'SDA',      side: 'right', capabilities: ['gpio', 'pwm', 'i2c_sda'],    notes: 'Free connector GPIO — default I2C SDA' },
+      { gpio: 22, label: 'SCL',      side: 'right', capabilities: ['gpio', 'pwm', 'i2c_scl'],    notes: 'Free connector GPIO — default I2C SCL' },
+      { gpio: 25, label: 'GPIO25',   side: 'right', capabilities: ['gpio', 'adc', 'dac', 'pwm'], notes: 'Free connector GPIO' },
+      { gpio: 32, label: 'GPIO32',   side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm'], notes: 'Free connector GPIO' },
+      { gpio: 35, label: 'GPIO35',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Free connector GPIO — input only' },
+    ],
+    defaultComponents: [
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red_pin: 4, green_pin: 16, blue_pin: 17 } },
+      { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
+    ],
+  },
+
+  {
+    id: 'cyd_esp32_3248s035c',
+    name: 'Cheap Yellow Display (CYD 3.5" Capacitive)',
+    platform: 'esp32',
+    variant: 'esp32',
+    board: 'esp32dev',
+    description: 'ESP32-3248S035C: 3.5" ST7796 480×320 TFT (SPI), GT911 capacitive touch (I²C, shared with user I2C bus), RGB LED, and LDR. Pinout per rzeldent/esp32-smartdisplay.',
+    hasBLE: true,
+    defaultI2C: { sda: 33, scl: 32 },
+    pins: [
+      // Display SPI (ST7796)
+      { gpio: 14, label: 'LCD_CLK',  side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI SCLK' },
+      { gpio: 13, label: 'LCD_MOSI', side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI MOSI' },
+      { gpio: 12, label: 'LCD_MISO', side: 'left',  capabilities: ['gpio', 'pwm', 'spi', 'strapping'], notes: 'Display SPI MISO — must be LOW at boot' },
+      { gpio: 15, label: 'LCD_CS',   side: 'left',  capabilities: ['gpio', 'pwm', 'spi'],        notes: 'Display SPI CS' },
+      { gpio: 2,  label: 'LCD_DC',   side: 'left',  capabilities: ['gpio', 'pwm', 'strapping'],  notes: 'Display D/C line' },
+      { gpio: 27, label: 'LCD_BL',   side: 'left',  capabilities: ['gpio', 'pwm'],               notes: 'Display backlight (PWM)' },
+      // Capacitive touch (GT911 — I²C)
+      { gpio: 33, label: 'TP_SDA',   side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm', 'i2c_sda'], notes: 'GT911 touch — I2C SDA (shared user bus)' },
+      { gpio: 32, label: 'TP_SCL',   side: 'right', capabilities: ['gpio', 'adc', 'pwm', 'i2c_scl'], notes: 'GT911 touch — I2C SCL (shared user bus)' },
+      { gpio: 21, label: 'TP_INT',   side: 'right', capabilities: ['gpio', 'pwm'],               notes: 'GT911 touch interrupt' },
+      { gpio: 25, label: 'TP_RST',   side: 'right', capabilities: ['gpio', 'dac', 'pwm'],        notes: 'GT911 touch reset' },
+      // Built-in peripherals
+      { gpio: 34, label: 'LDR',      side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'Photoresistor (lower = brighter)' },
+      { gpio: 4,  label: 'LED_R',    side: 'right', capabilities: ['gpio', 'adc', 'touch', 'pwm'], notes: 'RGB LED — Red (active LOW)' },
+      { gpio: 16, label: 'LED_G',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_rx'],    notes: 'RGB LED — Green (active LOW)' },
+      { gpio: 17, label: 'LED_B',    side: 'right', capabilities: ['gpio', 'pwm', 'uart_tx'],    notes: 'RGB LED — Blue (active LOW)' },
+      { gpio: 26, label: 'SPEAK',    side: 'right', capabilities: ['gpio', 'adc', 'dac', 'pwm'], notes: 'Onboard speaker amp (DAC)' },
+      // User connector (Grove/CN1)
+      { gpio: 22, label: 'GPIO22',   side: 'right', capabilities: ['gpio', 'pwm'],               notes: 'CN1 connector — free GPIO' },
+      { gpio: 35, label: 'GPIO35',   side: 'right', capabilities: ['gpio', 'adc', 'input_only'], notes: 'CN1 connector — input only' },
+    ],
+    defaultComponents: [
+      { type: 'light.rgb',        name: 'RGB LED',  config: { restore_mode: 'ALWAYS_OFF' }, pins: { red_pin: 4, green_pin: 16, blue_pin: 17 } },
+      { type: 'sensor.adc',       name: 'LDR',      config: { attenuation: '11db', update_interval: '10s' }, pins: { pin: 34 } },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
   //  AZ-Delivery / Generic ESP32
   // ═══════════════════════════════════════════════════════════
   {
