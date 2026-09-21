@@ -1,6 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Automerge non-major devDependency updates once CI passes",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    }
   ]
 }
