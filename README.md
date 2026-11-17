@@ -1,4 +1,5 @@
 # ESPForge
+$${\color{red}\Huge\textsf{Since ESPHome Device Builder now does pretty much the same thing as this project this repo will no longer be maintained}}$$  
 
 Visual, browser-based configuration tool for [ESPHome](https://esphome.io/). Pick a board, add components, configure settings -- get a ready-to-flash YAML file. No YAML knowledge required.  
 
